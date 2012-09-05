@@ -1,4 +1,7 @@
 *.py[co]
 .ropeproject
 build/
+*.egg-info
+nosetests.xml
+.coverage
 
