@@ -61,5 +61,5 @@ class TestCategoryModel(TestCase):
     def test_get_descendants(self):
         c12 = Category.objects.create(parent=self.c1, title="Mňam mňam", slug="mnam-mnam-2")
 
-        tools.assert_in(self.c1, self.c0.get_descendants())
-        tools.assert_in(c12, self.c0.get_descendants())
+        tools.assert_true(self.c1 in self.c0.get_descendants())
+        tools.assert_true(c12 in self.c0.get_descendants())
