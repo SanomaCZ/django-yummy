@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
 from yummy import conf
+from yummy.managers import RecipeManager, CategoryManager
 
 
 class CookingType(models.Model):
@@ -85,6 +86,8 @@ class Photo(models.Model):
 
 
 class Category(models.Model):
+
+    objects = CategoryManager()
 
     parent = models.ForeignKey('self', null=True, blank=True)
     title = models.CharField(_('Title'), max_length=128)
@@ -169,6 +172,8 @@ class Category(models.Model):
 
 class Recipe(models.Model):
 
+    objects = RecipeManager()
+
     title = models.CharField(_('Title'), max_length=128)
     slug = models.SlugField(_('Slug'), max_length=64, unique=True)
     category = models.ForeignKey(Category, verbose_name=_("Category"))
@@ -209,7 +214,7 @@ class IngredientInRecipeGroup(models.Model):
     order = models.PositiveSmallIntegerField(_('Order'), default=1)
 
     def __unicode__(self):
-        return "%s %s" % (self.recipe, self.title)
+        return u"%s %s" % (self.recipe, self.title)
 
     class Meta:
         unique_together = (('recipe', 'order'),)
