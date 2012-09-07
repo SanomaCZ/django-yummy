@@ -228,10 +228,10 @@ class IngredientInRecipe(models.Model):
 
     def clean(self):
         if self.recipe is None and self.group is None:
-            raise ValidationError("Recipe or Group must be filled.")
+            raise ValidationError(_("Recipe or Group must be filled."))
 
     def __unicode__(self):
-        return "%s - %s" % (self.ingredient, self.recipe)
+        return u"%s - %s" % (self.ingredient, self.recipe)
 
     class Meta:
         unique_together = (('recipe', 'ingredient',), ('group', 'ingredient',))
