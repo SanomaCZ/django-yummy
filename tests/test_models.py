@@ -2,7 +2,8 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
-from nose import tools
+from django import VERSION as DJANGO_VERSION
+from nose import tools, SkipTest
 
 from yummy.models import Category
 
@@ -13,6 +14,10 @@ class TestCategoryModel(TestCase):
         super(TestCategoryModel, self).setUp()
         self.c0 = Category.objects.create(title="Ámen", slug="amen")
         self.c1 = Category.objects.create(parent=self.c0, title="Mňam mňam", slug="mnam-mnam")
+
+    def tearDown(self):
+        super(TestCategoryModel, self).tearDown()
+        Category.objects.all().delete()
 
     def test_nested_category_path(self):
         tools.assert_equal('amen', self.c0.path)
@@ -83,3 +88,8 @@ class TestCategoryModel(TestCase):
 
     def test_unicode_returns_title(self):
         tools.assert_equal("Mňam mňam", "%s" % self.c1.__unicode__())
+
+    def test_select_related(self):
+        if DJANGO_VERSION[:2] < (1, 4):
+            raise SkipTest()
+        self.assertNumQueries(1, lambda: Category.objects.get(slug="mnam-mnam").parent.slug)
