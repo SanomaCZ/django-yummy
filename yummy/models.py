@@ -187,8 +187,14 @@ class Recipe(models.Model):
 
     owner = models.ForeignKey(User, verbose_name=_('User'))
     is_approved = models.BooleanField(_('Approved'), default=False)
-    created = models.DateTimeField(auto_now_add=True, editable=False)
-    updated = models.DateTimeField(auto_now=True, editable=False)
+    created = models.DateTimeField(editable=False)
+    updated = models.DateTimeField(editable=False)
+
+    def save(self, **kwargs):
+        if not self.id:
+            self.created = datetime.now()
+        self.updated = datetime.now()
+        super(Recipe, self).save(**kwargs)
 
     class Meta:
         verbose_name = _('Recipe')
