@@ -38,6 +38,16 @@ class TestCategoryModel(TestCase):
         new_c = Category(parent=self.c0, title="Mňam mňam", slug="mnam-mnam")
         tools.assert_raises(ValidationError, new_c.clean)
 
+    def test_path_is_unique_on_clean_no_parent(self):
+        new_c = Category(title="Ámen", slug="amen")
+        tools.assert_raises(ValidationError, new_c.clean)
+
+    def test_path_is_unique(self):
+        new_c_ok = Category(title="Ámen 2", slug="amen-2")
+        new_c_no = Category(title="Ámen", slug="amen")
+        tools.assert_true(new_c_ok.path_is_unique())
+        tools.assert_false(new_c_no.path_is_unique())
+
     def test_path_changed_correctly(self):
         c01 = Category.objects.create(title="Jajky", slug="jajky")
         c12 = Category.objects.create(parent=self.c1, title="Mňam mňam", slug="mnam-mnam-2")
@@ -63,3 +73,13 @@ class TestCategoryModel(TestCase):
 
         tools.assert_true(self.c1 in self.c0.get_descendants())
         tools.assert_true(c12 in self.c0.get_descendants())
+
+    def test_is_ancestor_if_category_none(self):
+        tools.assert_false(self.c0.is_ancestor_of())
+
+    def test_is_ancestor(self):
+        tools.assert_false(self.c1.is_ancestor_of(self.c0))
+        tools.assert_true(self.c0.is_ancestor_of(self.c1))
+
+    def test_unicode_returns_title(self):
+        tools.assert_equal("Mňam mňam", "%s" % self.c1.__unicode__())

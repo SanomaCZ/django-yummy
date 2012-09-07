@@ -129,7 +129,7 @@ class Category(models.Model):
             path = self.slug
         try:
             self.__class__.objects.get(path=path)
-        except self.__class__.DoesNotExists:
+        except self.__class__.DoesNotExist:
             return True
         else:
             return False
