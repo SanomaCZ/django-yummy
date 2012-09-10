@@ -5,8 +5,12 @@ from yummy.models import (Category, CookingType, Cuisine, Ingredient,
     IngredientInRecipeGroup)
 
 
+class CuisineAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
+
+
 class CategoryAdmin(admin.ModelAdmin):
-    pass
+    prepopulated_fields = {'slug': ('title',)}
 
 
 class IngredientInRecipeInlineAdmin(admin.TabularInline):
@@ -25,7 +29,8 @@ class RecipeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Recipe, RecipeAdmin)
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Cuisine, CuisineAdmin)
 
-admin.site.register([Category, CookingType, Cuisine, Ingredient,
-                     IngredientGroup, UnitConversion, IngredientInRecipeGroup,
-                     IngredientInRecipe])
+admin.site.register([CookingType, Ingredient, IngredientGroup, UnitConversion,
+                     IngredientInRecipeGroup, IngredientInRecipe])
