@@ -195,6 +195,9 @@ class Recipe(models.Model):
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
 
+    def __unicode__(self):
+        return self.title
+
     def save(self, **kwargs):
         if not self.id:
             self.created = datetime.now()
@@ -224,22 +227,18 @@ class IngredientInRecipeGroup(models.Model):
 
 class IngredientInRecipe(models.Model):
 
-    recipe = models.ForeignKey(Recipe, verbose_name=_('Recipe'), null=True)
-    group = models.ForeignKey(IngredientInRecipeGroup, verbose_name=_('Group'), null=True)
+    recipe = models.ForeignKey(Recipe, verbose_name=_('Recipe'))
+    group = models.ForeignKey(IngredientInRecipeGroup, verbose_name=_('Group'), null=True, blank=True)
     ingredient = models.ForeignKey(Ingredient, verbose_name=_('Ingredient'))
     amount = models.DecimalField(_('Amount'), max_digits=5, decimal_places=2, null=True, blank=True)
     unit = models.PositiveSmallIntegerField(_('Unit'), choices=conf.UNIT_CHOICES, null=True, blank=True)
     order = models.PositiveSmallIntegerField(_('Order'), default=1)
-
-    def clean(self):
-        if self.recipe is None and self.group is None:
-            raise ValidationError(_("Recipe or Group must be filled."))
+    note = models.CharField(_('Note'), max_length=255, blank=True)
 
     def __unicode__(self):
         return u"%s - %s" % (self.ingredient, self.recipe)
 
     class Meta:
-        unique_together = (('recipe', 'ingredient',), ('group', 'ingredient',))
         verbose_name = _('Ingredient in recipe')
         verbose_name_plural = _('Ingredients in recipe')
 

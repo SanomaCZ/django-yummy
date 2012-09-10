@@ -1,7 +1,31 @@
 from django.contrib import admin
 
 from yummy.models import (Category, CookingType, Cuisine, Ingredient,
-                          IngredientGroup, UnitConversion)
+    IngredientGroup, UnitConversion, Recipe, IngredientInRecipe,
+    IngredientInRecipeGroup)
+
+
+class CategoryAdmin(admin.ModelAdmin):
+    pass
+
+
+class IngredientInRecipeInlineAdmin(admin.TabularInline):
+    model = IngredientInRecipe
+    extra = 1
+
+class IngredientInRecipeGroupInlineAdmin(admin.TabularInline):
+    model = IngredientInRecipeGroup
+    extra = 1
+
+
+class RecipeAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('title',)}
+    inlines = [IngredientInRecipeInlineAdmin, IngredientInRecipeGroupInlineAdmin]
+    exclude_fields = ('group',)
+
+
+admin.site.register(Recipe, RecipeAdmin)
 
 admin.site.register([Category, CookingType, Cuisine, Ingredient,
-                     IngredientGroup, UnitConversion])
+                     IngredientGroup, UnitConversion, IngredientInRecipeGroup,
+                     IngredientInRecipe])
