@@ -243,19 +243,6 @@ class IngredientInRecipe(models.Model):
         verbose_name_plural = _('Ingredients in recipe')
 
 
-class RecipeOfDay(models.Model):
-
-    date = models.DateField(_('Date'), unique=True)
-    recipe = models.ForeignKey(Recipe, verbose_name=_('Recipe'))
-
-    def __unicode__(self):
-        return u"%s: %s" % (self.date, self.recipe)
-
-    class Meta:
-        verbose_name = _('Recipe of day')
-        verbose_name_plural = _('Recipes of day')
-
-
 class UnitConversion(models.Model):
 
     from_unit = models.PositiveSmallIntegerField(choices=conf.UNIT_CHOICES)
