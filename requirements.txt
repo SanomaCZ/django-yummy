@@ -1,3 +1,4 @@
 PIL
 Django>=1.4,<1.5
 south>=0.7
+-e git+https://github.com/thinkingpotato/django-taggit.git#egg=django-taggit
