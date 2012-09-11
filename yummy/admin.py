@@ -32,6 +32,8 @@ class RecipeAdmin(admin.ModelAdmin):
 
 class PhotoAdmin(admin.ModelAdmin):
 
+    readonly_fields = ('owner',)
+
     def save_model(self, request, obj, form, change):
         obj.owner = request.user
         return super(PhotoAdmin, self).save_model(request, obj, form, change)
