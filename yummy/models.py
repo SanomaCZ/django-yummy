@@ -1,8 +1,11 @@
+from os import path
+from hashlib import md5
 from datetime import datetime
 
 from django.db import models
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
+from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
@@ -69,16 +72,33 @@ class Ingredient(models.Model):
         verbose_name_plural = _('Ingredients')
 
 
+def upload_to(instance, filename):
+    name, ext = path.splitext(filename)
+    to_hash = '|'.join((name, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), smart_str(instance.owner)))
+    h = md5(to_hash).hexdigest()
+
+    return path.join(
+        "yummy",
+        h[:2],
+        h[2:4],
+        h + ext.lower()
+    )
+
+
 class Photo(models.Model):
 
-    # FIXME: smarter callable upload_to
-    image = models.ImageField(_('Image'), upload_to="photos/%Y/%m/%d")
-    title = models.CharField(_('Title'), max_length=64)
-    slug = models.SlugField(_('Slug'), max_length=64)
+    image = models.ImageField(_('Image'), upload_to=upload_to, max_length=255,
+                              width_field='width', height_field='height')
+    width = models.PositiveIntegerField(editable=False)
+    height = models.PositiveIntegerField(editable=False)
+    title = models.CharField(_('Title'), max_length=64, blank=True)
     description = models.TextField(_('Description'), blank=True)
     is_redaction = models.BooleanField(default=False)
 
-    owner = models.ForeignKey(User, editable=False)
+    owner = models.ForeignKey(User)
+
+    def __unicode__(self):
+        return self.image.url
 
     class Meta:
         verbose_name = _('Photo')
@@ -195,6 +215,8 @@ class Recipe(models.Model):
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
 
+#    photos = models.ManyToManyField(Photo, verbose_name=_('Photos'), through='RecipePhoto')
+
     def __unicode__(self):
         return self.title
 
@@ -207,6 +229,21 @@ class Recipe(models.Model):
     class Meta:
         verbose_name = _('Recipe')
         verbose_name_plural = _('Recipes')
+
+
+class RecipePhoto(models.Model):
+    recipe = models.ForeignKey(Recipe, verbose_name=_('Recipe'))
+    photo = models.ForeignKey(Photo, verbose_name=_('Photo'))
+    is_visible = models.BooleanField(_('Visible'), default=True)
+    order = models.PositiveSmallIntegerField(_('Order'), default=1)
+
+    def __unicode__(self):
+        return u"%d. %s" % (self.order, self.photo)
+
+    class Meta:
+        unique_together = (('recipe', 'photo'),)
+        verbose_name = _('Recipe photo')
+        verbose_name_plural = _('Recipe photos')
 
 
 class IngredientInRecipeGroup(models.Model):
