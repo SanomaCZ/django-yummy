@@ -20,3 +20,11 @@ DIFFICULTY_CHOICES = (
     (3, _('Standard difficulty')),
     (5, _('Difficult')),
 )
+
+PHOTO_EXTENSION = {
+    'JPEG': '.jpg',
+    'PNG': '.png',
+    'GIF': '.gif'
+}
+
+RECIPE_RECOMMENDATIONS_COUNT = 3
