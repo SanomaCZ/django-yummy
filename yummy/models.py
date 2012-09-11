@@ -185,13 +185,13 @@ class Recipe(models.Model):
     cuisines = models.ManyToManyField(Cuisine, verbose_name=_('Cuisines'))
     servings = models.PositiveSmallIntegerField(_('Servings'), blank=True, null=True)
 
-    price = models.SmallIntegerField(_('Price'), choices=conf.PRICING_CHOICES, default=3)
-    difficulty = models.PositiveSmallIntegerField(_('Preparation difficulty'), choices=conf.DIFFICULTY_CHOICES, default=3)
+    price = models.SmallIntegerField(_('Price'), choices=conf.PRICING_CHOICES, default=3, db_index=True)
+    difficulty = models.PositiveSmallIntegerField(_('Preparation difficulty'), choices=conf.DIFFICULTY_CHOICES, default=3, db_index=True)
     preparation_time = models.PositiveSmallIntegerField(_('Preparation time (min)'))
     caloric_value = models.PositiveIntegerField(_('Caloric value'), blank=True, null=True)
 
     owner = models.ForeignKey(User, verbose_name=_('User'))
-    is_approved = models.BooleanField(_('Approved'), default=False)
+    is_approved = models.BooleanField(_('Approved'), default=False, db_index=True)
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
 
@@ -232,13 +232,14 @@ class IngredientInRecipe(models.Model):
     ingredient = models.ForeignKey(Ingredient, verbose_name=_('Ingredient'))
     amount = models.DecimalField(_('Amount'), max_digits=5, decimal_places=2, null=True, blank=True)
     unit = models.PositiveSmallIntegerField(_('Unit'), choices=conf.UNIT_CHOICES, null=True, blank=True)
-    order = models.PositiveSmallIntegerField(_('Order'), default=1)
+    order = models.PositiveSmallIntegerField(_('Order'), default=1, db_index=True)
     note = models.CharField(_('Note'), max_length=255, blank=True)
 
     def __unicode__(self):
         return u"%s - %s" % (self.ingredient, self.recipe)
 
     class Meta:
+        unique_together = (('recipe', 'order'),)
         verbose_name = _('Ingredient in recipe')
         verbose_name_plural = _('Ingredients in recipe')
 
@@ -256,5 +257,3 @@ class UnitConversion(models.Model):
         unique_together = (('from_unit', 'to_unit',),)
         verbose_name = _('Unit conversion')
         verbose_name_plural = _('Units conversions')
-
-
