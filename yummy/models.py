@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
 from yummy import conf
-from yummy.managers import RecipeManager, CategoryManager
+from yummy.managers import RecipeManager, CategoryManager, RecipeRecommendationManager
 
 
 class CookingType(models.Model):
@@ -294,3 +294,19 @@ class UnitConversion(models.Model):
         unique_together = (('from_unit', 'to_unit',),)
         verbose_name = _('Unit conversion')
         verbose_name_plural = _('Units conversions')
+
+
+class RecipeRecommendation(models.Model):
+
+    objects = RecipeRecommendationManager()
+
+    day_from = models.DateField(_("Show from day"), help_text=_("Recipe will show itself starting this day"))
+    day_to = models.DateField(_("Show until day"), help_text=_("Recipe shown until this day. This field is not required. The longer is recipe shown, the lower priority it has."), blank=True, null=True)
+    recipe = models.ForeignKey(Recipe)
+
+    def __unicode__(self):
+        return u"'%s', %s - %s" % (self.recipe, self.day_from, (self.day_to or u'infinity'))
+
+    class Meta:
+        verbose_name = _("Recipe recommendation")
+        verbose_name_plural = _("Recipe recommendations")

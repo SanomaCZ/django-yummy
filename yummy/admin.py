@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from yummy.models import (Category, CookingType, Cuisine, Ingredient,
     IngredientGroup, UnitConversion, Recipe, IngredientInRecipe,
-    IngredientInRecipeGroup, Photo, RecipePhoto)
+    IngredientInRecipeGroup, Photo, RecipePhoto, RecipeRecommendation)
 
 
 class CuisineAdmin(admin.ModelAdmin):
@@ -45,4 +45,5 @@ admin.site.register(Cuisine, CuisineAdmin)
 admin.site.register(Photo, PhotoAdmin)
 
 admin.site.register([CookingType, Ingredient, IngredientGroup, UnitConversion,
-                     IngredientInRecipeGroup, IngredientInRecipe, RecipePhoto])
+                     IngredientInRecipeGroup, IngredientInRecipe, RecipePhoto,
+                     RecipeRecommendation])
