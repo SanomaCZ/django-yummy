@@ -93,7 +93,7 @@ class Photo(models.Model):
     height = models.PositiveIntegerField(editable=False)
     title = models.CharField(_('Title'), max_length=64, blank=True)
     description = models.TextField(_('Description'), blank=True)
-    is_redaction = models.BooleanField(default=False)
+    is_redaction = models.BooleanField(default=False, editable=False)
 
     owner = models.ForeignKey(User, editable=False)
 
@@ -229,6 +229,9 @@ class Recipe(models.Model):
     class Meta:
         verbose_name = _('Recipe')
         verbose_name_plural = _('Recipes')
+        permissions = (
+            ("approve_recipe", "Can approve recipe"),
+        )
 
 
 class RecipePhoto(models.Model):
@@ -310,3 +313,25 @@ class RecipeRecommendation(models.Model):
     class Meta:
         verbose_name = _("Recipe recommendation")
         verbose_name_plural = _("Recipe recommendations")
+
+
+"""
+class CookBook(models.Model):
+    owner = models.OneToOneField(User)
+
+    def __unicode__(self):
+        return u"%s's cookbok" % self.owner
+
+    class Meta:
+        verbose_name = _('Cookbook')
+        verbose_name_plural = _('Cookbooks')
+
+
+class RecipeInCookBook(models.Model):
+    cookbook = models.ForeignKey(CookBook)
+    recipe = models.ForeignKey(Recipe)
+
+
+class ShoppingList(models.Model):
+    owner = models.ForeignKey(User)
+"""
