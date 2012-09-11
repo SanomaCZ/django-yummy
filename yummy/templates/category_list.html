@@ -1,0 +1,29 @@
+{% extends BASE_TEMPLATE %}
+
+
+{% block content %}
+
+
+	{% include "categories_overview.html" %}
+
+	<h1 xmlns="http://www.w3.org/1999/html">{{ category.title }}</h1>
+
+	<hr/>
+
+	{% for one in object_list %}
+		<div class="row">
+			<a href="{% url yummy:recipe_detail recipe_slug=one.slug %}">
+
+				<div class="span2 thumbnail">
+
+					<img src="{{ STATIC_URL }}images/content/image1.jpg"/>
+					{# TODO <img src="{{ one.image }}" /> #}
+				</div>
+				<div class="span4">
+					<h3>{{ one.title }}</h3>
+				</div>
+			</a>
+		</div>
+	{% endfor %}
+
+{% endblock %}
