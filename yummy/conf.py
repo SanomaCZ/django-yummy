@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils.translation import ngettext, npgettext, ugettext_lazy as _
 
 #ngettext(singular, plural, number)
@@ -28,3 +29,13 @@ PHOTO_EXTENSION = {
 }
 
 RECIPE_RECOMMENDATIONS_COUNT = 3
+
+CATEGORY_ORDER_DEFAULT = getattr(settings, 'YUMMY_CATEGORY_ORDER', '-created')
+CATEGORY_ORDERING = {
+    'slug': _("by ranking"), #TODO - add ranking
+    'title': _("by alphabet"),
+    '-created': _("by date"),
+}
+CATEGORY_PHOTO_OPTIONS = ('all', 'photos')
+CATEGORY_ORDER_ATTR = 'category_order_attr'
+CATEGORY_PHOTO_ATTR = 'category_photo_attr'

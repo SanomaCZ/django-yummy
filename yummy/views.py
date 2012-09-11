@@ -1,19 +1,9 @@
 from django.http import Http404, HttpResponseRedirect
-from django.views.generic import ListView, DetailView, RedirectView, View
+from django.views.generic import ListView, DetailView, View
 from django.utils.translation import ugettext, ugettext_lazy as _
-from django.conf import settings
 
 from yummy.models import Category, Ingredient, Recipe
-
-CATEGORY_ORDER_DEFAULT = getattr(settings, 'YUMMY_CATEGORY_ORDER', '-created')
-CATEGORY_ORDERING = {
-    'slug': _("by ranking"), #TODO - add ranking
-    'title': _("by alphabet"),
-    '-created': _("by date"),
-}
-CATEGORY_PHOTO = ('all', 'photos')
-CATEGORY_ORDER_ATTR = 'category_order_attr'
-CATEGORY_PHOTO_ATTR = 'category_photo_attr'
+from yummy import conf
 
 
 class IngredientView(ListView):
@@ -66,23 +56,23 @@ class CategoryView(ListView):
         if self.category:
             qs = qs.filter(category=self.category)
 
-        photo_attr = self.request.COOKIES.get(CATEGORY_PHOTO_ATTR) or 'all'
+        photo_attr = self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all'
         if photo_attr != 'all':
             #TODO - add photo filtering
             #qs = qs.filter()
             pass
-        order_attr = self.request.COOKIES.get(CATEGORY_ORDER_ATTR)
-        if order_attr not in CATEGORY_ORDERING.keys():
-            order_attr = CATEGORY_ORDER_DEFAULT
+        order_attr = self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR)
+        if order_attr not in conf.CATEGORY_ORDERING.keys():
+            order_attr = conf.CATEGORY_ORDER_DEFAULT
 
         qs = qs.order_by(order_attr)
         return qs
 
     def get_context_data(self, **kwargs):
         data = super(CategoryView, self).get_context_data(**kwargs)
-        data['current_order_attr'] = self.request.COOKIES.get(CATEGORY_ORDER_ATTR) or CATEGORY_ORDER_DEFAULT
-        data['current_photo_attr'] = self.request.COOKIES.get(CATEGORY_PHOTO_ATTR) or 'all'
-        data['ranking_attrs'] = CATEGORY_ORDERING
+        data['current_order_attr'] = self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) or conf.CATEGORY_ORDER_DEFAULT
+        data['current_photo_attr'] = self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all'
+        data['ranking_attrs'] = conf.CATEGORY_ORDERING
         return data
 
 
@@ -93,13 +83,13 @@ class CategoryReorder(View):
         next_url =  request.GET.get('next_url') or '/'
         response = HttpResponseRedirect(next_url)
 
-        order_attr = kwargs.get('order_attr') or CATEGORY_ORDER_ATTR
-        if request.COOKIES.get(CATEGORY_ORDER_ATTR) != order_attr:
-            response.set_cookie(CATEGORY_ORDER_ATTR, order_attr)
+        order_attr = kwargs.get('order_attr') or conf.CATEGORY_ORDER_ATTR
+        if request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) != order_attr:
+            response.set_cookie(conf.CATEGORY_ORDER_ATTR, order_attr)
 
         photo_attr = kwargs.get('photo_attr') or 'all'
-        if request.COOKIES.get(CATEGORY_PHOTO_ATTR) != photo_attr:
-            response.set_cookie(CATEGORY_PHOTO_ATTR, photo_attr)
+        if request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) != photo_attr:
+            response.set_cookie(conf.CATEGORY_PHOTO_ATTR, photo_attr)
 
         return response
 
