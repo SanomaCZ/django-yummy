@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from yummy.models import (Category, CookingType, Cuisine, Ingredient,
     IngredientGroup, UnitConversion, Recipe, IngredientInRecipe,
-    IngredientInRecipeGroup, Photo)
+    IngredientInRecipeGroup, Photo, RecipePhoto)
 
 
 class CuisineAdmin(admin.ModelAdmin):
@@ -31,7 +31,8 @@ class RecipeAdmin(admin.ModelAdmin):
 
 
 class PhotoAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('title',)}
+
+    readonly_fields = ('owner',)
 
     def save_model(self, request, obj, form, change):
         obj.owner = request.user
@@ -44,4 +45,4 @@ admin.site.register(Cuisine, CuisineAdmin)
 admin.site.register(Photo, PhotoAdmin)
 
 admin.site.register([CookingType, Ingredient, IngredientGroup, UnitConversion,
-                     IngredientInRecipeGroup, IngredientInRecipe])
+                     IngredientInRecipeGroup, IngredientInRecipe, RecipePhoto])
