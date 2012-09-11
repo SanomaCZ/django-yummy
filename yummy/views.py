@@ -34,11 +34,12 @@ class CategoryView(ListView):
     template_name = 'category_list.html'
     model = Recipe
 
-    def set_category(self, slug):
+    def set_category(self, category_path):
         try:
-            self._category = Category.objects.get(slug=slug)
+            self._category = Category.objects.get(path=category_path)
         except Category.DoesNotExist:
-            return None
+            self._category = None
+        print 'cat set'
         return self._category
 
     @property
@@ -46,13 +47,18 @@ class CategoryView(ListView):
         return self._category
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.set_category(kwargs.get('category')):
+        category = kwargs.get('category_path')
+        if not self.set_category(category) and category:
             raise Http404(ugettext("Category not found"))
         return super(CategoryView, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        return self.model.objects.approved().filter(category=self.category)
-
+        qs = self.model.objects.approved()
+        print 'get qs'
+        print self.category
+        if self.category:
+            qs = qs.filter(category=self.category)
+        return qs
 
 
 class RecipeDetail(DetailView):
