@@ -180,7 +180,7 @@ class Category(models.Model):
 
         super(Category, self).save(**kwargs)
 
-        if old_path != self.path and self.get_children().count() > 0:
+        if old_path != self.path and self.get_children().count():
             # update descendants
             for cat in self.get_descendants():
                 cat.save(force_update=True)
