@@ -48,4 +48,22 @@
 		</div>
 	{% endfor %}
 
+	{% if is_paginated %}
+		<div class="pagination">
+			<ul>
+				{% for num in paginator.page_range %}
+					{% if num == page_obj.number %}
+						<li class="disabled">
+							<span class="current page">{{ num }}</span>
+
+							{% else %}
+						<li>
+						<a href="?page={{ num }}"> {{ num }}</a>
+					{% endif %}
+
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% endif %}
 {% endblock %}
