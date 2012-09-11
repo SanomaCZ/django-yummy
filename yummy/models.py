@@ -95,7 +95,7 @@ class Photo(models.Model):
     description = models.TextField(_('Description'), blank=True)
     is_redaction = models.BooleanField(default=False)
 
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(User, editable=False)
 
     def __unicode__(self):
         return self.image.url
