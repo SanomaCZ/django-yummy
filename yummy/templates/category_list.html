@@ -1,14 +1,36 @@
 {% extends BASE_TEMPLATE %}
-
+{% load i18n %}
 
 {% block content %}
 
 
 	{% include "categories_overview.html" %}
 
-	<h1 xmlns="http://www.w3.org/1999/html">{{ category.title }}</h1>
+	<h1>{{ category.title }}</h1>
 
 	<hr/>
+
+	{% trans "Order recipes by" %}
+
+	{% for loop_order_id, loop_order_trans in ranking_attrs.items %}
+		<span {% if current_order_attr == loop_order_id %}class="active"{% endif %}>
+		    <a href="{% url yummy:category_reorder order_attr=loop_order_id %}?next_url={{ request.path }}">{{ loop_order_trans }}</a>
+		</span>
+	{% endfor %}
+
+	<span>|</span>
+
+	<span id="photos_reorder">
+	    {% if current_photo_attr == 'photos' %}
+			<a href="{% url yummy:category_reorder order_attr=current_order_attr photo_attr='all' %}?next_url={{ request.path }}">
+			<input type="checkbox" checked="checked"/>
+		{% else %}
+			<a href="{% url yummy:category_reorder order_attr=current_order_attr photo_attr='photos' %}?next_url={{ request.path }}">
+			<input type="checkbox"/>
+		{% endif %}
+		{% trans "Show recipes only with photos" %}
+		</a>
+	</span>
 
 	{% for one in object_list %}
 		<div class="row">
