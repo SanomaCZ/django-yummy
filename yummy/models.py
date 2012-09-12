@@ -304,7 +304,9 @@ class RecipeRecommendation(models.Model):
     objects = RecipeRecommendationManager()
 
     day_from = models.DateField(_("Show from day"), help_text=_("Recipe will show itself starting this day"))
-    day_to = models.DateField(_("Show until day"), help_text=_("Recipe shown until this day. This field is not required. The longer is recipe shown, the lower priority it has."), blank=True, null=True)
+    day_to = models.DateField(_("Show until day"), blank=True, null=True,
+                              help_text=_("Recipe shown until this day. This field is not required. "
+                                            "The longer is recipe shown, the lower priority it has."))
     recipe = models.ForeignKey(Recipe)
 
     def __unicode__(self):

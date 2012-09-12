@@ -3,10 +3,20 @@
 
 {% block content %}
 
-
-	{% include "categories_overview.html" %}
-
-	<h1>{{ category.title }}</h1>
+	{% if category %}
+		<h1>{{ category.title }}</h1>
+		<ul class="unstyled">
+			{% for one in category.get_descendants %}
+				<li>
+				<a href="{% url category_detail one.path %}">
+				{{ one.title }}
+				</a>
+				</li>
+			{% endfor %}
+		</ul>
+	{% else %}
+		{% include "categories_overview.html" %}
+	{% endif %}
 
 	<hr/>
 

@@ -73,6 +73,7 @@ class CategoryView(ListView):
         data['current_order_attr'] = self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) or conf.CATEGORY_ORDER_DEFAULT
         data['current_photo_attr'] = self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all'
         data['ranking_attrs'] = conf.CATEGORY_ORDERING
+        data['category'] = self.category
         return data
 
 
