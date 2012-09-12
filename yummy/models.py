@@ -315,23 +315,18 @@ class RecipeRecommendation(models.Model):
         verbose_name_plural = _("Recipe recommendations")
 
 
-"""
 class CookBook(models.Model):
-    owner = models.OneToOneField(User)
+
+    owner = models.ForeignKey(User)
+    title = models.CharField(_("Title"), max_length=128)
+    slug = models.SlugField(_("Slug"), max_length=128)
+    is_public = models.BooleanField(_("Public"), default=True)
+    recipes = models.ManyToManyField(Recipe, verbose_name=_('Recipes'))
 
     def __unicode__(self):
-        return u"%s's cookbok" % self.owner
+        return u"%s's cookbok: %s" % (self.owner, self.title)
 
     class Meta:
+        unique_together = (('owner', 'slug'),)
         verbose_name = _('Cookbook')
         verbose_name_plural = _('Cookbooks')
-
-
-class RecipeInCookBook(models.Model):
-    cookbook = models.ForeignKey(CookBook)
-    recipe = models.ForeignKey(Recipe)
-
-
-class ShoppingList(models.Model):
-    owner = models.ForeignKey(User)
-"""
