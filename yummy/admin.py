@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.forms.models import ModelChoiceField
 
 from yummy.models import (Category, CookingType, Cuisine, Ingredient,
     IngredientGroup, UnitConversion, Recipe, IngredientInRecipe,
@@ -40,11 +41,19 @@ class PhotoAdmin(admin.ModelAdmin):
         return super(PhotoAdmin, self).save_model(request, obj, form, change)
 
 
+class RecipeRecommendationAdmin(admin.ModelAdmin):
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "recipe":
+            queryset = Recipe.objects.approved()
+            return ModelChoiceField(queryset, **kwargs)
+
+
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Cuisine, CuisineAdmin)
 admin.site.register(Photo, PhotoAdmin)
+admin.site.register(RecipeRecommendation, RecipeRecommendationAdmin)
 
 admin.site.register([CookingType, Ingredient, IngredientGroup, UnitConversion,
-                     IngredientInRecipeGroup, IngredientInRecipe, RecipePhoto,
-                     RecipeRecommendation])
+                     IngredientInRecipeGroup, IngredientInRecipe, RecipePhoto])
