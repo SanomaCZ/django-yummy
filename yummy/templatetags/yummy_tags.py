@@ -12,7 +12,7 @@ class RecommendationNode(template.Node):
 
     def render(self, context):
             qs = RecipeRecommendation.objects.get_actual()
-            context[self.varname] = [one.recipe for one in qs[:self.count]]
+            context[self.varname] = tuple(one.recipe for one in qs[:self.count])
             return ''
 
 
