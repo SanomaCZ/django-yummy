@@ -8,7 +8,7 @@
 		<ul class="unstyled">
 			{% for one in category.get_descendants %}
 				<li>
-				<a href="{% url category_detail one.path %}">
+				<a href="{% url yummy:category_detail category_path=one.path %}">
 				{{ one.title }}
 				</a>
 				</li>
