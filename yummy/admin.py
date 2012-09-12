@@ -3,7 +3,7 @@ from django.contrib.admin.widgets import ForeignKeyRawIdWidget
 
 from yummy.models import (Category, CookingType, Cuisine, Ingredient,
     IngredientGroup, UnitConversion, Recipe, IngredientInRecipe,
-    IngredientInRecipeGroup, Photo, RecipePhoto, RecipeRecommendation, CookBook)
+    IngredientInRecipeGroup, Photo, RecipePhoto, RecipeRecommendation, CookBook, WeekMenu)
 
 
 class ApprovedRecipeRaw(ForeignKeyRawIdWidget):
@@ -59,12 +59,21 @@ class RecipeRecommendationAdmin(admin.ModelAdmin):
         return db_field.formfield(**kwargs)
 
 
+class WeekMenuAdmin(admin.ModelAdmin):
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        db = kwargs.get('using')
+        if db_field.name in ('soup', 'meal', 'dessert'):
+            kwargs['widget'] = ApprovedRecipeRaw(db_field.rel, self.admin_site, using=db)
+        return db_field.formfield(**kwargs)
+
 
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Cuisine, CuisineAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(RecipeRecommendation, RecipeRecommendationAdmin)
+admin.site.register(WeekMenu, WeekMenuAdmin)
 
 admin.site.register([CookingType, Ingredient, IngredientGroup, UnitConversion,
                      IngredientInRecipeGroup, IngredientInRecipe, RecipePhoto, CookBook])

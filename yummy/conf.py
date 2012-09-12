@@ -39,3 +39,13 @@ CATEGORY_ORDERING = {
 CATEGORY_PHOTO_OPTIONS = ('all', 'photos')
 CATEGORY_ORDER_ATTR = 'category_order_attr'
 CATEGORY_PHOTO_ATTR = 'category_photo_attr'
+
+WEEK_DAYS = (
+    (1, _("Monday")),
+    (2, _("Tuesday")),
+    (3, _("Wednesday")),
+    (4, _("Thursday")),
+    (5, _("Friday")),
+    (6, _("Saturday")),
+    (7, _("Sunday")),
+)

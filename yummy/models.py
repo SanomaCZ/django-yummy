@@ -336,3 +336,20 @@ class CookBook(models.Model):
         unique_together = (('owner', 'slug'),)
         verbose_name = _('Cookbook')
         verbose_name_plural = _('Cookbooks')
+
+
+class WeekMenu(models.Model):
+
+    day = models.IntegerField(_("Day of the week"), choices=conf.WEEK_DAYS)
+    soup = models.ForeignKey(Recipe, blank=True, null=True, related_name="menu_soup")
+    meal = models.ForeignKey(Recipe, blank=True, null=True, related_name="menu_meal")
+    dessert = models.ForeignKey(Recipe, blank=True, null=True, related_name="menu_dessert")
+    even_week = models.BooleanField(_("Menu for even week"), help_text=_("Check if this day menu is for even week"), default=False)
+
+    class Meta:
+        unique_together = (('day', 'even_week'),)
+        verbose_name = _("Menu of the day")
+        verbose_name_plural = _("Menus of the day")
+
+    def __unicode__(self):
+        return u"%s week, day %s" % (_("Even") if self.even_week else _("Odd"), self.get_day_display())
