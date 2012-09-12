@@ -2,6 +2,7 @@
 .ropeproject
 build/
 *.egg-info
+*.egg
 nosetests.xml
 .coverage
 
