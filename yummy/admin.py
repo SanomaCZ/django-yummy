@@ -1,9 +1,17 @@
 from django.contrib import admin
-from django.forms.models import ModelChoiceField
+from django.contrib.admin.widgets import ForeignKeyRawIdWidget
 
 from yummy.models import (Category, CookingType, Cuisine, Ingredient,
     IngredientGroup, UnitConversion, Recipe, IngredientInRecipe,
     IngredientInRecipeGroup, Photo, RecipePhoto, RecipeRecommendation)
+
+
+class ApprovedRecipeRaw(ForeignKeyRawIdWidget):
+
+    def url_parameters(self):
+        params = super(ApprovedRecipeRaw, self).url_parameters()
+        params.update(dict(is_approved=True))
+        return params
 
 
 class CuisineAdmin(admin.ModelAdmin):
@@ -45,9 +53,11 @@ class PhotoAdmin(admin.ModelAdmin):
 class RecipeRecommendationAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "recipe":
-            queryset = Recipe.objects.approved()
-            return ModelChoiceField(queryset, **kwargs)
+        db = kwargs.get('using')
+        if db_field.name == 'recipe':
+            kwargs['widget'] = ApprovedRecipeRaw(db_field.rel, self.admin_site, using=db)
+        return db_field.formfield(**kwargs)
+
 
 
 admin.site.register(Recipe, RecipeAdmin)

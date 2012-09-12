@@ -310,11 +310,15 @@ class RecipeRecommendation(models.Model):
     recipe = models.ForeignKey(Recipe)
 
     def __unicode__(self):
-        return u"'%s', %s - %s" % (self.recipe, self.day_from, (self.day_to or u'infinity'))
+        return u"'%s', %s - %s" % (self.recipe, self.day_from, (self.day_to or _('until forever')))
 
     class Meta:
         verbose_name = _("Recipe recommendation")
         verbose_name_plural = _("Recipe recommendations")
+
+    def clean(self):
+        if not self.recipe.is_approved:
+            raise ValidationError(_("You can save recommendation only with approved recipe"))
 
 
 """
