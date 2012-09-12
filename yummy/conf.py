@@ -1,17 +1,15 @@
-from collections import namedtuple
 from django.conf import settings
 from django.utils.translation import npgettext, ugettext_lazy as _
 
-Unit = namedtuple('Unit', 'id name abbr')
 UNITS = (
-    Unit(0, npgettext('unit', 'piece', 'pieces', 1), npgettext('unit', 'pc', 'pcs', 1)),
-    Unit(1, npgettext('unit', 'gram', 'grams', 1), 'g'),
-    Unit(2, npgettext('unit', 'dekagram', 'dekagrams', 1), 'dkg'),
-    Unit(3, npgettext('unit', 'kilogram', 'kilograms', 1), 'kg'),
-    Unit(4, npgettext('unit', 'mililiter', 'mililiters', 1), 'ml'),
-    Unit(5, npgettext('unit', 'deciliter', 'deciliters', 1), 'dl'),
-    Unit(6, npgettext('unit', 'liter', 'liters', 1), 'l'),
-    Unit(100, npgettext('unit', 'cup', 'cups', 1), npgettext('unit', 'cup', 'cups', 1)),
+    (0, npgettext('unit', 'piece', 'pieces', 1), npgettext('unit', 'pc', 'pcs', 1)),
+    (1, npgettext('unit', 'gram', 'grams', 1), 'g'),
+    (2, npgettext('unit', 'dekagram', 'dekagrams', 1), 'dkg'),
+    (3, npgettext('unit', 'kilogram', 'kilograms', 1), 'kg'),
+    (4, npgettext('unit', 'mililiter', 'mililiters', 1), 'ml'),
+    (5, npgettext('unit', 'deciliter', 'deciliters', 1), 'dl'),
+    (6, npgettext('unit', 'liter', 'liters', 1), 'l'),
+    (100, npgettext('unit', 'cup', 'cups', 1), npgettext('unit', 'cup', 'cups', 1)),
 )
 UNIT_CHOICES = tuple(unit[:2] for unit in UNITS)
 
