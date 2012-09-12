@@ -3,7 +3,7 @@ from django.contrib.admin.widgets import ForeignKeyRawIdWidget
 
 from yummy.models import (Category, CookingType, Cuisine, Ingredient,
     IngredientGroup, UnitConversion, Recipe, IngredientInRecipe,
-    IngredientInRecipeGroup, Photo, RecipePhoto, RecipeRecommendation)
+    IngredientInRecipeGroup, Photo, RecipePhoto, RecipeRecommendation, CookBook)
 
 
 class ApprovedRecipeRaw(ForeignKeyRawIdWidget):
@@ -67,4 +67,4 @@ admin.site.register(Photo, PhotoAdmin)
 admin.site.register(RecipeRecommendation, RecipeRecommendationAdmin)
 
 admin.site.register([CookingType, Ingredient, IngredientGroup, UnitConversion,
-                     IngredientInRecipeGroup, IngredientInRecipe, RecipePhoto])
+                     IngredientInRecipeGroup, IngredientInRecipe, RecipePhoto, CookBook])
