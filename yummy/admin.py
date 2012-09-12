@@ -12,6 +12,7 @@ class CuisineAdmin(admin.ModelAdmin):
 
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
+    raw_id_fields = ('photo',)
 
 
 class IngredientInRecipeInlineAdmin(admin.TabularInline):
