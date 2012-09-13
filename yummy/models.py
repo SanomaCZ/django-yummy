@@ -5,6 +5,7 @@ from datetime import datetime
 from django.db import models
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -119,6 +120,9 @@ class Category(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('yummy:category_detail', args=(self.path,))
 
     @property
     def is_root_category(self):
