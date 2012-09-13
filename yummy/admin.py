@@ -38,6 +38,7 @@ class RecipeAdmin(admin.ModelAdmin):
     inlines = [IngredientInRecipeInlineAdmin, IngredientInRecipeGroupInlineAdmin]
     exclude_fields = ('group',)
     search_fields = ('title', )
+    list_filter = ['is_approved']
 
 
 class PhotoAdmin(admin.ModelAdmin):
