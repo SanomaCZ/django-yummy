@@ -309,7 +309,7 @@ class RecipeRecommendation(models.Model):
     objects = RecipeRecommendationManager()
 
     day_from = models.DateField(_("Show from day"), help_text=_("Recipe will show itself starting this day"))
-    day_to = models.DateField(_("Show until day"), blank=True, null=True,
+    day_to = models.DateField(_("Show until day (inclusive)"), blank=True, null=True,
                               help_text=_("Recipe shown until this day. This field is not required. "
                                             "The longer is recipe shown, the lower priority it has."))
     recipe = models.ForeignKey(Recipe)
@@ -324,6 +324,17 @@ class RecipeRecommendation(models.Model):
     def clean(self):
         if not self.recipe.is_approved:
             raise ValidationError(_("You can save recommendation only with approved recipe"))
+
+        if self.day_to and self.day_to < self.day_from:
+            raise ValidationError(_("You can save recommendation only with approved recipe"))
+
+    def save(self, *args, **kwargs):
+        try:
+            self.clean()
+        except ValidationError, e:
+            raise IntegrityError(e.message)
+
+        super(RecipeRecommendation, self).save(*args, **kwargs)
 
 
 class CookBook(models.Model):

@@ -1,11 +1,41 @@
 # -*- coding: utf-8 -*-
+from datetime import date, timedelta
+
+from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django import VERSION as DJANGO_VERSION
+
 from nose import tools, SkipTest
 
-from yummy.models import Category
+from yummy.models import Category, Recipe, RecipeRecommendation
+
+
+class TestRecipeRecommendation(TestCase):
+
+    def setUp(self):
+        super(TestRecipeRecommendation, self).setUp()
+        cache.clear()
+
+        self.user = User.objects.create_user(username='foo')
+        self.cat = Category.objects.create(title="generic cat")
+        self.recipe = Recipe.objects.create(
+            title='generic recipe',
+            category=self.cat,
+            preparation_time=20,
+            owner=self.user)
+
+    def test_invalid_date_range_raises_validation_error(self):
+        today = date.today()
+        tools.assert_raises(IntegrityError, lambda: RecipeRecommendation.objects.create(
+            recipe=self.recipe,
+            day_from=today,
+            day_to=today-timedelta(days=1)
+            ))
+
+
 
 
 class TestCategoryModel(TestCase):
