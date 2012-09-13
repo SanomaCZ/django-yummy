@@ -21,12 +21,23 @@ class RecipeManager(models.Manager):
 class RecipeRecommendationManager(models.Manager):
 
     def get_actual(self):
+        """
+        if there is more valid records for current date, order them by day_from
+        (in example lower, r3 has highest priority)
+
+              today
+                |
+        r1  ----+-
+                |
+        r2    --+---
+                |
+        r3     -+----
+        """
         today = date.today()
         return self.get_query_set().filter(
             (models.Q(day_to__gte=today) | models.Q(day_to__isnull=True)),
             day_from__lte=today, recipe__is_approved=True
-        ).select_related('recipe')
-
+        ).select_related('recipe').order_by('-day_from')
 
 
 class WeekMenuManager(models.Manager):

@@ -47,6 +47,52 @@ class TestRecipeRecommendation(TestCase):
         record = RecipeRecommendation.objects.create(recipe=self.recipe, day_from=today)
         tools.assert_equals(record.day_to, None)
 
+    def test_unapproved_recipe_save_raises(self):
+        today = date.today()
+
+        self.recipe.is_approved = False
+        self.recipe.save()
+
+        tools.assert_raises(IntegrityError, lambda: RecipeRecommendation.objects.create(
+            recipe=self.recipe, day_from=today)
+        )
+
+    def test_date_invalid_chronology_borders_raises(self):
+        today = date.today()
+        tools.assert_raises(IntegrityError, lambda: RecipeRecommendation.objects.create(
+            recipe=self.recipe,
+            day_to=today - timedelta(days=2),
+            day_from=today - timedelta(days=1)
+        ))
+
+    def test_recommendation_manager_get_actual_ignores_past_records(self):
+        today = date.today()
+        RecipeRecommendation.objects.create(
+            recipe=self.recipe,
+            day_from=today-timedelta(days=2),
+            day_to=today-timedelta(days=1),
+        )
+
+        tools.assert_equals([], list(RecipeRecommendation.objects.get_actual()))
+
+    def test_recommendation_manager_get_actual_priorized_by_start_date(self):
+        today = date.today()
+
+        r1 = RecipeRecommendation.objects.create(
+            recipe=self.recipe,
+            day_from=today - timedelta(days=2),
+            day_to=today + timedelta(days=1),
+        )
+
+        r2 = RecipeRecommendation.objects.create(
+            recipe=self.recipe,
+            day_from=today - timedelta(days=1),
+            day_to=today + timedelta(days=1),
+        )
+
+        tools.assert_equals(r2, RecipeRecommendation.objects.get_actual()[0])
+
+
 
 class TestCategoryModel(TestCase):
 

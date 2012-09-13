@@ -327,7 +327,7 @@ class RecipeRecommendation(models.Model):
             raise ValidationError(_("You can save recommendation only with approved recipe"))
 
         if self.day_to and self.day_to < self.day_from:
-            raise ValidationError(_("You can save recommendation only with approved recipe"))
+            raise ValidationError(_("Invalid chronology of border dates"))
 
     def save(self, *args, **kwargs):
         try:
