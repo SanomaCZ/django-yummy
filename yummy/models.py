@@ -1,7 +1,8 @@
+from django.utils.timezone import now
 from django.utils.translation.trans_real import ugettext
 from os import path
 from hashlib import md5
-from datetime import datetime, date
+from datetime import date
 
 from django.db import models
 from django.db import IntegrityError
@@ -76,7 +77,7 @@ class Ingredient(models.Model):
 
 def upload_to(instance, filename):
     name, ext = path.splitext(filename)
-    to_hash = '|'.join((name, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), smart_str(instance.owner)))
+    to_hash = '|'.join((name, now().strftime('%Y-%m-%d %H:%M:%S'), smart_str(instance.owner)))
     h = md5(to_hash).hexdigest()
 
     return path.join(
@@ -226,9 +227,9 @@ class Recipe(models.Model):
         return self.title
 
     def save(self, **kwargs):
+        self.updated = now()
         if not self.id:
-            self.created = datetime.now()
-        self.updated = datetime.now()
+            self.created = self.updated
         super(Recipe, self).save(**kwargs)
 
     class Meta:
@@ -354,19 +355,15 @@ class CookBook(models.Model):
         verbose_name_plural = _('Cookbooks')
 
 
-
-def week_parity():
-    foo, week_no, foo = date.isocalendar(date.today())
-    return ugettext("odd") if week_no%2 else ugettext("even")
-
-
 class WeekMenu(models.Model):
 
     day = models.IntegerField(_("Day of the week"), choices=conf.WEEK_DAYS)
     soup = models.ForeignKey(Recipe, blank=True, null=True, related_name="menu_soup")
     meal = models.ForeignKey(Recipe, blank=True, null=True, related_name="menu_meal")
     dessert = models.ForeignKey(Recipe, blank=True, null=True, related_name="menu_dessert")
-    even_week = models.BooleanField(_("Menu for even week"), help_text=_("Check if this day menu is for even week. Current week is %s." % unicode(week_parity())), default=False)
+    even_week = models.BooleanField(_("Menu for even week"), default=False,
+                                    help_text=_("Check if this day menu is for even week. Current week is %s." % \
+                                                ugettext("odd" if date.isocalendar(date.today())[1] % 2 else "even")))
 
     objects = WeekMenuManager()
 
