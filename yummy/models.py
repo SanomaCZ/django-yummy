@@ -1,5 +1,3 @@
-from django.utils.timezone import now
-from django.utils.translation.trans_real import ugettext
 from os import path
 from hashlib import md5
 from datetime import date
@@ -11,6 +9,8 @@ from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from django.utils.timezone import now
+from django.utils.translation.trans_real import ugettext
 
 from yummy import conf
 from yummy.managers import RecipeManager, CategoryManager, RecipeRecommendationManager, WeekMenuManager
@@ -333,7 +333,7 @@ class RecipeRecommendation(models.Model):
         try:
             self.clean()
         except ValidationError, e:
-            raise IntegrityError(e.message)
+            raise IntegrityError(e.messages)
 
         super(RecipeRecommendation, self).save(*args, **kwargs)
 

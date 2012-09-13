@@ -25,9 +25,10 @@ class TestRecipeRecommendation(TestCase):
             title='generic recipe',
             category=self.cat,
             preparation_time=20,
-            owner=self.user)
+            owner=self.user,
+            is_approved=True)
 
-    def test_invalid_date_range_raises_validation_error(self):
+    def test_invalid_date_range_save_raises_validation_error(self):
         today = date.today()
         tools.assert_raises(IntegrityError, lambda: RecipeRecommendation.objects.create(
             recipe=self.recipe,
@@ -35,7 +36,16 @@ class TestRecipeRecommendation(TestCase):
             day_to=today-timedelta(days=1)
             ))
 
+    def test_valid_date_range_save_pass(self):
+        today = date.today()
+        record = RecipeRecommendation.objects.create(recipe=self.recipe,
+                    day_from=today, day_to=today + timedelta(days=1))
+        tools.assert_not_equals(record.pk, None)
 
+    def test_empty_ending_date_save_pass(self):
+        today = date.today()
+        record = RecipeRecommendation.objects.create(recipe=self.recipe, day_from=today)
+        tools.assert_equals(record.day_to, None)
 
 
 class TestCategoryModel(TestCase):
