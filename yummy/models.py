@@ -1,6 +1,7 @@
+from django.utils.translation.trans_real import ugettext
 from os import path
 from hashlib import md5
-from datetime import datetime
+from datetime import datetime, date
 
 from django.db import models
 from django.db import IntegrityError
@@ -11,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
 from yummy import conf
-from yummy.managers import RecipeManager, CategoryManager, RecipeRecommendationManager
+from yummy.managers import RecipeManager, CategoryManager, RecipeRecommendationManager, WeekMenuManager
 
 
 class CookingType(models.Model):
@@ -342,13 +343,21 @@ class CookBook(models.Model):
         verbose_name_plural = _('Cookbooks')
 
 
+
+def week_parity():
+    foo, week_no, foo = date.isocalendar(date.today())
+    return ugettext("odd") if week_no%2 else ugettext("even")
+
+
 class WeekMenu(models.Model):
 
     day = models.IntegerField(_("Day of the week"), choices=conf.WEEK_DAYS)
     soup = models.ForeignKey(Recipe, blank=True, null=True, related_name="menu_soup")
     meal = models.ForeignKey(Recipe, blank=True, null=True, related_name="menu_meal")
     dessert = models.ForeignKey(Recipe, blank=True, null=True, related_name="menu_dessert")
-    even_week = models.BooleanField(_("Menu for even week"), help_text=_("Check if this day menu is for even week"), default=False)
+    even_week = models.BooleanField(_("Menu for even week"), help_text=_("Check if this day menu is for even week. Current week is %s." % unicode(week_parity())), default=False)
+
+    objects = WeekMenuManager()
 
     class Meta:
         unique_together = (('day', 'even_week'),)
