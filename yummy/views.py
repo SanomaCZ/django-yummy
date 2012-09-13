@@ -34,9 +34,9 @@ class CategoryView(ListView):
     template_name = 'category_list.html'
     model = Recipe
 
-    def set_category(self, category_path):
+    def set_category(self, path):
         try:
-            self._category = Category.objects.get(path=category_path)
+            self._category = Category.objects.get(path=path)
         except Category.DoesNotExist:
             self._category = None
         return self._category
@@ -45,11 +45,11 @@ class CategoryView(ListView):
     def category(self):
         return self._category
 
-    def dispatch(self, request, *args, **kwargs):
-        category = kwargs.get('category_path')
-        if not self.set_category(category) and category:
-            raise Http404(ugettext("Category not found"))
-        return super(CategoryView, self).dispatch(request, *args, **kwargs)
+    def dispatch(self, request, path=None, **kwargs):
+        if not self.set_category(path) and path is not None:
+            print path
+            raise Http404("Category with path '%s' not found" % path)
+        return super(CategoryView, self).dispatch(request, path, **kwargs)
 
     def get_queryset(self):
         qs = self.model.objects.approved()
@@ -81,7 +81,7 @@ class CategoryReorder(View):
     def get(self, request, *args, **kwargs):
 
         #TODO - check or sign next_url (see Entree)
-        next_url =  request.GET.get('next_url') or '/'
+        next_url = request.GET.get('next_url') or '/'
         response = HttpResponseRedirect(next_url)
 
         order_attr = kwargs.get('order_attr') or conf.CATEGORY_ORDER_ATTR
@@ -102,6 +102,6 @@ class RecipeDetail(DetailView):
 
     def get_object(self, queryset=None):
         try:
-            return self.model.objects.get(slug=self.kwargs.get('recipe_slug'))
+            return self.model.objects.get(pk=self.kwargs.get('recipe_id'), slug=self.kwargs.get('recipe_slug'))
         except self.model.DoesNotExist:
-            raise Http404(_("Given recipe not found"))
+            raise Http404("Given recipe not found")

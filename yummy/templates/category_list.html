@@ -44,7 +44,7 @@
 
 	{% for one in object_list %}
 		<div class="row">
-			<a href="{% url yummy:recipe_detail recipe_slug=one.slug %}">
+			<a href="{% url yummy:recipe_detail one.category.path, one.slug, one.pk %}">
 
 				<div class="span2 thumbnail">
 
