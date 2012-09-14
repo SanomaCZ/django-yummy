@@ -13,7 +13,7 @@ from django.utils.timezone import now
 from django.utils.translation.trans_real import ugettext
 
 from yummy import conf
-from yummy.managers import RecipeManager, CategoryManager, RecipeRecommendationManager, WeekMenuManager
+from yummy import managers
 
 
 class CookingType(models.Model):
@@ -110,7 +110,7 @@ class Photo(models.Model):
 
 class Category(models.Model):
 
-    objects = CategoryManager()
+    objects = managers.CategoryManager()
 
     parent = models.ForeignKey('self', null=True, blank=True)
     title = models.CharField(_('Title'), max_length=128)
@@ -198,7 +198,7 @@ class Category(models.Model):
 
 class Recipe(models.Model):
 
-    objects = RecipeManager()
+    objects = managers.RecipeManager()
 
     title = models.CharField(_('Title'), max_length=128)
     slug = models.SlugField(_('Slug'), max_length=64, unique=True)
@@ -239,16 +239,22 @@ class Recipe(models.Model):
             ("approve_recipe", "Can approve recipe"),
         )
 
-    def top_image(self):
+    def get_photos(self):
         #TODO - cache
-        images = self.recipephoto_set.filter(is_visible=True).order_by('order')
-        if images:
-            return images[0].photo
+        return tuple(p.photo for p in self.recipephoto_set.visible().order_by('order'))
+
+    def get_top_photo(self):
+        photos = self.get_photos()
+        if len(photos) > 0:
+            return photos[0]
         else:
             return self.category.photo
 
 
 class RecipePhoto(models.Model):
+
+    objects = managers.RecipePhotoManager()
+
     recipe = models.ForeignKey(Recipe, verbose_name=_('Recipe'))
     photo = models.ForeignKey(Photo, verbose_name=_('Photo'))
     is_visible = models.BooleanField(_('Visible'), default=True)
@@ -315,7 +321,7 @@ class UnitConversion(models.Model):
 
 class RecipeRecommendation(models.Model):
 
-    objects = RecipeRecommendationManager()
+    objects = managers.RecipeRecommendationManager()
 
     day_from = models.DateField(_("Show from day"), help_text=_("Recipe will show itself starting this day"))
     day_to = models.DateField(_("Show until day (inclusive)"), blank=True, null=True,
@@ -373,7 +379,7 @@ class WeekMenu(models.Model):
                                     help_text=_("Check if this day menu is for even week. Current week is %s." % \
                                                 ugettext("odd" if date.isocalendar(date.today())[1] % 2 else "even")))
 
-    objects = WeekMenuManager()
+    objects = managers.WeekMenuManager()
 
     class Meta:
         unique_together = (('day', 'even_week'),)
