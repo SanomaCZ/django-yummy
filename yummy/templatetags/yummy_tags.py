@@ -46,7 +46,7 @@ def yummy_recipe_recommendation(parser, token):
     return RecommendationNode(count, varname)
 
 
-@register.inclusion_tag("day_menu.html")
+@register.inclusion_tag("yummy/day_menu.html")
 def yummy_day_menu():
     menu = WeekMenu.objects.get_actual()
 
