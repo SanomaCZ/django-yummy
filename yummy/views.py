@@ -1,9 +1,29 @@
-from django.http import Http404, HttpResponseRedirect
+import simplejson as json
+
+from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed
 from django.views.generic import ListView, DetailView, View
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from yummy.models import Category, Ingredient, Recipe
 from yummy import conf
+
+
+class JSONResponseMixin(object):
+    def render_to_response(self, context):
+        return self.get_json_response(self.convert_context_to_json(context))
+
+    def get_json_response(self, content, **kwargs):
+        return HttpResponse(content, content_type='application/json', **kwargs)
+
+    def convert_context_to_json(self, context):
+        return json.dumps(context)
+
+
+class DailyMenu(JSONResponseMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        if not request.is_ajax():
+            return HttpResponseNotAllowed("Allowed AJAX request only")
 
 
 class IngredientView(ListView):
