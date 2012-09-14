@@ -1,8 +1,7 @@
-import simplejson as json
-
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed
 from django.views.generic import ListView, DetailView, View
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext
+from django.utils.simplejson import dumps
 
 from yummy.models import Category, Ingredient, Recipe
 from yummy import conf
@@ -16,7 +15,7 @@ class JSONResponseMixin(object):
         return HttpResponse(content, content_type='application/json', **kwargs)
 
     def convert_context_to_json(self, context):
-        return json.dumps(context)
+        return dumps(context, ensure_ascii=False)
 
 
 class DailyMenu(JSONResponseMixin, View):
