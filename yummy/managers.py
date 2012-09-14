@@ -57,6 +57,6 @@ class WeekMenuManager(models.Manager):
         week_no = date.isocalendar(today)[1]
 
         try:
-            return self.get_query_set().select_related('soup', 'meal', 'dessert').get(day=weekday, even_week=bool((week_no+1)%2))
+            return self.get_query_set().select_related('soup', 'meal', 'dessert').get(day=weekday, even_week=bool((week_no + 1) % 2))
         except ObjectDoesNotExist:
             pass
