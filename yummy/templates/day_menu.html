@@ -1,0 +1,15 @@
+<div class="column">
+	{% if current_menu.meal %}
+		{% box recipe_recommend for current_menu.meal %}{% endbox %}
+	{% endif %}
+	<div class="category">
+		<a href="#">{{ yummy_menu.soup.title }}sladké</a>
+		<a href="" class="tag">{{ yummy_menu.meal.title }}polévka</a>
+		<a href="" class="tag">{{ yummy_menu.dessert.title }}hlavní chod</a>
+	</div>
+	<div class="menu">
+		{% for day_no, week_day in week_days %}
+			<span><a href="">{{ week_day|slice:":2"|capfirst }}</a></span>
+		{% endfor %}
+	</div>
+</div>

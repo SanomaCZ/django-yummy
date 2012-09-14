@@ -1,3 +1,4 @@
+from datetime import date
 from django import template
 
 from yummy.models import RecipeRecommendation, WeekMenu
@@ -45,34 +46,12 @@ def yummy_recipe_recommendation(parser, token):
     return RecommendationNode(count, varname)
 
 
+@register.inclusion_tag("day_menu.html")
+def yummy_day_menu():
+    menu = WeekMenu.objects.get_actual()
 
-class DayMenuNode(template.Node):
-    def __init__(self, varname):
-        self.varname = varname
-
-    def render(self, context):
-        context[self.varname] = WeekMenu.objects.get_actual()
-        return ''
-
-
-@register.tag
-def yummy_day_menu(parser, token):
-    """
-    Get daily menu for current weekday in odd/even weeek
-
-    syntax:
-        {% yummy_day_menu as <var> %}
-
-    examples:
-
-        {% yummy_day_menu as menu %}
-
-        {{ menu.soup }} - {{ menu.meal }} - {{ menu.dessert }}
-    """
-    bits = token.split_contents()
-
-    if len(bits) != 3 or bits[1] != 'as':
-        raise template.TemplateSyntaxError('Usage: {% yummy_day_menu as <variable> %}')
-
-    foo, foo, varname = bits
-    return DayMenuNode(varname)
+    return {
+        'current_menu': menu,
+        'current_day':  date.isoweekday(date.today()),
+        'week_days': conf.WEEK_DAYS,
+    }
