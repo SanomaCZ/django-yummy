@@ -7,7 +7,7 @@ from yummy import conf
 
 
 class IngredientView(ListView):
-    template_name = 'ingredient_detail.html'
+    template_name = 'yummy/ingredient_detail.html'
     model = Recipe
 
     def set_ingredient(self, slug):
@@ -31,7 +31,7 @@ class IngredientView(ListView):
 
 
 class CategoryView(ListView):
-    template_name = 'category_list.html'
+    template_name = 'yummy/category_list.html'
     model = Recipe
 
     def set_category(self, path):
@@ -96,7 +96,7 @@ class CategoryReorder(View):
 
 
 class RecipeDetail(DetailView):
-    template_name = 'recipe_detail.html'
+    template_name = 'yummy/recipe_detail.html'
 
     model = Recipe
 
