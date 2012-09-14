@@ -1,15 +1,20 @@
+{# template is overriden in project #}
 <div class="column">
-	{% if current_menu.meal %}
-		{% box recipe_recommend for current_menu.meal %}{% endbox %}
-	{% endif %}
-	<div class="category">
-		<a href="#">{{ yummy_menu.soup.title }}sladké</a>
-		<a href="" class="tag">{{ yummy_menu.meal.title }}polévka</a>
-		<a href="" class="tag">{{ yummy_menu.dessert.title }}hlavní chod</a>
+	<div id="yummy_menu_content">
+		{{ current_menu.meal }}
 	</div>
-	<div class="menu">
-		{% for day_no, week_day in week_days %}
-			<span><a href="">{{ week_day|slice:":2"|capfirst }}</a></span>
+	<div id="yummy_menu_cats" class="category">
+		<a href="" class="tag" data-category="dessert">sladké</a>
+		<a href="" class="tag" data-category="soup">polévka</a>
+		<a href="" data-category="meal">hlavní chod</a>
+	</div>
+	<div id="yummy_menu_menu" class="menu">
+		{% for day_no, day_name in week_days %}
+			<span>
+				<a href="" data-day="{{ day_no }}">
+					{{ day_name|slice:":2"|capfirst }}
+				</a>
+			</span>
 		{% endfor %}
 	</div>
 </div>
