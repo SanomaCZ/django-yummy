@@ -120,6 +120,10 @@ class Category(models.Model):
     path = models.CharField(max_length=255, editable=False, unique=True)
     description = models.TextField(_('Description'), blank=True)
 
+    class Meta:
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
+
     def __unicode__(self):
         return self.title
 
@@ -191,9 +195,12 @@ class Category(models.Model):
             for cat in self.get_descendants():
                 cat.save(force_update=True)
 
-    class Meta:
-        verbose_name = _('Category')
-        verbose_name_plural = _('Categories')
+    @property
+    def photo_hierarchic(self):
+        if self.photo:
+            return self.photo
+        if self.parent:
+            return self.parent.photo_hierarchic
 
 
 class Recipe(models.Model):
@@ -244,8 +251,7 @@ class Recipe(models.Model):
         images = self.recipephoto_set.filter(is_visible=True).order_by('order')
         if images:
             return images[0].photo
-        else:
-            return self.category.photo
+        return self.category.photo_hierarchic
 
 
 class RecipePhoto(models.Model):
