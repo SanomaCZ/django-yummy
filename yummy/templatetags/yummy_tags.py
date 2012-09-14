@@ -1,7 +1,7 @@
 from datetime import date
 from django import template
 
-from yummy.models import RecipeRecommendation, WeekMenu
+from yummy.models import RecipeRecommendation, WeekMenu, Category
 from yummy import conf
 
 register = template.Library()
@@ -52,6 +52,51 @@ def yummy_day_menu():
 
     return {
         'current_menu': menu,
-        'current_day':  date.isoweekday(date.today()),
+        'current_day': date.isoweekday(date.today()),
         'week_days': conf.WEEK_DAYS,
     }
+
+
+class CategoriesNode(template.Node):
+
+    def __init__(self, category, varname):
+        self.category, self.varname = category, varname
+
+    def render(self, context):
+        if self.category is not None:
+            c = template.Variable(self.category).resolve(context)
+            qs = Category.objects.filter(parent=c)
+        else:
+            qs = Category.objects.filter(parent__isnull=True)
+
+        context[self.varname] = qs
+        return ''
+
+
+@register.tag
+def yummy_get_categories(parser, token):
+    """
+    Returns category children if category variable is defined, or root categories.
+
+    syntax::
+
+        {% yummy_get_categories [from <category>] as <var> %}
+
+    examples::
+
+        {% yummy_get_categories as categories  %}
+        {% yummy_get_categories from category as recommended_recipes %}
+
+    """
+
+    bits = token.split_contents()
+
+    if (len(bits) == 3 and bits[1] != 'as') or (len(bits) == 5 and (bits[1] != 'from' or bits[3] != 'as')):
+        raise template.TemplateSyntaxError('Usage: {% yummy_get_categories [from <category>] as <var> %}')
+
+    if len(bits) == 3:
+        category, varname = None, bits[2]
+    else:
+        category, varname = bits[2], bits[4]
+
+    return CategoriesNode(category, varname)
