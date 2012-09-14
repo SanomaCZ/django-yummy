@@ -33,9 +33,14 @@ class IngredientInRecipeGroupInlineAdmin(admin.TabularInline):
     extra = 1
 
 
+class RecipePhotoInlineAdmin(admin.TabularInline):
+    model = RecipePhoto
+    raw_id_fields = ('photo', )
+
+
 class RecipeAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
-    inlines = [IngredientInRecipeInlineAdmin, IngredientInRecipeGroupInlineAdmin]
+    inlines = [IngredientInRecipeInlineAdmin, IngredientInRecipeGroupInlineAdmin, RecipePhotoInlineAdmin]
     exclude_fields = ('group',)
     search_fields = ('title', )
     list_filter = ['is_approved']
@@ -44,12 +49,20 @@ class RecipeAdmin(admin.ModelAdmin):
 class PhotoAdmin(admin.ModelAdmin):
 
     readonly_fields = ('owner',)
+    list_display = ('title', 'image', 'is_redaction',)
+    search_fields = ('description', 'title' )
 
     def save_model(self, request, obj, form, change):
         obj.owner = request.user
         obj.is_redaction = True
         return super(PhotoAdmin, self).save_model(request, obj, form, change)
 
+
+class RecipePhotoAdmin(admin.ModelAdmin):
+
+    raw_id_fields = ('recipe', 'photo',)
+    list_display = ('recipe', 'photo', 'is_visible', 'order')
+    search_fields = ('recipe__title', )
 
 class RecipeRecommendationAdmin(admin.ModelAdmin):
 
@@ -73,8 +86,9 @@ admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Cuisine, CuisineAdmin)
 admin.site.register(Photo, PhotoAdmin)
+admin.site.register(RecipePhoto, RecipePhotoAdmin)
 admin.site.register(RecipeRecommendation, RecipeRecommendationAdmin)
 admin.site.register(WeekMenu, WeekMenuAdmin)
 
 admin.site.register([CookingType, Ingredient, IngredientGroup, UnitConversion,
-                     IngredientInRecipeGroup, IngredientInRecipe, RecipePhoto, CookBook])
+                     IngredientInRecipeGroup, IngredientInRecipe, CookBook])
