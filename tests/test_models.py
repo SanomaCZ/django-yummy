@@ -7,26 +7,37 @@ from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django import VERSION as DJANGO_VERSION
+from mock import patch
 
 from nose import tools, SkipTest
+from yummy import conf
 
-from yummy.models import Category, Recipe, RecipeRecommendation
+from yummy.models import Category, Recipe, RecipeRecommendation, CookingType, Cuisine, WeekMenu, IngredientGroup, Ingredient
 
 
-class TestRecipeRecommendation(TestCase):
+class MockedDate(date):
+    pass
+
+
+def create_recipe(**kwargs):
+    params = dict(
+        title='generic recipe',
+        preparation_time=20,
+        is_approved=True
+    )
+    params.update(kwargs)
+    return Recipe.objects.create(**params)
+
+
+class TestRecipeRecommendationModel(TestCase):
 
     def setUp(self):
-        super(TestRecipeRecommendation, self).setUp()
+        super(TestRecipeRecommendationModel, self).setUp()
         cache.clear()
 
         self.user = User.objects.create_user(username='foo')
         self.cat = Category.objects.create(title="generic cat")
-        self.recipe = Recipe.objects.create(
-            title='generic recipe',
-            category=self.cat,
-            preparation_time=20,
-            owner=self.user,
-            is_approved=True)
+        self.recipe = create_recipe(owner=self.user, category=self.cat)
 
     def test_invalid_date_range_save_raises_validation_error(self):
         today = date.today()
@@ -98,6 +109,8 @@ class TestCategoryModel(TestCase):
 
     def setUp(self):
         super(TestCategoryModel, self).setUp()
+        cache.clear()
+
         self.c0 = Category.objects.create(title="Ámen", slug="amen")
         self.c1 = Category.objects.create(parent=self.c0, title="Mňam mňam", slug="mnam-mnam")
 
@@ -189,4 +202,143 @@ class TestRecipeModel(TestCase):
 
     def setUp(self):
         super(TestRecipeModel, self).setUp()
+        cache.clear()
 
+        self.user = User.objects.create_user(username='foo')
+        self.cat = Category.objects.create(title="generic cat")
+
+    def test_objects_get_approved_returns_empty(self):
+        recipe = create_recipe(is_approved=False, owner=self.user, category=self.cat)
+
+        tools.assert_equals([], list(Recipe.objects.approved()))
+        tools.assert_equals([recipe], list(Recipe.objects.all()))
+
+    def test_objects_get_approved_returns_approved(self):
+        recipe = create_recipe(owner=self.user, category=self.cat)
+
+        tools.assert_equals([recipe], list(Recipe.objects.approved()))
+        tools.assert_equals([recipe], list(Recipe.objects.all()))
+
+    def test_unicode_pass(self):
+        #coverage ftw!
+        title = u'sytý nášup'
+        recipe = create_recipe(owner=self.user, category=self.cat, title=title)
+        tools.assert_equals(True, title in unicode(recipe))
+
+
+
+class TestCookingTypeModel(TestCase):
+
+    def setUp(self):
+        super(TestCookingTypeModel, self).setUp()
+        cache.clear()
+
+    def test_unique_slug_violation_raises(self):
+        cook_type = CookingType.objects.create(name='foobar')
+
+        tools.assert_raises(IntegrityError, lambda: CookingType.objects.create(name='foobar'))
+
+    def test_unicode_pass(self):
+        name=u'vegetariánská díákrítíká'
+        cook_type = CookingType.objects.create(name=name)
+
+        tools.assert_equals(True, name in unicode(cook_type))
+
+class TestCuisineModel(TestCase):
+
+    def setUp(self):
+        super(TestCuisineModel, self).setUp()
+        cache.clear()
+
+    def test_unique_slug_violation_raises(self):
+        Cuisine.objects.create(name='foobar')
+
+        tools.assert_raises(IntegrityError, lambda: Cuisine.objects.create(name='foobar'))
+
+    def test_unicode_pass(self):
+        name=u'árménská kúchýně'
+        cook_type = Cuisine.objects.create(name=name)
+        tools.assert_equals(True, name in unicode(cook_type))
+
+
+class TestIngredientGroupModel(TestCase):
+
+    def setUp(self):
+        super(TestIngredientGroupModel, self).setUp()
+        cache.clear()
+
+    def test_unique_slug_violation_raises(self):
+        IngredientGroup.objects.create(name='foobar')
+
+        tools.assert_raises(IntegrityError, lambda: IngredientGroup.objects.create(name='foobar'))
+
+    def test_unicode_pass(self):
+        name=u'árménská'
+        group = IngredientGroup.objects.create(name=name)
+        tools.assert_equals(True, name in unicode(group))
+
+
+class TestIngredientModel(TestCase):
+
+    def setUp(self):
+        super(TestIngredientModel, self).setUp()
+        cache.clear()
+
+    def test_unique_slug_violation_raises(self):
+        Ingredient.objects.create(name='foobar', default_unit=conf.UNITS[0][0])
+
+        tools.assert_raises(IntegrityError,
+                            lambda: Ingredient.objects.create(
+                                name='foobar',
+                                default_unit=conf.UNITS[0][0]))
+
+    def test_unicode_pass(self):
+        name=u'čokoláda'
+        ingredient = Ingredient.objects.create(name=name, default_unit=conf.UNITS[0][0])
+        tools.assert_equals(True, name in unicode(ingredient))
+
+
+class TestWeekMenuModel(TestCase):
+
+    def setUp(self):
+        super(TestWeekMenuModel, self).setUp()
+        cache.clear()
+
+    def test_day_week_combinations_violation_raises(self):
+        menu_item = WeekMenu.objects.create(day=conf.WEEK_DAYS[0][0], even_week=False)
+
+        tools.assert_not_equals(None, menu_item.pk)
+        tools.assert_raises(IntegrityError, lambda: WeekMenu.objects.create(
+                                                    day=conf.WEEK_DAYS[0][0],
+                                                    even_week=False))
+
+    def test_day_even_odd_week_combinations_pass(self):
+        menu_item = WeekMenu.objects.create(day=conf.WEEK_DAYS[0][0], even_week=False)
+        next_item = WeekMenu.objects.create(day=conf.WEEK_DAYS[0][0], even_week=True)
+
+        tools.assert_not_equals(menu_item, next_item)
+
+    @patch('yummy.managers.date', MockedDate)
+    def test_objects_get_actual_returns_valid_item(self):
+        #monday odd week
+        actual_item = WeekMenu.objects.create(day=1, even_week=False)
+
+        #monday, odd week
+        MockedDate.today = classmethod(lambda cls: date(2012, 1, 2))
+
+        obtained_item = WeekMenu.objects.get_actual()
+
+        tools.assert_equals(actual_item, obtained_item)
+
+    @patch('yummy.managers.date', MockedDate)
+    def test_objects_get_actual_returns_nothing_if_not_found(self):
+
+        #monday, odd week
+        WeekMenu.objects.create(day=1, even_week=False)
+
+        #monday, even week
+        MockedDate.today = classmethod(lambda cls: date(2012, 1, 9))
+
+        obtained_item = WeekMenu.objects.get_actual()
+
+        tools.assert_equals(None, obtained_item)
