@@ -37,6 +37,7 @@ class IngredientInRecipeGroupInlineAdmin(admin.TabularInline):
 class RecipePhotoInlineAdmin(admin.TabularInline):
     model = RecipePhoto
     raw_id_fields = ('photo', )
+    extra = 1
 
 
 class RecipeAdmin(admin.ModelAdmin):

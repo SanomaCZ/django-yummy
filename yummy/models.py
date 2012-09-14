@@ -239,6 +239,14 @@ class Recipe(models.Model):
             ("approve_recipe", "Can approve recipe"),
         )
 
+    def top_image(self):
+        #TODO - cache
+        images = self.recipephoto_set.filter(is_visible=True).order_by('order')
+        if images:
+            return images[0].photo
+        else:
+            return self.category.photo
+
 
 class RecipePhoto(models.Model):
     recipe = models.ForeignKey(Recipe, verbose_name=_('Recipe'))
