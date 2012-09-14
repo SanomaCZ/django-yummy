@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin.widgets import ForeignKeyRawIdWidget
+from django.utils.translation import ugettext_lazy as _
 
 from yummy.models import (Category, CookingType, Cuisine, Ingredient,
     IngredientGroup, UnitConversion, Recipe, IngredientInRecipe,
@@ -49,8 +50,12 @@ class RecipeAdmin(admin.ModelAdmin):
 class PhotoAdmin(admin.ModelAdmin):
 
     readonly_fields = ('owner',)
-    list_display = ('title', 'image', 'is_redaction',)
-    search_fields = ('description', 'title' )
+    list_display = ('get_title', 'image', 'is_redaction',)
+    list_filter = ('is_redaction', )
+    search_fields = ('description', 'title')
+
+    def get_title(self, obj):
+        return obj.title or _("No title")
 
     def save_model(self, request, obj, form, change):
         obj.owner = request.user
