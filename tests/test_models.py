@@ -328,7 +328,7 @@ class TestWeekMenuModel(TestCase):
 
         obtained_item = WeekMenu.objects.get_actual()
 
-        tools.assert_equals(actual_item, obtained_item)
+        tools.assert_equals({1: actual_item}, obtained_item)
 
     @patch('yummy.managers.date', MockedDate)
     def test_objects_get_actual_returns_nothing_if_not_found(self):
@@ -341,4 +341,4 @@ class TestWeekMenuModel(TestCase):
 
         obtained_item = WeekMenu.objects.get_actual()
 
-        tools.assert_equals(None, obtained_item)
+        tools.assert_equals({}, obtained_item)
