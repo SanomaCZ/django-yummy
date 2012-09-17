@@ -51,16 +51,12 @@ class RecipeRecommendationManager(models.Manager):
 
 class WeekMenuManager(models.Manager):
 
-    def get_actual(self, day=None):
+    def get_actual(self):
         today = date.today()
         week_no = date.isocalendar(today)[1]
 
-        try:
-            weekday = int(day)
-        except (TypeError, ValueError):
-            weekday = date.isoweekday(today)
-
-        try:
-            return self.get_query_set().select_related('soup', 'meal', 'dessert').get(day=weekday, even_week=bool((week_no + 1) % 2))
-        except ObjectDoesNotExist:
-            pass
+        items = self.get_query_set().select_related('soup', 'meal', 'dessert').filter(even_week=bool((week_no + 1) % 2))
+        week_menu = {}
+        for one in items:
+            week_menu[one.day] = one
+        return week_menu

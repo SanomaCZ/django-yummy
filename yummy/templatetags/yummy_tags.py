@@ -50,9 +50,9 @@ def yummy_recipe_recommendation(parser, token):
 def yummy_day_menu():
     menu = WeekMenu.objects.get_actual()
 
+    current_day = date.isoweekday(date.today())
     return {
-        'current_menu': menu,
-        'current_day': date.isoweekday(date.today()),
+        'current_menu': menu[current_day],
         'week_days': conf.WEEK_DAYS,
     }
 

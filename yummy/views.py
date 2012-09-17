@@ -24,34 +24,36 @@ class DailyMenu(JSONResponseMixin, View):
     def get(self, request, *args, **kwargs):
 
         if not request.is_ajax():
-            pass#return HttpResponseNotAllowed("Allowed AJAX request only")
+            return HttpResponseNotAllowed("Allowed AJAX request only")
 
-        try:
-            day = request.GET['day']
-        except (KeyError, ValueError):
-            raise Http404
+        menu_days = WeekMenu.objects.get_actual()
+        menu_data = dict( [(one, {}) for one in range(1,8)] )
+        for day_index, day_menu in menu_days.items():
+            menu_data[day_index] = self.arrange_menu_item(day_menu)
 
-        menu = WeekMenu.objects.get_actual(day)
-        if not menu:
-            raise Http404
+        return self.render_to_response(menu_data)
 
-        menu_data = {}
+    def arrange_menu_item(self, menu_item):
+        arranged_item = {}
         for one in ('soup', 'meal', 'dessert'):
             try:
-                menu_item = getattr(menu, one)
+                actual_item = getattr(menu_item, one)
             except AttributeError:
-                pass
+                arranged_item[one] = {}
             else:
                 try:
-                    image_url = menu_item.get_top_photo().image.url
+                    image_url = actual_item.get_top_photo().image.url
                 except AttributeError:
                     image_url = ''
-                menu_data[one] = {
-                    'title': menu_item.title,
-                    'link': reverse('yummy:recipe_detail', args=(menu_item.category.path, menu_item.slug, menu_item.pk)),
+
+                arranged_item[one] = {
+                    'title': actual_item.title,
+                    'link': reverse('yummy:recipe_detail', args=(
+                        actual_item.category.path, actual_item.slug, actual_item.pk)),
                     'image': image_url,
                 }
-        return self.render_to_response(menu_data)
+
+        return arranged_item
 
 
 class IngredientView(ListView):
