@@ -51,10 +51,14 @@ class RecipeRecommendationManager(models.Manager):
 
 class WeekMenuManager(models.Manager):
 
-    def get_actual(self):
+    def get_actual(self, day=None):
         today = date.today()
-        weekday = date.isoweekday(today)
         week_no = date.isocalendar(today)[1]
+
+        try:
+            weekday = int(day)
+        except (TypeError, ValueError):
+            weekday = date.isoweekday(today)
 
         try:
             return self.get_query_set().select_related('soup', 'meal', 'dessert').get(day=weekday, even_week=bool((week_no + 1) % 2))

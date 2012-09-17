@@ -1,9 +1,10 @@
+from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed
 from django.views.generic import ListView, DetailView, View
 from django.utils.translation import ugettext
 from django.utils.simplejson import dumps
 
-from yummy.models import Category, Ingredient, Recipe
+from yummy.models import Category, Ingredient, Recipe, WeekMenu
 from yummy import conf
 
 
@@ -21,8 +22,36 @@ class JSONResponseMixin(object):
 class DailyMenu(JSONResponseMixin, View):
 
     def get(self, request, *args, **kwargs):
+
         if not request.is_ajax():
-            return HttpResponseNotAllowed("Allowed AJAX request only")
+            pass#return HttpResponseNotAllowed("Allowed AJAX request only")
+
+        try:
+            day = request.GET['day']
+        except (KeyError, ValueError):
+            raise Http404
+
+        menu = WeekMenu.objects.get_actual(day)
+        if not menu:
+            raise Http404
+
+        menu_data = {}
+        for one in ('soup', 'meal', 'dessert'):
+            try:
+                menu_item = getattr(menu, one)
+            except AttributeError:
+                pass
+            else:
+                try:
+                    image_url = menu_item.get_top_photo().image.url
+                except AttributeError:
+                    image_url = ''
+                menu_data[one] = {
+                    'title': menu_item.title,
+                    'link': reverse('yummy:recipe_detail', args=(menu_item.category.path, menu_item.slug, menu_item.pk)),
+                    'image': image_url,
+                }
+        return self.render_to_response(menu_data)
 
 
 class IngredientView(ListView):
