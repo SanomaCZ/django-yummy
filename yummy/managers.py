@@ -7,9 +7,6 @@ class RecipePhotoManager(models.Manager):
     def visible(self):
         return self.get_query_set().filter(is_visible=True)
 
-    def get_query_set(self):
-        return super(RecipePhotoManager, self).get_query_set().select_related()
-
 
 class CategoryManager(models.Manager):
 

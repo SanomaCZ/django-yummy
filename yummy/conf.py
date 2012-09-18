@@ -55,3 +55,7 @@ WEEK_DAYS = (
     (6, _("Saturday")),
     (7, _("Sunday")),
 )
+
+CACHE_TOP_PHOTO = 30*60
+
+PHOTO_ORDER_GAP = 5
