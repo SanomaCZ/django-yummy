@@ -203,6 +203,22 @@ class Category(models.Model):
             return self.parent.photo_hierarchic
 
 
+class Consumer(models.Model):
+    """
+    Some recipes are suitable for diabetics, kids etc. for example
+    """
+
+    title = models.CharField(_('Title'), max_length=64)
+    slug = models.SlugField(_('Slug'), max_length=64, unique=True)
+
+    def __unicode__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _("Consumer")
+        verbose_name_plural = _("Consumers")
+
+
 class Recipe(models.Model):
 
     objects = managers.RecipeManager()
@@ -213,10 +229,12 @@ class Recipe(models.Model):
 
     description = models.TextField(_('Short description'), blank=True)
     preparation = models.TextField(_('Preparation'))
+    hint = models.TextField(_('Hint'), blank=True)
 
     cooking_type = models.ForeignKey(CookingType, verbose_name=_('Cooking type'), blank=True, null=True)
     cuisines = models.ManyToManyField(Cuisine, verbose_name=_('Cuisines'))
     servings = models.PositiveSmallIntegerField(_('Servings'), blank=True, null=True)
+    consumers = models.ManyToManyField(Consumer, verbose_name=_('Consumers'), blank=True)
 
     price = models.SmallIntegerField(_('Price'), choices=conf.PRICING_CHOICES, default=3, db_index=True)
     difficulty = models.PositiveSmallIntegerField(_('Preparation difficulty'), choices=conf.DIFFICULTY_CHOICES, default=3, db_index=True)
@@ -225,6 +243,7 @@ class Recipe(models.Model):
 
     owner = models.ForeignKey(User, verbose_name=_('User'))
     is_approved = models.BooleanField(_('Approved'), default=False, db_index=True)
+    is_public = models.BooleanField(_('Public'), default=True)
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
 
