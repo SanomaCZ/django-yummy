@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from yummy.models import (Category, CookingType, Cuisine, Ingredient,
     IngredientGroup, UnitConversion, Recipe, IngredientInRecipe,
-    IngredientInRecipeGroup, Photo, RecipePhoto, RecipeRecommendation, CookBook, WeekMenu)
+    IngredientInRecipeGroup, Photo, RecipePhoto, RecipeRecommendation, CookBook, WeekMenu, Consumer)
 
 
 class ApprovedRecipeRaw(ForeignKeyRawIdWidget):
@@ -107,4 +107,4 @@ admin.site.register(RecipeRecommendation, RecipeRecommendationAdmin)
 admin.site.register(WeekMenu, WeekMenuAdmin)
 
 admin.site.register([CookingType, Ingredient, IngredientGroup, UnitConversion,
-                     IngredientInRecipeGroup, IngredientInRecipe, CookBook])
+                     IngredientInRecipeGroup, IngredientInRecipe, CookBook, Consumer])
