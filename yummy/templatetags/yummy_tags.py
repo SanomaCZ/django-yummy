@@ -12,9 +12,9 @@ class RecommendationNode(template.Node):
         self.count, self.varname = count, varname
 
     def render(self, context):
-            qs = RecipeRecommendation.objects.get_actual()
-            context[self.varname] = tuple(one.recipe for one in qs[:self.count])
-            return ''
+        qs = RecipeRecommendation.objects.get_actual()
+        context[self.varname] = tuple(one.recipe for one in qs[:self.count])
+        return ''
 
 
 @register.tag
@@ -48,6 +48,15 @@ def yummy_recipe_recommendation(parser, token):
 
 @register.inclusion_tag("yummy/day_menu.html")
 def yummy_day_menu():
+    """
+    renders daily menu with given template
+
+    example:
+        {% yummy_day_menu %}
+
+    :return: context data for inclusion tag decorator
+    :rtype: dict
+    """
     menu = WeekMenu.objects.get_actual()
 
     current_day = date.isoweekday(date.today())
