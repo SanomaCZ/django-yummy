@@ -326,7 +326,7 @@ class RecipePhoto(models.Model):
         - if this value collides, bump following values
             (also make there a gap to fit more photos w/o reordering in there)
         """
-        photos = list(RecipePhoto.objects.filter(recipe=self.recipe).order_by('order'))
+        photos = list(RecipePhoto.objects.filter(recipe=self.recipe).select_related('recipe', 'photo').order_by('order'))
         if not photos:
             return
 
