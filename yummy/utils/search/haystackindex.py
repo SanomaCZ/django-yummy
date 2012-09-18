@@ -22,6 +22,7 @@ class YummyRecipeIndex(indexes.RealTimeSearchIndex):
     title = indexes.CharField(model_attr='title', boost=5)
     description = indexes.CharField(model_attr='description', null=True)
     category = indexes.CharField(model_attr='category', boost=2)
+    category_path = indexes.CharField(faceted=True)
     cooking_type = indexes.CharField(model_attr='cooking_type', null=True, faceted=True)
     cuisines = indexes.MultiValueField(faceted=True)
     owner = indexes.CharField(model_attr='owner', faceted=True)
@@ -29,13 +30,16 @@ class YummyRecipeIndex(indexes.RealTimeSearchIndex):
     ingredient_groups = indexes.MultiValueField(faceted=True)
     consumers = indexes.MultiValueField(faceted=True)
     servings = indexes.IntegerField(model_attr='servings', null=True)
-    price = indexes.CharField(model_attr='get_price_display', faceted=True)
-    difficulty = indexes.CharField(model_attr='get_difficulty_display', faceted=True)
+    price = indexes.IntegerField(model_attr='price')
+    difficulty = indexes.IntegerField(model_attr='difficulty')
     created = indexes.DateTimeField(model_attr='created')
     updated = indexes.DateTimeField(model_attr='updated')
 
     def prepare_category(self, obj):
         return obj.category.title
+
+    def prepare_category_path(self, obj):
+        return obj.category.path
 
     def prepare_cuisines(self, obj):
         return [c.name for c in obj.cuisines.all()]
