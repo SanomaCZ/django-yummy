@@ -266,10 +266,16 @@ class Recipe(models.Model):
             ("approve_recipe", "Can approve recipe"),
         )
 
-    def get_photos(self):
-        return tuple(p.photo for p in self.recipephoto_set.visible().order_by('order'))
+    def get_photos(self, recache=False):
+        cache_key = '%s_recipe_photos' % self.pk
+        cached_photos = cache.get(cache_key)
+        if cached_photos is None or recache:
+            cached_photos = tuple(p.photo for p in self.recipephoto_set.visible().select_related('photo').order_by('order'))
+            cache.set(cache_key, cached_photos)
 
-    def get_top_photo(self, recache=False):
+        return cached_photos
+
+    def get_top_photo(self):
         """
         Get to photo for recipe. Prefer photo from recipe's owner, if available.
         If recipe doesn't have any photo, try to get photo for recipe's category
@@ -277,17 +283,11 @@ class Recipe(models.Model):
         :return: photo for recipe
         :rtype: Photo
         """
-        cache_key = '%s_recipe_top_photo' % self.pk
-        cached_photo = cache.get(cache_key)
-        if cached_photo is None or recache:
-            photos = self.get_photos()
-            if photos:
-                cached_photo = photos[0]
-            else:
-                cached_photo = self.category.photo_hierarchic
-
-            cache.set(cache_key, cached_photo, timeout=conf.CACHE_TOP_PHOTO)
-        return cached_photo
+        photos = self.get_photos()
+        if photos:
+            return photos[0]
+        else:
+            return self.category.photo_hierarchic
 
 
 class RecipePhoto(models.Model):
@@ -316,7 +316,7 @@ class RecipePhoto(models.Model):
 
         super(RecipePhoto, self).save(*args, **kwargs)
 
-        self.recipe.get_top_photo(recache=True)
+        self.recipe.get_photos(recache=True)
 
     def manage_photo_order(self):
         """
@@ -359,7 +359,7 @@ class RecipePhoto(models.Model):
             last_order_value = one.order
             modified_items.append(one)
 
-        #save items later, due to unique_together
+        #save items in reversed order, due to unique_together
         for one in modified_items[::-1]:
             one.save()
 
