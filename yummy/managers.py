@@ -19,6 +19,9 @@ class CategoryManager(models.Manager):
 
 class RecipeManager(models.Manager):
 
+    def public(self):
+        return self.approved().filter(is_public=True)
+
     def approved(self):
         return self.get_query_set().filter(is_approved=True)
 
