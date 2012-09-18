@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin.widgets import ForeignKeyRawIdWidget
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from yummy.models import (Category, CookingType, Cuisine, Ingredient,
@@ -80,6 +81,16 @@ class RecipeRecommendationAdmin(admin.ModelAdmin):
 
 
 class WeekMenuAdmin(admin.ModelAdmin):
+
+    list_display = ('__unicode__', 'selected_recipes')
+    list_filter = ('even_week',)
+    ordering = ('even_week', 'day')
+
+    def selected_recipes(self, obj):
+        return mark_safe(_("soup: %(soup)s<br>meal: %(meal)s<br>dessert: %(dessert)s") \
+                    % dict(soup=obj.soup, meal=obj.meal, dessert=obj.dessert))
+    selected_recipes.short_description = _('Selected recipes')
+    selected_recipes.allow_tags = True
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         db = kwargs.get('using')
