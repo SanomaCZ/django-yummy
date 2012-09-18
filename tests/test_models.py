@@ -12,7 +12,8 @@ from mock import patch
 from nose import tools, SkipTest
 from yummy import conf
 
-from yummy.models import Category, Recipe, RecipeRecommendation, CookingType, Cuisine, WeekMenu, IngredientGroup, Ingredient
+from yummy.models import ( Category, Recipe, RecipeRecommendation, CookingType,
+    Cuisine, WeekMenu, IngredientGroup, Ingredient, Photo, RecipePhoto)
 
 
 class MockedDate(date):
@@ -20,6 +21,10 @@ class MockedDate(date):
 
 
 def create_recipe(**kwargs):
+    """
+    :return: recipe
+    :rtype: Recipe
+    """
     params = dict(
         title='generic recipe',
         preparation_time=20,
@@ -225,6 +230,21 @@ class TestRecipeModel(TestCase):
         recipe = create_recipe(owner=self.user, category=self.cat, title=title)
         tools.assert_equals(True, title in unicode(recipe))
 
+    def test_reoder_owner_photo(self):
+
+        nonowner = User.objects.create_user(username='nonauthor')
+
+        nonowner_photo = Photo.objects.create(width=1, height=1, owner=nonowner)
+        owner_photo = Photo.objects.create(width=1, height=1, owner=self.user)
+
+        recipe = create_recipe(owner=self.user, category=self.cat)
+
+        RecipePhoto.objects.create(recipe=recipe, photo=nonowner_photo, order=1)
+        owner_recipe_photo = RecipePhoto.objects.create(recipe=recipe, photo=owner_photo, order=2)
+
+        top_photo = recipe.get_top_photo()
+
+        tools.assert_equals(top_photo.pk, owner_recipe_photo.pk)
 
 
 class TestCookingTypeModel(TestCase):

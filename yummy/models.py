@@ -4,6 +4,7 @@ from datetime import date
 
 from django.db import models
 from django.db import IntegrityError
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_str
@@ -268,12 +269,25 @@ class Recipe(models.Model):
     def get_photos(self):
         return tuple(p.photo for p in self.recipephoto_set.visible().order_by('order'))
 
-    def get_top_photo(self):
-        #TODO - cache
-        photos = self.get_photos()
-        if photos:
-            return photos[0]
-        return self.category.photo_hierarchic
+    def get_top_photo(self, recache=False):
+        """
+        Get to photo for recipe. Prefer photo from recipe's owner, if available.
+        If recipe doesn't have any photo, try to get photo for recipe's category
+
+        :return: photo for recipe
+        :rtype: Photo
+        """
+        cache_key = '%s_recipe_top_photo' % self.pk
+        cached_photo = cache.get(cache_key)
+        if cached_photo is None or recache:
+            photos = self.get_photos()
+            if photos:
+                cached_photo = photos[0]
+            else:
+                cached_photo = self.category.photo_hierarchic
+
+            cache.set(cache_key, cached_photo, timeout=conf.CACHE_TOP_PHOTO)
+        return cached_photo
 
 
 class RecipePhoto(models.Model):
@@ -283,15 +297,72 @@ class RecipePhoto(models.Model):
     recipe = models.ForeignKey(Recipe, verbose_name=_('Recipe'))
     photo = models.ForeignKey(Photo, verbose_name=_('Photo'))
     is_visible = models.BooleanField(_('Visible'), default=True)
-    order = models.PositiveSmallIntegerField(_('Order'), default=1)
+    order = models.PositiveSmallIntegerField(_('Order'), default=1, db_index=True)
 
     def __unicode__(self):
         return u"%d. %s" % (self.order, self.photo)
 
     class Meta:
-        unique_together = (('recipe', 'photo'),)
+        unique_together = (
+            ('recipe', 'photo'),
+            ('recipe', 'order'),
+        )
         verbose_name = _('Recipe photo')
         verbose_name_plural = _('Recipe photos')
+
+    def save(self, *args, **kwargs):
+        if self.photo.owner_id == self.recipe.owner_id:
+            self.manage_photo_order()
+
+        super(RecipePhoto, self).save(*args, **kwargs)
+
+        self.recipe.get_top_photo(recache=True)
+
+    def manage_photo_order(self):
+        """
+        update photo's order if current photo belongs to recipe's owner:
+
+        - set current photo `order` value as lowest owner's but higher than non-owners
+        - if this value collides, bump following values
+            (also make there a gap to fit more photos w/o reordering in there)
+        """
+        photos = list(RecipePhoto.objects.filter(recipe=self.recipe).order_by('order'))
+        if not photos:
+            return
+
+        last_owners_order_value = 0
+        following_photo_index = 0
+
+        #look for last owner's photo to set `order` value for current instance
+        for loop_index, one in enumerate(photos):
+            if one.photo.owner_id == self.recipe.owner_id:
+                last_owners_order_value = one.order
+            elif last_owners_order_value:
+                following_photo_index = loop_index
+                break
+
+        self.order = last_owners_order_value + 1
+
+        #now deal with colliding ids, if any
+        if photos[following_photo_index].order > self.order:
+            return
+
+        last_order_value = self.order
+        modified_items = []
+        for loop_index, one in enumerate(photos[following_photo_index:]):
+            if one.order > last_order_value:
+                #seems like ids don't collide anymore
+                break
+
+            order_bump = conf.PHOTO_ORDER_GAP if loop_index == 0 else 1
+            one.order = last_order_value + order_bump
+            last_order_value = one.order
+            modified_items.append(one)
+
+        #save items later, due to unique_together
+        for one in modified_items[::-1]:
+            one.save()
+
 
 
 class IngredientInRecipeGroup(models.Model):

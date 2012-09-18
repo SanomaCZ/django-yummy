@@ -26,7 +26,6 @@ class TestTags(TestCase):
         tools.assert_equals(context['current_menu'], {})
         tools.assert_equals(type(context['week_days']), tuple)
 
-
     @patch('yummy.managers.date', MockedDate)
     @patch('yummy.templatetags.yummy_tags.date', MockedDate)
     def test_yummy_renders_current_menu(self):
@@ -40,7 +39,6 @@ class TestTags(TestCase):
 
         tools.assert_equals(context['current_menu'], actual_item)
 
-
     @patch('yummy.managers.date', MockedDate)
     @patch('yummy.templatetags.yummy_tags.date', MockedDate)
     def test_yummy_renders_empty_item(self):
@@ -53,7 +51,6 @@ class TestTags(TestCase):
         context = yummy_day_menu()
 
         tools.assert_equals(context['current_menu'], {})
-
 
     def test_recommendation_renders_even_without_data(self):
         c = Context()
