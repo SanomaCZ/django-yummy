@@ -1,5 +1,4 @@
 from datetime import date
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 
@@ -52,11 +51,11 @@ class RecipeRecommendationManager(models.Manager):
 class WeekMenuManager(models.Manager):
 
     def get_actual(self):
-        today = date.today()
-        week_no = date.isocalendar(today)[1]
+        week_no = date.isocalendar( date.today() )[1]
+        is_even_week = bool((week_no + 1) % 2)
 
-        items = self.get_query_set().select_related('soup', 'meal', 'dessert').filter(even_week=bool((week_no + 1) % 2))
-        week_menu = {}
-        for one in items:
-            week_menu[one.day] = one
-        return week_menu
+        items = self.get_query_set().\
+                    select_related('soup', 'meal', 'dessert').\
+                    filter(even_week=is_even_week)
+
+        return dict( [(one.day, one) for one in items ] )
