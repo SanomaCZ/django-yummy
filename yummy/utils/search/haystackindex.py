@@ -42,7 +42,7 @@ class YummyRecipeIndex(indexes.RealTimeSearchIndex):
         return obj.category.path
 
     def prepare_cuisines(self, obj):
-        return [c.name for c in obj.cuisines.all()]
+        return tuple(c.name for c in obj.cuisines.all())
 
     def prepare_ingredients(self, obj):
         i_set = set()
@@ -57,7 +57,7 @@ class YummyRecipeIndex(indexes.RealTimeSearchIndex):
         return tuple(g_set)
 
     def prepare_consumers(self, obj):
-        return [c.title for c in obj.consumers.all()]
+        return tuple(c.title for c in obj.consumers.all())
 
     def get_model(self):
         return Recipe
