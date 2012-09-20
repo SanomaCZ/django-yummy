@@ -44,7 +44,7 @@ class RecipeRecommendationManager(models.Manager):
         today = date.today()
         return self.get_query_set().filter(
             (models.Q(day_to__gte=today) | models.Q(day_to__isnull=True)),
-            day_from__lte=today, recipe__is_approved=True
+            day_from__lte=today, recipe__is_approved=True, recipe__is_public=True,
         ).select_related('recipe').order_by('-day_from')
 
 
