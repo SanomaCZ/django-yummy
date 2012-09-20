@@ -51,7 +51,7 @@ class RecipeRecommendationManager(models.Manager):
 class WeekMenuManager(models.Manager):
 
     def get_actual(self):
-        week_no = date.isocalendar( date.today() )[1]
+        week_no = date.isocalendar(date.today())[1]
         is_even_week = bool((week_no + 1) % 2)
 
         items = self.get_query_set().\

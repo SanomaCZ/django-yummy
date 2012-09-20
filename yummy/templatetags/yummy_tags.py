@@ -61,6 +61,7 @@ def yummy_day_menu():
 
     current_day = date.isoweekday(date.today())
     return {
+        'current_week_day': current_day,
         'current_menu': menu.get(current_day) or {},
         'week_days': conf.WEEK_DAYS,
     }
