@@ -35,13 +35,11 @@ def yummy_recipe_recommendation(parser, token):
 
     bits = token.split_contents()
 
-    if (len(bits) == 3 and bits[1] != 'as') or (len(bits) == 4 and bits[2] != 'as'):
+    if len(bits) not in (3, 4) or bits[-2] != 'as':
         raise template.TemplateSyntaxError('Usage: {% yummy_recipe_recommendation [<count>] as <variable> %}')
 
-    if len(bits) == 3:
-        count, varname = conf.RECIPE_RECOMMENDATIONS_COUNT, bits[2]
-    else:
-        count, varname = bits[1], bits[3]
+    varname = bits[-1]
+    count = conf.RECIPE_RECOMMENDATIONS_COUNT if len(bits) == 3 else bits[1]
 
     return RecommendationNode(count, varname)
 
@@ -101,12 +99,10 @@ def yummy_get_categories(parser, token):
 
     bits = token.split_contents()
 
-    if (len(bits) == 3 and bits[1] != 'as') or (len(bits) == 5 and (bits[1] != 'from' or bits[3] != 'as')):
-        raise template.TemplateSyntaxError('Usage: {% yummy_get_categories [from <category>] as <var> %}')
+    if len(bits) not in (3, 5) or bits[-2] != 'as':
+        raise template.TemplateSyntaxError('Usage: {% yummy_get_categories [from <category>] as <variable> %}')
 
-    if len(bits) == 3:
-        category, varname = None, bits[2]
-    else:
-        category, varname = bits[2], bits[4]
+    varname = bits[-1]
+    category = None if len(bits) == 3 else bits[2]
 
     return CategoriesNode(category, varname)
