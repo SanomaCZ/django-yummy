@@ -15,6 +15,12 @@ class ApprovedRecipeRaw(ForeignKeyRawIdWidget):
         params.update(dict(is_approved=True))
         return params
 
+class PublicRecipeRaw(ApprovedRecipeRaw):
+
+    def url_parameters(self):
+        params = super(PublicRecipeRaw, self).url_parameters()
+        params.update(dict(is_public=True))
+        return params
 
 class CuisineAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
@@ -75,7 +81,7 @@ class RecipeRecommendationAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         db = kwargs.get('using')
         if db_field.name == 'recipe':
-            kwargs['widget'] = ApprovedRecipeRaw(db_field.rel, self.admin_site, using=db)
+            kwargs['widget'] = PublicRecipeRaw(db_field.rel, self.admin_site, using=db)
         return db_field.formfield(**kwargs)
 
 
@@ -94,7 +100,7 @@ class WeekMenuAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         db = kwargs.get('using')
         if db_field.name in ('soup', 'meal', 'dessert'):
-            kwargs['widget'] = ApprovedRecipeRaw(db_field.rel, self.admin_site, using=db)
+            kwargs['widget'] = PublicRecipeRaw(db_field.rel, self.admin_site, using=db)
         return db_field.formfield(**kwargs)
 
 
