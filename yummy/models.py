@@ -235,7 +235,6 @@ class Recipe(models.Model):
     cooking_type = models.ForeignKey(CookingType, verbose_name=_('Cooking type'), blank=True, null=True)
     cuisines = models.ManyToManyField(Cuisine, verbose_name=_('Cuisines'))
     servings = models.PositiveSmallIntegerField(_('Servings'), blank=True, null=True)
-    consumers = models.ManyToManyField(Consumer, verbose_name=_('Consumers'), blank=True)
 
     price = models.SmallIntegerField(_('Price'), choices=conf.PRICING_CHOICES, default=3, db_index=True)
     difficulty = models.PositiveSmallIntegerField(_('Preparation difficulty'), choices=conf.DIFFICULTY_CHOICES, default=3, db_index=True)
@@ -247,8 +246,6 @@ class Recipe(models.Model):
     is_public = models.BooleanField(_('Public'), default=True)
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
-
-#    photos = models.ManyToManyField(Photo, verbose_name=_('Photos'), through='RecipePhoto')
 
     def __unicode__(self):
         return self.title
@@ -362,7 +359,6 @@ class RecipePhoto(models.Model):
         #save items in reversed order, due to unique_together
         for one in modified_items[::-1]:
             one.save()
-
 
 
 class IngredientInRecipeGroup(models.Model):

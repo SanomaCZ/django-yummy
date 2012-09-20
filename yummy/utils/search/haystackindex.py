@@ -56,9 +56,6 @@ class YummyRecipeIndex(indexes.RealTimeSearchIndex):
             g_set.add(i.ingredient.group.name)
         return tuple(g_set)
 
-    def prepare_consumers(self, obj):
-        return tuple(c.title for c in obj.consumers.all())
-
     def get_model(self):
         return Recipe
 

@@ -45,7 +45,7 @@ class RecipeAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     inlines = [IngredientInRecipeInlineAdmin, IngredientInRecipeGroupInlineAdmin, RecipePhotoInlineAdmin]
     search_fields = ('title',)
-    list_filter = ('is_approved', 'consumers', 'category')
+    list_filter = ('is_approved', 'category')
 
 
 class PhotoAdmin(admin.ModelAdmin):
