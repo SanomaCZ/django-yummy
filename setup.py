@@ -10,6 +10,7 @@ install_requires = [
 test_requires = [
     'nose',
     'coverage',
+    'mock',
 ]
 
 long_description = open('README.rst').read()
