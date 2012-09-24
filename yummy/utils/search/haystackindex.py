@@ -28,7 +28,6 @@ class YummyRecipeIndex(indexes.RealTimeSearchIndex):
     owner = indexes.CharField(model_attr='owner', faceted=True)
     ingredients = indexes.MultiValueField(faceted=True, boost=4)
     ingredient_groups = indexes.MultiValueField(faceted=True)
-    consumers = indexes.MultiValueField(faceted=True)
     servings = indexes.IntegerField(model_attr='servings', null=True)
     price = indexes.IntegerField(model_attr='price')
     difficulty = indexes.IntegerField(model_attr='difficulty')

@@ -204,22 +204,6 @@ class Category(models.Model):
             return self.parent.photo_hierarchic
 
 
-class Consumer(models.Model):
-    """
-    Some recipes are suitable for diabetics, kids etc. for example
-    """
-
-    title = models.CharField(_('Title'), max_length=64)
-    slug = models.SlugField(_('Slug'), max_length=64, unique=True)
-
-    def __unicode__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = _("Consumer")
-        verbose_name_plural = _("Consumers")
-
-
 class Recipe(models.Model):
 
     objects = managers.RecipeManager()
