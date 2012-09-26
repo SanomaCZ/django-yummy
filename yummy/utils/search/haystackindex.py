@@ -51,7 +51,7 @@ class YummyRecipeIndex(indexes.RealTimeSearchIndex):
 
     def prepare_ingredient_groups(self, obj):
         g_set = set()
-        for i in obj.ingredientinrecipe_set.all():
+        for i in obj.ingredientinrecipe_set.filter(group__isnull=False):
             g_set.add(i.ingredient.group.name)
         return tuple(g_set)
 

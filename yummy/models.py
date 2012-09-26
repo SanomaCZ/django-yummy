@@ -271,6 +271,7 @@ class Recipe(models.Model):
             return self.category.photo_hierarchic
 
     def groupped_ingredients(self):
+        #TODO - cache
         ingredients = self.ingredientinrecipe_set.all()
 
         groups = {}
