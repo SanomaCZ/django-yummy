@@ -270,6 +270,17 @@ class Recipe(models.Model):
         else:
             return self.category.photo_hierarchic
 
+    def groupped_ingredients(self):
+        ingredients = self.ingredientinrecipe_set.all()
+
+        groups = {}
+        NOGROUP = '__nogroup__'
+        for one in ingredients:
+            ing_group = one.group or NOGROUP
+            groups.setdefault(ing_group, []).append(one)
+
+        return groups
+
 
 class RecipePhoto(models.Model):
 

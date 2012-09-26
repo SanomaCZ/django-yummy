@@ -104,6 +104,11 @@ class WeekMenuAdmin(admin.ModelAdmin):
         return db_field.formfield(**kwargs)
 
 
+class IngredientAdmin(admin.ModelAdmin):
+
+    prepopulated_fields = {'slug': ('name',)}
+
+
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Cuisine, CuisineAdmin)
@@ -111,6 +116,7 @@ admin.site.register(Photo, PhotoAdmin)
 admin.site.register(RecipePhoto, RecipePhotoAdmin)
 admin.site.register(RecipeRecommendation, RecipeRecommendationAdmin)
 admin.site.register(WeekMenu, WeekMenuAdmin)
+admin.site.register(Ingredient, IngredientAdmin)
 
-admin.site.register([CookingType, Ingredient, IngredientGroup, UnitConversion,
+admin.site.register([CookingType, IngredientGroup, UnitConversion,
                      IngredientInRecipeGroup, IngredientInRecipe, CookBook])
