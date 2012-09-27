@@ -3,7 +3,7 @@ from haystack import indexes
 from yummy.models import Recipe
 
 
-class YummyRecipeIndex(object):
+class YummyRecipeIndex(indexes.SearchIndex):
     """
     Extend this index like this::
 
