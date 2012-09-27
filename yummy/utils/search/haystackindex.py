@@ -3,11 +3,11 @@ from haystack import indexes
 from yummy.models import Recipe
 
 
-class YummyRecipeIndex(indexes.RealTimeSearchIndex):
+class YummyRecipeIndex(object):
     """
     Extend this index like this::
 
-        class RecipeIndex(YummyRecipeIndex, indexes.Indexable):
+        class RecipeIndex(YummyRecipeIndex, indexes.SearchIndex, indexes.Indexable):
 
             rating = indexes.DecimalField(boost=3)
             tags = indexes.MultiValueField(faceted=True)
