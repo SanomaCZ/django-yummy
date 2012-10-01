@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed
 from django.views.generic import ListView, DetailView, View
@@ -77,7 +78,7 @@ class IngredientView(ListView):
         return super(IngredientView, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        return self.model.objects.approved().filter(ingredient=self.ingredient)
+        return self.model.objects.public().filter(ingredient=self.ingredient)
 
 
 class CategoryView(ListView):
@@ -102,7 +103,7 @@ class CategoryView(ListView):
         return super(CategoryView, self).dispatch(request, path, **kwargs)
 
     def get_queryset(self):
-        qs = self.model.objects.approved()
+        qs = self.model.objects.public()
         if self.category:
             qs = qs.filter(category=self.category)
 
@@ -120,10 +121,13 @@ class CategoryView(ListView):
 
     def get_context_data(self, **kwargs):
         data = super(CategoryView, self).get_context_data(**kwargs)
-        data['current_order_attr'] = self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) or conf.CATEGORY_ORDER_DEFAULT
-        data['current_photo_attr'] = self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all'
-        data['ranking_attrs'] = conf.CATEGORY_ORDERING
-        data['category'] = self.category
+        data.update({
+            'current_order_attr': self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) or conf.CATEGORY_ORDER_DEFAULT,
+            'current_photo_attr': self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all',
+            'ranking_attrs': conf.CATEGORY_ORDERING,
+            'category': self.category,
+
+        })
         return data
 
 
@@ -155,3 +159,29 @@ class RecipeDetail(DetailView):
             return self.model.objects.get(pk=self.kwargs.get('recipe_id'), slug=self.kwargs.get('recipe_slug'))
         except self.model.DoesNotExist:
             raise Http404("Given recipe not found")
+
+
+class AuthorRecipes(ListView):
+
+    template_name = 'yummy/author_recipes.html'
+    model = Recipe
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.owner = User.objects.get(pk=self.kwargs['author_id'])
+        except User.DoesNotExist:
+            raise Http404("Given author not found")
+        return super(AuthorRecipes, self).get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return self.model.objects.public().filter(owner=self.owner)
+
+    def get_context_data(self, **kwargs):
+        data = super(AuthorRecipes, self).get_context_data(**kwargs)
+        data.update({
+            'current_order_attr': self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) or conf.CATEGORY_ORDER_DEFAULT,
+            'current_photo_attr': self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all',
+            'ranking_attrs': conf.CATEGORY_ORDERING,
+            'author': self.owner,
+        })
+        return data
