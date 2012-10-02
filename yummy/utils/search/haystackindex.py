@@ -60,3 +60,6 @@ class YummyRecipeIndex(indexes.SearchIndex):
 
     def index_set(self):
         return self.get_model().objects.public()
+
+    def get_updated_field(self):
+        return 'updated'
