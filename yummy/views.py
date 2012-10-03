@@ -1,3 +1,7 @@
+from _locale import LC_ALL
+from calendar import calendar, month_name
+from django.conf import settings
+import locale
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed
@@ -5,7 +9,7 @@ from django.views.generic import ListView, DetailView, View
 from django.utils.translation import ugettext
 from django.utils.simplejson import dumps
 
-from yummy.models import Category, Ingredient, Recipe, WeekMenu
+from yummy.models import Category, Ingredient, Recipe, WeekMenu, IngredientGroup
 from yummy import conf
 
 
@@ -58,8 +62,25 @@ class DailyMenu(JSONResponseMixin, View):
 
 
 class IngredientView(ListView):
+
+    template_name = 'yummy/ingredient_index.html'
+    model = Ingredient
+
+    def get_context_data(self, **kwargs):
+        data = super(IngredientView, self).get_context_data(**kwargs)
+
+        data.update({
+            'groups': IngredientGroup.objects.all(),
+            'months': conf.MONTHS,
+        })
+
+        return data
+
+
+class IngredientDetail(DetailView):
+
     template_name = 'yummy/ingredient_detail.html'
-    model = Recipe
+    model = Ingredient
 
     def set_ingredient(self, slug):
         try:
@@ -98,7 +119,6 @@ class CategoryView(ListView):
 
     def dispatch(self, request, path=None, **kwargs):
         if not self.set_category(path) and path is not None:
-            print path
             raise Http404("Category with path '%s' not found" % path)
         return super(CategoryView, self).dispatch(request, path, **kwargs)
 
