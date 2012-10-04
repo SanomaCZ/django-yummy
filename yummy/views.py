@@ -9,7 +9,7 @@ from django.views.generic import ListView, DetailView, View
 from django.utils.translation import ugettext
 from django.utils.simplejson import dumps
 
-from yummy.models import Category, Ingredient, Recipe, WeekMenu, IngredientGroup
+from yummy.models import Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe
 from yummy import conf
 
 
@@ -63,7 +63,7 @@ class DailyMenu(JSONResponseMixin, View):
 
 class IngredientView(ListView):
 
-    template_name = 'yummy/ingredient_index.html'
+    template_name = 'yummy/ingredient/index.html'
     model = Ingredient
 
     def get_context_data(self, **kwargs):
@@ -77,10 +77,42 @@ class IngredientView(ListView):
         return data
 
 
-class IngredientDetail(DetailView):
+class IngredientGroupView(ListView):
 
-    template_name = 'yummy/ingredient_detail.html'
+    template_name = 'yummy/ingredient/group.html'
     model = Ingredient
+
+    def set_group(self, slug):
+        try:
+            self._group = IngredientGroup.objects.get(slug=slug)
+        except Ingredient.DoesNotExist:
+            return None
+        return self._group
+
+    @property
+    def group(self):
+        return self._group
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.set_group(kwargs.get('group')):
+            raise Http404(ugettext("Group not found"))
+        return super(IngredientGroupView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        data = super(IngredientGroupView, self).get_context_data(**kwargs)
+        data.update({
+            'group': self.group,
+        })
+        return data
+
+    def get_queryset(self):
+        return self.model.objects.filter(group=self.group)
+
+
+class IngredientDetail(ListView):
+
+    template_name = 'yummy/ingredient/detail.html'
+    model = IngredientInRecipe
 
     def set_ingredient(self, slug):
         try:
@@ -96,10 +128,17 @@ class IngredientDetail(DetailView):
     def dispatch(self, request, *args, **kwargs):
         if not self.set_ingredient(kwargs.get('ingredient')):
             raise Http404(ugettext("Ingredient not found"))
-        return super(IngredientView, self).dispatch(request, *args, **kwargs)
+        return super(IngredientDetail, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        data = super(IngredientDetail, self).get_context_data(**kwargs)
+        data.update({
+            'ingredient': self.ingredient,
+        })
+        return data
 
     def get_queryset(self):
-        return self.model.objects.public().filter(ingredient=self.ingredient)
+        return self.model.objects.filter(ingredient=self.ingredient).select_related('recipe')
 
 
 class CategoryView(ListView):

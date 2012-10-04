@@ -1,20 +1,17 @@
 {% extends BASE_TEMPLATE %}
-{% load i18n %}
 
 {% block content %}
 
-	<h2>{% trans "By category" %}</h2>
-	{% for one in object_list %}
-		<div class="row">
-			{# <a href="{% url yummy:recipe_detail one.category.path one.slug one.pk %}"> #}
-			<a>
-				<div class="span4">
-					<h3>{{ one.title }}</h3>
-				</div>
-			</a>
-		</div>
-	{% endfor %}
+	<h1>{{ ingredient.name }}</h1>
 
+	<h2>{% trans "Utilized in recipes" %}:</h2>
+	{% for ingredient_recipe in object_list %}
+		{% with ingredient_recipe.recipe as one %}
+			<a href="{% url yummy:recipe_detail one.category.path one.slug one.pk %}">
+				{{ one.title }}
+			</a>
+		{% endwith %}
+	{% endfor %}
 
 	{% if is_paginated %}
 		<div class="pagination">
@@ -34,4 +31,5 @@
 			</ul>
 		</div>
 	{% endif %}
+
 {% endblock %}

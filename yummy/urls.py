@@ -2,16 +2,18 @@ from django.conf.urls import patterns, url
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
 
-from yummy.views import CategoryView, IngredientView, RecipeDetail, CategoryReorder, DailyMenu, AuthorRecipes
+from yummy.views import (CategoryView, IngredientView, RecipeDetail,
+                         CategoryReorder, DailyMenu, AuthorRecipes,
+                         IngredientGroupView, IngredientDetail)
 
 INGREDIENT = slugify(_("ingredient"))
 
 urlpatterns = patterns('',
     url(r'^%s/(?P<author_id>[\d]+)/$' % _("author"), AuthorRecipes.as_view(), name='author_recipes'),
 
-    url(r'^%s/detail/(?P<ingredient>[\w-]+)/$' % INGREDIENT, IngredientView.as_view(), name='ingredient_detail'),
-    url(r'^%s/group/(?P<ingredient>[\w-]+)$' % INGREDIENT, IngredientView.as_view(), name='ingredient_group'),
-    url(r'^%s/season/(?P<ingredient>[\w-]+)$' % INGREDIENT, IngredientView.as_view(), name='ingredient_season'), #TODO
+    url(r'^%s/detail/(?P<ingredient>[\w-]+)/$' % INGREDIENT, IngredientDetail.as_view(), name='ingredient_detail'),
+    url(r'^%s/group/(?P<group>[\w-]+)/$' % INGREDIENT, IngredientGroupView.as_view(), name='ingredient_group'),
+    url(r'^%s/season/(?P<ingredient>[\w-]+)/$' % INGREDIENT, IngredientView.as_view(), name='ingredient_season'), #TODO
     url(r'^%s/$' % INGREDIENT, IngredientView.as_view(), name='ingredient_index'),
 
     url(r'^(?P<cat_path>[\w/-]+)/(?P<recipe_slug>[\w-]+)-(?P<recipe_id>[\d]+)/$', RecipeDetail.as_view(), name='recipe_detail'),
