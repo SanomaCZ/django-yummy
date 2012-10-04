@@ -1,0 +1,539 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-10-04 14:59+0200\n"
+"PO-Revision-Date: 2012-10-04 13:26+0100\n"
+"Last-Translator: yedpodtrzitko <yed@vanyli.net>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
+
+#: admin.py:67
+msgid "No title"
+msgstr ""
+
+#: admin.py:106
+msgid "Soup"
+msgstr "Polévka"
+
+#: admin.py:107
+msgid "Meal"
+msgstr "Hlavní chod"
+
+#: admin.py:108
+msgid "Dessert"
+msgstr "Desert"
+
+#: admin.py:110
+msgid "Selected recipes"
+msgstr "Zvolené recepisy"
+
+#: conf.py:5
+msgctxt "unit"
+msgid "piece"
+msgid_plural "pieces"
+msgstr[0] "kus"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:5
+msgctxt "unit"
+msgid "pc"
+msgid_plural "pcs"
+msgstr[0] ""
+msgstr[1] ""
+
+#: conf.py:6
+msgctxt "unit"
+msgid "gram"
+msgid_plural "grams"
+msgstr[0] ""
+msgstr[1] ""
+
+#: conf.py:7
+msgctxt "unit"
+msgid "dekagram"
+msgid_plural "dekagrams"
+msgstr[0] ""
+msgstr[1] ""
+
+#: conf.py:8
+msgctxt "unit"
+msgid "kilogram"
+msgid_plural "kilograms"
+msgstr[0] ""
+msgstr[1] ""
+
+#: conf.py:9
+msgctxt "unit"
+msgid "mililiter"
+msgid_plural "mililiters"
+msgstr[0] ""
+msgstr[1] ""
+
+#: conf.py:10
+msgctxt "unit"
+msgid "deciliter"
+msgid_plural "deciliters"
+msgstr[0] ""
+msgstr[1] ""
+
+#: conf.py:11
+msgctxt "unit"
+msgid "liter"
+msgid_plural "liters"
+msgstr[0] ""
+msgstr[1] ""
+
+#: conf.py:12
+msgctxt "unit"
+msgid "cup"
+msgid_plural "cups"
+msgstr[0] ""
+msgstr[1] ""
+
+#: conf.py:18
+msgid "Cheapest"
+msgstr "Nejlevnější"
+
+#: conf.py:19
+msgid "Cheaper"
+msgstr "Levnější"
+
+#: conf.py:20
+msgid "Standard price"
+msgstr "Průměrné"
+
+#: conf.py:21
+msgid "Expensive"
+msgstr "Drahý"
+
+#: conf.py:22
+msgid "Most Expensive"
+msgstr "Nejdražší"
+
+#: conf.py:26
+msgid "Easy"
+msgstr "Snadný"
+
+#: conf.py:27
+msgid "Standard difficulty"
+msgstr "Středně"
+
+#: conf.py:28
+msgid "Difficult"
+msgstr "Náročný"
+
+#: conf.py:41
+msgid "by ranking"
+msgstr "hodnocení"
+
+#: conf.py:42
+msgid "by alphabet"
+msgstr "abecedy"
+
+#: conf.py:43
+msgid "by date"
+msgstr "data přidání"
+
+#: conf.py:50
+msgid "Monday"
+msgstr "Pondělí"
+
+#: conf.py:51
+msgid "Tuesday"
+msgstr "Úterý"
+
+#: conf.py:52
+msgid "Wednesday"
+msgstr "Středa"
+
+#: conf.py:53
+msgid "Thursday"
+msgstr "Čtvrtek"
+
+#: conf.py:54
+msgid "Friday"
+msgstr "Pátek"
+
+#: conf.py:55
+msgid "Saturday"
+msgstr "Sobota"
+
+#: conf.py:56
+msgid "Sunday"
+msgstr "Neděle"
+
+#: conf.py:60
+msgid "January"
+msgstr ""
+
+#: conf.py:61
+msgid "February"
+msgstr ""
+
+#: conf.py:62
+msgid "March"
+msgstr ""
+
+#: conf.py:63
+msgid "April"
+msgstr ""
+
+#: conf.py:64
+msgid "May"
+msgstr ""
+
+#: conf.py:65
+msgid "June"
+msgstr ""
+
+#: conf.py:66
+msgid "July"
+msgstr ""
+
+#: conf.py:67
+msgid "August"
+msgstr ""
+
+#: conf.py:68
+msgid "September"
+msgstr ""
+
+#: conf.py:69
+msgid "October"
+msgstr ""
+
+#: conf.py:70
+msgid "November"
+msgstr ""
+
+#: conf.py:71
+msgid "December"
+msgstr ""
+
+#: models.py:22 models.py:36 models.py:50 models.py:64
+msgid "Name"
+msgstr "Jméno"
+
+#: models.py:23 models.py:37 models.py:51 models.py:65 models.py:118
+#: models.py:212 models.py:447
+msgid "Slug"
+msgstr "Slug"
+
+#: models.py:24 models.py:38 models.py:99 models.py:122
+msgid "Description"
+msgstr "Popis"
+
+#: models.py:30 models.py:219
+msgid "Cooking type"
+msgstr ""
+
+#: models.py:31
+msgid "Cooking types"
+msgstr ""
+
+#: models.py:44
+msgid "Cuisine"
+msgstr ""
+
+#: models.py:45 models.py:220
+msgid "Cuisines"
+msgstr ""
+
+#: models.py:57
+msgid "Ingredient group"
+msgstr ""
+
+#: models.py:58
+msgid "Ingredient groups"
+msgstr ""
+
+#: models.py:63 models.py:379
+msgid "Group"
+msgstr ""
+
+#: models.py:66
+msgid "Genitive"
+msgstr ""
+
+#: models.py:67
+msgid "Default unit"
+msgstr ""
+
+#: models.py:69
+msgid "NDB id number"
+msgstr ""
+
+#: models.py:75 models.py:380
+msgid "Ingredient"
+msgstr ""
+
+#: models.py:76
+msgid "Ingredients"
+msgstr ""
+
+#: models.py:94
+msgid "Image"
+msgstr ""
+
+#: models.py:98 models.py:117 models.py:211 models.py:363 models.py:446
+msgid "Title"
+msgstr ""
+
+#: models.py:108 models.py:120 models.py:291
+msgid "Photo"
+msgstr ""
+
+#: models.py:109
+msgid "Photos"
+msgstr ""
+
+#: models.py:125 models.py:213 templates/yummy/ingredient/group.html:6
+msgid "Category"
+msgstr ""
+
+#: models.py:126
+msgid "Categories"
+msgstr ""
+
+#: models.py:173
+msgid "Parent category must be different than child."
+msgstr ""
+
+#: models.py:176
+msgid "A parent can't be a descendant of this category."
+msgstr ""
+
+#: models.py:179
+msgid "Path is not unique, change category title or slug."
+msgstr ""
+
+#: models.py:215 models.py:364
+msgid "Short description"
+msgstr ""
+
+#: models.py:216
+msgid "Preparation"
+msgstr ""
+
+#: models.py:217
+msgid "Hint"
+msgstr ""
+
+#: models.py:221
+msgid "Servings"
+msgstr ""
+
+#: models.py:223
+msgid "Price"
+msgstr ""
+
+#: models.py:224
+msgid "Preparation difficulty"
+msgstr ""
+
+#: models.py:225
+msgid "Preparation time (min)"
+msgstr ""
+
+#: models.py:226
+msgid "Caloric value"
+msgstr ""
+
+#: models.py:228
+msgid "User"
+msgstr ""
+
+#: models.py:229
+msgid "Approved"
+msgstr ""
+
+#: models.py:230 models.py:448
+msgid "Public"
+msgstr ""
+
+#: models.py:244 models.py:290 models.py:362 models.py:378
+msgid "Recipe"
+msgstr ""
+
+#: models.py:245 models.py:449
+msgid "Recipes"
+msgstr ""
+
+#: models.py:292
+msgid "Visible"
+msgstr ""
+
+#: models.py:293 models.py:365 models.py:383
+msgid "Order"
+msgstr ""
+
+#: models.py:303
+msgid "Recipe photo"
+msgstr ""
+
+#: models.py:304
+msgid "Recipe photos"
+msgstr ""
+
+#: models.py:372
+msgid "Ingredients in recipe group"
+msgstr ""
+
+#: models.py:373
+msgid "Ingredients in recipe groups"
+msgstr ""
+
+#: models.py:381
+msgid "Amount"
+msgstr ""
+
+#: models.py:382
+msgid "Unit"
+msgstr ""
+
+#: models.py:384
+msgid "Note"
+msgstr ""
+
+#: models.py:391
+msgid "Ingredient in recipe"
+msgstr ""
+
+#: models.py:392
+msgid "Ingredients in recipe"
+msgstr ""
+
+#: models.py:399
+msgid "Ratio"
+msgstr ""
+
+#: models.py:406
+msgid "Unit conversion"
+msgstr ""
+
+#: models.py:407
+msgid "Units conversions"
+msgstr ""
+
+#: models.py:414
+msgid "Show from day"
+msgstr ""
+
+#: models.py:414
+msgid "Recipe will show itself starting this day"
+msgstr ""
+
+#: models.py:415
+msgid "Show until day (inclusive)"
+msgstr ""
+
+#: models.py:416
+msgid ""
+"Recipe shown until this day. This field is not required. The longer is "
+"recipe shown, the lower priority it has."
+msgstr ""
+
+#: models.py:421
+msgid "until forever"
+msgstr ""
+
+#: models.py:424
+msgid "Recipe recommendation"
+msgstr ""
+
+#: models.py:425
+msgid "Recipe recommendations"
+msgstr ""
+
+#: models.py:429
+msgid "You can save recommendation only with approved recipe"
+msgstr ""
+
+#: models.py:432
+msgid "Invalid chronology of border dates"
+msgstr ""
+
+#: models.py:456
+msgid "Cookbook"
+msgstr ""
+
+#: models.py:457
+msgid "Cookbooks"
+msgstr ""
+
+#: models.py:462
+msgid "Day of the week"
+msgstr ""
+
+#: models.py:466
+msgid "Menu for even week"
+msgstr ""
+
+#: models.py:468
+msgid "odd"
+msgstr ""
+
+#: models.py:467
+#, python-format
+msgid "Check if this day menu is for even week. Current week is %s."
+msgstr ""
+
+#: models.py:474
+msgid "Menu of the day"
+msgstr ""
+
+#: models.py:475
+msgid "Menus of the day"
+msgstr ""
+
+#: models.py:478
+msgid "Even"
+msgstr ""
+
+#: models.py:478
+msgid "Odd"
+msgstr ""
+
+#: urls.py:9
+msgid "ingredient"
+msgstr ""
+
+#: urls.py:12
+msgid "author"
+msgstr ""
+
+#: views.py:94
+msgid "Group not found"
+msgstr ""
+
+#: views.py:126
+msgid "Ingredient not found"
+msgstr ""
+
+#: templates/yummy/author_recipes.html:6 templates/yummy/category/list.html:23
+msgid "Order recipes by"
+msgstr ""
+
+#: templates/yummy/author_recipes.html:24
+#: templates/yummy/category/list.html:41
+msgid "Show recipes only with photos"
+msgstr "Pouze s fotografií"
+
+#: templates/yummy/ingredient/detail.html:7
+msgid "Utilized in recipes"
+msgstr ""
+
+#: templates/yummy/ingredient/index.html:6
+msgid "By category"
+msgstr ""

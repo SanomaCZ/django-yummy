@@ -95,8 +95,18 @@ class WeekMenuAdmin(admin.ModelAdmin):
     ordering = ('even_week', 'day')
 
     def selected_recipes(self, obj):
-        return mark_safe(_("soup: %(soup)s<br>meal: %(meal)s<br>dessert: %(dessert)s") \
-                    % dict(soup=obj.soup, meal=obj.meal, dessert=obj.dessert))
+        return mark_safe(
+            """%(soup_label): %(soup)s<br/>
+            %(meal_label): %(meal)s<br/>
+            %(dessert_label)s: %(dessert)s""") %\
+               dict(
+                   soup=obj.soup,
+                   meal=obj.meal,
+                   dessert=obj.dessert,
+                   soup_label=_("Soup"),
+                   meal_label=_("Meal"),
+                   dessert_label=_("Dessert")
+            )
     selected_recipes.short_description = _('Selected recipes')
     selected_recipes.allow_tags = True
 
