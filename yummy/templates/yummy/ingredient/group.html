@@ -3,7 +3,7 @@
 
 {% block content %}
 
-	<h2>{% trans "Category" %}: {{ group }}</h2>
+	<h2>{% trans "Category" %}: {{ cynosure }}</h2>
 	{% for one in object_list %}
 		<div class="row">
 			<a href="{% url yummy:ingredient_detail one.slug %}"

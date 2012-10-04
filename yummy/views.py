@@ -21,6 +21,33 @@ class JSONResponseMixin(object):
         return dumps(context, ensure_ascii=False)
 
 
+class CynosureList(ListView):
+
+    @property
+    def cynosure(self):
+        return self._cynosure
+
+    def get_cynosure(self):
+        raise NotImplemented
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.get_cynosure()
+        except ObjectDoesNotExist:
+            raise Http404("Page not found")
+        return super(CynosureList, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        data = super(CynosureList, self).get_context_data(**kwargs)
+        data.update({
+            'current_order_attr': self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) or conf.CATEGORY_ORDER_DEFAULT,
+            'current_photo_attr': self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all',
+            'ranking_attrs': conf.CATEGORY_ORDERING,
+            'cynosure': self.cynosure,
+        })
+        return data
+
+
 class DailyMenu(JSONResponseMixin, View):
 
     def get(self, request, *args, **kwargs):
@@ -74,68 +101,22 @@ class IngredientView(ListView):
         return data
 
 
-class IngredientGroupView(ListView):
+class IngredientGroupView(CynosureList):
 
     template_name = 'yummy/ingredient/group.html'
     model = Ingredient
 
-    def set_group(self, slug):
-        try:
-            self._group = IngredientGroup.objects.get(slug=slug)
-        except Ingredient.DoesNotExist:
-            return None
-        return self._group
-
-    @property
-    def group(self):
-        return self._group
-
-    def dispatch(self, request, *args, **kwargs):
-        if not self.set_group(kwargs.get('group')):
-            raise Http404(ugettext("Group not found"))
-        return super(IngredientGroupView, self).dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        data = super(IngredientGroupView, self).get_context_data(**kwargs)
-        data.update({
-            'group': self.group,
-        })
-        return data
-
     def get_queryset(self):
-        return self.model.objects.filter(group=self.group)
+        return self.model.objects.filter(group=self.cynosure)
 
 
-class IngredientDetail(ListView):
+class IngredientDetail(CynosureList):
 
     template_name = 'yummy/ingredient/detail.html'
     model = IngredientInRecipe
 
-    def set_ingredient(self, slug):
-        try:
-            self._ingredient = Ingredient.objects.get(slug=slug)
-        except Ingredient.DoesNotExist:
-            return None
-        return self._ingredient
-
-    @property
-    def ingredient(self):
-        return self._ingredient
-
-    def dispatch(self, request, *args, **kwargs):
-        if not self.set_ingredient(kwargs.get('ingredient')):
-            raise Http404(ugettext("Ingredient not found"))
-        return super(IngredientDetail, self).dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        data = super(IngredientDetail, self).get_context_data(**kwargs)
-        data.update({
-            'ingredient': self.ingredient,
-        })
-        return data
-
     def get_queryset(self):
-        return self.model.objects.filter(ingredient=self.ingredient).select_related('recipe')
+        return self.model.objects.filter(ingredient=self.cynosure).select_related('recipe')
 
 
 class CategoryView(ListView):
@@ -168,7 +149,7 @@ class CategoryView(ListView):
         return data
 
 
-class CategoryDetail(CategoryView):
+class CategoryDetail(CynosureList, CategoryView):
     template_name = 'yummy/category/detail.html'
 
     def set_category(self, path):
@@ -178,26 +159,10 @@ class CategoryDetail(CategoryView):
             self._category = None
         return self._category
 
-    @property
-    def category(self):
-        return self._category
-
-    def dispatch(self, request, path=None, **kwargs):
-        if not self.set_category(path) and path is not None:
-            raise Http404("Category with path '%s' not found" % path)
-        return super(CategoryView, self).dispatch(request, path, **kwargs)
-
     def get_queryset(self):
         qs = super(CategoryDetail, self).get_queryset()
-        qs = qs.filter(category=self.category)
+        qs = qs.filter(category=self.cynosure)
         return qs
-
-    def get_context_data(self, **kwargs):
-        data = super(CategoryDetail, self).get_context_data(**kwargs)
-        data.update({
-            'category': self.category,
-        })
-        return data
 
 
 class CategoryReorder(View):
@@ -230,34 +195,7 @@ class RecipeDetail(DetailView):
             raise Http404("Given recipe not found")
 
 
-class RecipeList(ListView):
-
-    @property
-    def cynosure(self):
-        return self._cynosure
-
-    def get_cynosure(self):
-        raise NotImplemented
-
-    def get(self, request, *args, **kwargs):
-        try:
-            self.get_cynosure()
-        except ObjectDoesNotExist:
-            raise Http404("Page not found")
-        return super(RecipeList, self).get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        data = super(RecipeList, self).get_context_data(**kwargs)
-        data.update({
-            'current_order_attr': self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) or conf.CATEGORY_ORDER_DEFAULT,
-            'current_photo_attr': self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all',
-            'ranking_attrs': conf.CATEGORY_ORDERING,
-            'cynosure': self.cynosure,
-        })
-        return data
-
-
-class AuthorRecipes(RecipeList):
+class AuthorRecipes(CynosureList):
 
     template_name = 'yummy/recipe/author.html'
     model = Recipe
@@ -269,7 +207,7 @@ class AuthorRecipes(RecipeList):
         return self.model.objects.public().filter(owner=self.cynosure)
 
 
-class CuisineView(RecipeList):
+class CuisineView(CynosureList):
 
     model = Recipe
     template_name = 'yummy/recipe/cuisine.html'
