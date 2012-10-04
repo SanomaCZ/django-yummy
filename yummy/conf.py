@@ -68,7 +68,7 @@ MONTHS = (
     (9, _("September")),
     (10, _("October")),
     (11, _("November")),
-    (11, _("December")),
+    (12, _("December")),
 )
 
 PHOTO_ORDER_GAP = 5
