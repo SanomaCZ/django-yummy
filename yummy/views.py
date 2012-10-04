@@ -138,29 +138,11 @@ class IngredientDetail(ListView):
 
 
 class CategoryView(ListView):
-    template_name = 'yummy/category/list.html'
+    template_name = 'yummy/category/index.html'
     model = Recipe
-
-    def set_category(self, path):
-        try:
-            self._category = Category.objects.get(path=path)
-        except Category.DoesNotExist:
-            self._category = None
-        return self._category
-
-    @property
-    def category(self):
-        return self._category
-
-    def dispatch(self, request, path=None, **kwargs):
-        if not self.set_category(path) and path is not None:
-            raise Http404("Category with path '%s' not found" % path)
-        return super(CategoryView, self).dispatch(request, path, **kwargs)
 
     def get_queryset(self):
         qs = self.model.objects.public()
-        if self.category:
-            qs = qs.filter(category=self.category)
 
         photo_attr = self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all'
         if photo_attr != 'all':
@@ -180,8 +162,39 @@ class CategoryView(ListView):
             'current_order_attr': self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) or conf.CATEGORY_ORDER_DEFAULT,
             'current_photo_attr': self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all',
             'ranking_attrs': conf.CATEGORY_ORDERING,
-            'category': self.category,
 
+        })
+        return data
+
+
+class CategoryDetail(CategoryView):
+    template_name = 'yummy/category/detail.html'
+
+    def set_category(self, path):
+        try:
+            self._category = Category.objects.get(path=path)
+        except Category.DoesNotExist:
+            self._category = None
+        return self._category
+
+    @property
+    def category(self):
+        return self._category
+
+    def dispatch(self, request, path=None, **kwargs):
+        if not self.set_category(path) and path is not None:
+            raise Http404("Category with path '%s' not found" % path)
+        return super(CategoryView, self).dispatch(request, path, **kwargs)
+
+    def get_queryset(self):
+        qs = super(CategoryDetail, self).get_queryset()
+        qs = qs.filter(category=self.category)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        data = super(CategoryDetail, self).get_context_data(**kwargs)
+        data.update({
+            'category': self.category,
         })
         return data
 
@@ -240,3 +253,9 @@ class AuthorRecipes(ListView):
             'author': self.owner,
         })
         return data
+
+
+class CuisineView(ListView):
+
+    model = Recipe
+    template_name = 'yummy/recipe_detail.html'

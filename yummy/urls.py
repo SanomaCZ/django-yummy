@@ -4,7 +4,7 @@ from django.template.defaultfilters import slugify
 
 from yummy.views import (CategoryView, IngredientView, RecipeDetail,
                          CategoryReorder, DailyMenu, AuthorRecipes,
-                         IngredientGroupView, IngredientDetail)
+                         IngredientGroupView, IngredientDetail, CuisineView, CategoryDetail)
 
 INGREDIENT = slugify(_("ingredient"))
 
@@ -18,11 +18,15 @@ urlpatterns = patterns('',
 
     url(r'^(?P<cat_path>[\w/-]+)/(?P<recipe_slug>[\w-]+)-(?P<recipe_id>[\d]+)/$', RecipeDetail.as_view(), name='recipe_detail'),
 
+    url(r'^daily_menu/$', DailyMenu.as_view(), name='menu_load_data'),
+
+    url(r'^cuisine/(?P<path>[\w/-]+)/$', CuisineView.as_view(), name='cuisine_detail'),
+
+
     url(r'^category_reorder/(?P<order_attr>[\w-]+)/$', CategoryReorder.as_view(), name='category_reorder'),
     url(r'^category_reorder/(?P<order_attr>[\w-]+)/(?P<photo_attr>\w+)/$', CategoryReorder.as_view(), name='category_reorder'),
 
-    url(r'^daily_menu/$', DailyMenu.as_view(), name='menu_load_data'),
+    url(r'^category/(?P<path>[\w/-]+)/$', CategoryDetail.as_view(), name='category_detail'),
 
-    url(r'^(?P<path>[\w/-]+)/$', CategoryView.as_view(), name='category_detail'),
-    url(r'^$', CategoryView.as_view(), name='category_detail'),
+    url(r'^$', CategoryView.as_view(), name='category_index'),
 )

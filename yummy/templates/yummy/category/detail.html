@@ -1,0 +1,14 @@
+{% extends "yummy/category/index.html" %}
+
+{% block overview %}
+	<div class="row">
+		{% for category in recipes_categories %}
+			<div class="span1">
+				<a href="{{ category.get_absolute_url }}" class="span1">
+					<img src="{{ STATIC_URL }}images/content/food_cat.png"/><br/>
+					{{ category.title }}
+				</a>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}
