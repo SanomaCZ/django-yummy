@@ -1,7 +1,3 @@
-from _locale import LC_ALL
-from calendar import calendar, month_name
-from django.conf import settings
-import locale
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed
@@ -142,7 +138,7 @@ class IngredientDetail(ListView):
 
 
 class CategoryView(ListView):
-    template_name = 'yummy/category_list.html'
+    template_name = 'yummy/category/list.html'
     model = Recipe
 
     def set_category(self, path):
