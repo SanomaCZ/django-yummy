@@ -20,7 +20,7 @@ urlpatterns = patterns('',
 
     url(r'^daily_menu/$', DailyMenu.as_view(), name='menu_load_data'),
 
-    url(r'^cuisine/(?P<path>[\w/-]+)/$', CuisineView.as_view(), name='cuisine_detail'),
+    url(r'^cuisine/(?P<slug>[\w/-]+)/$', CuisineView.as_view(), name='cuisine_detail'),
 
 
     url(r'^category_reorder/(?P<order_attr>[\w-]+)/$', CategoryReorder.as_view(), name='category_reorder'),

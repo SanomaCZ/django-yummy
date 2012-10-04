@@ -1,11 +1,12 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed
 from django.views.generic import ListView, DetailView, View
 from django.utils.translation import ugettext
 from django.utils.simplejson import dumps
 
-from yummy.models import Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe
+from yummy.models import Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe, Cuisine
 from yummy import conf
 
 
@@ -218,7 +219,7 @@ class CategoryReorder(View):
 
 
 class RecipeDetail(DetailView):
-    template_name = 'yummy/recipe_detail.html'
+    template_name = 'yummy/recipe/detail.html'
 
     model = Recipe
 
@@ -229,33 +230,52 @@ class RecipeDetail(DetailView):
             raise Http404("Given recipe not found")
 
 
-class AuthorRecipes(ListView):
+class RecipeList(ListView):
 
-    template_name = 'yummy/author_recipes.html'
-    model = Recipe
+    @property
+    def cynosure(self):
+        return self._cynosure
+
+    def get_cynosure(self):
+        raise NotImplemented
 
     def get(self, request, *args, **kwargs):
         try:
-            self.owner = User.objects.get(pk=self.kwargs['author_id'])
-        except User.DoesNotExist:
-            raise Http404("Given author not found")
-        return super(AuthorRecipes, self).get(request, *args, **kwargs)
-
-    def get_queryset(self):
-        return self.model.objects.public().filter(owner=self.owner)
+            self.get_cynosure()
+        except ObjectDoesNotExist:
+            raise Http404("Page not found")
+        return super(RecipeList, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        data = super(AuthorRecipes, self).get_context_data(**kwargs)
+        data = super(RecipeList, self).get_context_data(**kwargs)
         data.update({
             'current_order_attr': self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) or conf.CATEGORY_ORDER_DEFAULT,
             'current_photo_attr': self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all',
             'ranking_attrs': conf.CATEGORY_ORDERING,
-            'author': self.owner,
+            'cynosure': self.cynosure,
         })
         return data
 
 
-class CuisineView(ListView):
+class AuthorRecipes(RecipeList):
+
+    template_name = 'yummy/recipe/author.html'
+    model = Recipe
+
+    def get_cynosure(self):
+        self._cynosure = User.objects.get(pk=self.kwargs['author_id'])
+
+    def get_queryset(self):
+        return self.model.objects.public().filter(owner=self.cynosure)
+
+
+class CuisineView(RecipeList):
 
     model = Recipe
-    template_name = 'yummy/recipe_detail.html'
+    template_name = 'yummy/recipe/cuisine.html'
+
+    def get_cynosure(self):
+        self._cynosure = Cuisine.objects.get(slug=self.kwargs['slug'])
+
+    def get_queryset(self):
+        return Recipe.objects.public().filter(cuisines__in=[self.cynosure])

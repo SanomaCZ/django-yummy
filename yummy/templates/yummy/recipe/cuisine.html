@@ -1,0 +1,60 @@
+{% extends BASE_TEMPLATE %}
+{% load i18n %}
+
+{% block content %}
+
+	{% trans "Order recipes by" %}
+
+	{% for loop_order_id, loop_order_trans in ranking_attrs.items %}
+		<span {% if current_order_attr == loop_order_id %}class="active"{% endif %}>
+		    <a href="{% url yummy:category_reorder order_attr=loop_order_id %}?next_url={{ request.path }}">{{ loop_order_trans }}</a>
+		</span>
+	{% endfor %}
+
+	<span>|</span>
+
+	<span id="photos_reorder">
+	    {% if current_photo_attr == 'photos' %}
+			<a href="{% url yummy:category_reorder order_attr=current_order_attr photo_attr='all' %}?next_url={{ request.path }}">
+			<input type="checkbox" checked="checked"/>
+		{% else %}
+			<a href="{% url yummy:category_reorder order_attr=current_order_attr photo_attr='photos' %}?next_url={{ request.path }}">
+			<input type="checkbox"/>
+		{% endif %}
+		{% trans "Show recipes only with photos" %}
+		</a>
+	</span>
+
+	{% for one in object_list %}
+		<div class="row">
+			<a href="{% url yummy:recipe_detail one.category.path one.slug one.pk %}">
+
+				<div class="span2 thumbnail">
+					<img src="{{ one.get_top_photo }}"/>
+				</div>
+				<div class="span4">
+					<h3>{{ one.title }}</h3>
+				</div>
+			</a>
+		</div>
+	{% endfor %}
+
+	{% if is_paginated %}
+		<div class="pagination">
+			<ul>
+				{% for num in paginator.page_range %}
+					{% if num == page_obj.number %}
+						<li class="disabled">
+							<span class="current page">{{ num }}</span>
+
+							{% else %}
+						<li>
+						<a href="?page={{ num }}"> {{ num }}</a>
+					{% endif %}
+
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% endif %}
+{% endblock %}
