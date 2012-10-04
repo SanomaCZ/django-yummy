@@ -199,8 +199,8 @@ class TestCategoryModel(TestCase):
         self.assertNumQueries(1, lambda: Category.objects.get(slug="mnam-mnam").parent.slug)
 
     def test_get_absolute_url(self):
-        tools.assert_equal('/amen/', self.c0.get_absolute_url())
-        tools.assert_equal('/amen/mnam-mnam/', self.c1.get_absolute_url())
+        tools.assert_equal('/category/amen/', self.c0.get_absolute_url())
+        tools.assert_equal('/category/amen/mnam-mnam/', self.c1.get_absolute_url())
 
 
 class TestRecipeModel(TestCase):
