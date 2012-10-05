@@ -28,7 +28,7 @@ class CynosureList(ListView):
         return self._cynosure
 
     def get_cynosure(self):
-        raise NotImplemented
+        raise NotImplementedError("Override get_cynosure in %s! Now!" % self.__class__.__name__)
 
     def get(self, request, *args, **kwargs):
         try:
@@ -152,12 +152,8 @@ class CategoryView(ListView):
 class CategoryDetail(CynosureList, CategoryView):
     template_name = 'yummy/category/detail.html'
 
-    def set_category(self, path):
-        try:
-            self._category = Category.objects.get(path=path)
-        except Category.DoesNotExist:
-            self._category = None
-        return self._category
+    def get_cynosure(self):
+        self._cynosure = Category.objects.get(path=self.kwargs['path'])
 
     def get_queryset(self):
         qs = super(CategoryDetail, self).get_queryset()
