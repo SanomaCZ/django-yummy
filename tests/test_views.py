@@ -39,21 +39,21 @@ class TestViews(TestCase):
 
 
     def test_basic_views(self):
-        self.client.get(reverse('category_index'))
+        self.client.get(reverse('yummy:category_index'))
 
-        self.client.get(reverse('category_detail', args=(self.cat.path,)))
+        self.client.get(reverse('yummy:category_detail', args=(self.cat.path,)))
 
-        self.client.get(reverse('category_reorder', args=('foo', )))
+        self.client.get(reverse('yummy:category_reorder', args=('foo', )))
 
-        self.client.get(reverse('cuisine_detail', args=(self.cuisine.slug, )))
+        self.client.get(reverse('yummy:cuisine_detail', args=(self.cuisine.slug, )))
 
-        self.client.get(reverse('recipe_detail', args=(self.recipe.category.path, self.recipe.slug, self.recipe.pk)))
+        self.client.get(reverse('yummy:recipe_detail', args=(self.recipe.category.path, self.recipe.slug, self.recipe.pk)))
 
-        self.client.get(reverse('ingredient_index'))
+        self.client.get(reverse('yummy:ingredient_index'))
 
-        self.client.get(reverse('ingredient_group', args=(self.ingroup.slug,)))
+        self.client.get(reverse('yummy:ingredient_group', args=(self.ingroup.slug,)))
 
-        self.client.get(reverse('ingredient_detail', args=(self.ingredient.slug,)))
+        self.client.get(reverse('yummy:ingredient_detail', args=(self.ingredient.slug,)))
 
-        self.client.get(reverse('author_recipes', args=(self.user.pk,)))
+        self.client.get(reverse('yummy:author_recipes', args=(self.user.pk,)))
 
