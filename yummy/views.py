@@ -38,9 +38,18 @@ class CynosureList(ListView):
 
     def get_context_data(self, **kwargs):
         data = super(CynosureList, self).get_context_data(**kwargs)
+        COOKIES = self.request.COOKIES
+        current_order_attr = COOKIES.get(conf.CATEGORY_ORDER_ATTR)
+        if current_order_attr not in dict(conf.CATEGORY_ORDERING).keys():
+            current_order_attr = conf.CATEGORY_ORDER_DEFAULT
+
+        current_photo_attr = COOKIES.get(conf.CATEGORY_PHOTO_ATTR)
+        if current_order_attr not in conf.CATEGORY_PHOTO_OPTIONS:
+            current_photo_attr = conf.CATEGORY_PHOTO_OPTIONS[0]
+
         data.update({
-            'current_order_attr': self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) or conf.CATEGORY_ORDER_DEFAULT,
-            'current_photo_attr': self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all',
+            'current_order_attr': current_order_attr,
+            'current_photo_attr': current_photo_attr,
             'ranking_attrs': conf.CATEGORY_ORDERING,
             'cynosure': self.cynosure,
         })
@@ -167,16 +176,20 @@ class CategoryDetail(CynosureList, CategoryView):
 
 class CategoryReorder(View):
     def get(self, request, *args, **kwargs):
-
         #TODO - check or sign next_url (see Entree)
         next_url = request.GET.get('next_url') or '/'
         response = HttpResponseRedirect(next_url)
 
-        order_attr = kwargs.get('order_attr') or conf.CATEGORY_ORDER_ATTR
+        order_attr = kwargs.get('order_attr')
+        if order_attr not in conf.CATEGORY_ORDER_ATTR:
+            order_attr = conf.CATEGORY_ORDER_DEFAULT
+
         if request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) != order_attr:
             response.set_cookie(conf.CATEGORY_ORDER_ATTR, order_attr)
 
-        photo_attr = kwargs.get('photo_attr') or 'all'
+        photo_attr = kwargs.get('photo_attr')
+        if photo_attr not in conf.CATEGORY_PHOTO_OPTIONS:
+            photo_attr = conf.CATEGORY_PHOTO_OPTIONS[0]
         if request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) != photo_attr:
             response.set_cookie(conf.CATEGORY_PHOTO_ATTR, photo_attr)
 
