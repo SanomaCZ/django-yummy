@@ -2,10 +2,11 @@ from datetime import date
 from django.core.cache import cache
 from django.template import Template, Context
 from django.test import TestCase
+
 from mock import patch
 
 from yummy.models import WeekMenu
-from yummy.templatetags.yummy_tags import yummy_day_menu, yummy_recipe_recommendation
+from yummy.templatetags.yummy_tags import yummy_day_menu
 
 from nose import tools
 

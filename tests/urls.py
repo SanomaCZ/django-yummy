@@ -1,5 +1,1 @@
-from django.conf.urls.defaults import patterns, include
-
-urlpatterns = patterns('',
-    ('^', include('yummy.urls', namespace='yummy')),
-)
+from yummy.urls import urlpatterns

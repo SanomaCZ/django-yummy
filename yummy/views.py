@@ -3,7 +3,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed
 from django.views.generic import ListView, DetailView, View
-from django.utils.translation import ugettext
 from django.utils.simplejson import dumps
 
 from yummy.models import Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe, Cuisine
@@ -51,7 +50,6 @@ class CynosureList(ListView):
 class DailyMenu(JSONResponseMixin, View):
 
     def get(self, request, *args, **kwargs):
-
         if not request.is_ajax():
             return HttpResponseNotAllowed("Allowed AJAX request only")
 

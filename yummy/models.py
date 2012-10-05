@@ -1,3 +1,4 @@
+from django.template.defaultfilters import slugify
 from os import path
 from hashlib import md5
 from datetime import date
@@ -44,6 +45,11 @@ class Cuisine(models.Model):
         verbose_name = _('Cuisine')
         verbose_name_plural = _('Cuisines')
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super(Cuisine, self).save(*args, **kwargs)
+
 
 class IngredientGroup(models.Model):
 
@@ -56,6 +62,11 @@ class IngredientGroup(models.Model):
     class Meta:
         verbose_name = _('Ingredient group')
         verbose_name_plural = _('Ingredient groups')
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super(IngredientGroup, self).save(*args, **kwargs)
 
 
 class Ingredient(models.Model):
@@ -181,6 +192,8 @@ class Category(models.Model):
     def save(self, **kwargs):
         "Override save() to construct path based on the category's parent."
         old_path = self.path
+        if not self.slug:
+            self.slug = slugify(self.title)
 
         if self.parent:
             if self == self.parent or self.is_ancestor_of(self.parent):
@@ -238,6 +251,9 @@ class Recipe(models.Model):
         self.updated = now()
         if not self.id:
             self.created = self.updated
+
+        if not self.slug:
+            self.slug = slugify(self.title)
         super(Recipe, self).save(**kwargs)
 
     class Meta:
