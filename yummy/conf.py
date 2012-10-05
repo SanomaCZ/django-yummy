@@ -38,7 +38,7 @@ RECIPE_RECOMMENDATIONS_COUNT = 3
 
 CATEGORY_ORDER_DEFAULT = getattr(settings, 'YUMMY_CATEGORY_ORDER', '-created')
 CATEGORY_ORDERING = {
-    'slug': _("by ranking"),  # TODO - add ranking
+    'by_rating': _("by ranking"),  # TODO - add ranking
     'title': _("by alphabet"),
     '-created': _("by date"),
 }
@@ -72,3 +72,6 @@ MONTHS = (
 )
 
 PHOTO_ORDER_GAP = 5
+
+# get function to be load and get qs as arg to return qs by rating
+FUNC_QS_BY_RATING = getattr(settings, 'YUMMY_FUNC_QS_BY_RATING', None)

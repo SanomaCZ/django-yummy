@@ -7,6 +7,11 @@ from django.utils.simplejson import dumps
 
 from yummy.models import Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe, Cuisine
 from yummy import conf
+from yummy.utils import import_module_member
+
+FUNC_QS_BY_RATING = conf.FUNC_QS_BY_RATING
+if conf.FUNC_QS_BY_RATING:
+    FUNC_QS_BY_RATING = import_module_member(conf.FUNC_QS_BY_RATING)
 
 
 class JSONResponseMixin(object):
@@ -147,8 +152,11 @@ class CategoryView(ListView):
         order_attr = self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR)
         if order_attr not in conf.CATEGORY_ORDERING.keys():
             order_attr = conf.CATEGORY_ORDER_DEFAULT
-
-        qs = qs.order_by(order_attr)
+        
+        if order_attr == 'by_rating' and FUNC_QS_BY_RATING:
+            qs = FUNC_QS_BY_RATING(qs)
+        else:
+            qs = qs.order_by(order_attr)
         return qs
 
     def get_context_data(self, **kwargs):
