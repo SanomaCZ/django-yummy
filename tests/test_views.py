@@ -2,8 +2,9 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from yummy import conf
 
-from yummy.models import Category, Cuisine, Recipe
+from yummy.models import Category, Cuisine, Recipe, Ingredient, IngredientGroup
 
 
 class TestViews(TestCase):
@@ -27,6 +28,16 @@ class TestViews(TestCase):
             owner=self.user
         )
 
+        self.ingredient = Ingredient.objects.create(
+            name='ingredient',
+            default_unit=conf.UNIT_CHOICES[0][0]
+        )
+
+        self.ingroup = IngredientGroup.objects.create(
+            name='ingroup'
+        )
+
+
     def test_basic_views(self):
         self.client.get(reverse('category_index'))
 
@@ -37,3 +48,12 @@ class TestViews(TestCase):
         self.client.get(reverse('cuisine_detail', args=(self.cuisine.slug, )))
 
         self.client.get(reverse('recipe_detail', args=(self.recipe.category.path, self.recipe.slug, self.recipe.pk)))
+
+        self.client.get(reverse('ingredient_index'))
+
+        self.client.get(reverse('ingredient_group', args=(self.ingroup.slug,)))
+
+        self.client.get(reverse('ingredient_detail', args=(self.ingredient.slug,)))
+
+        self.client.get(reverse('author_recipes', args=(self.user.pk,)))
+

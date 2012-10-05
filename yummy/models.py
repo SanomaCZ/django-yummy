@@ -86,6 +86,11 @@ class Ingredient(models.Model):
         verbose_name = _('Ingredient')
         verbose_name_plural = _('Ingredients')
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super(Ingredient, self).save(*args, **kwargs)
+
 
 def upload_to(instance, filename):
     name, ext = path.splitext(filename)

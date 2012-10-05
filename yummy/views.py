@@ -107,6 +107,9 @@ class IngredientGroupView(CynosureList):
     def get_queryset(self):
         return self.model.objects.filter(group=self.cynosure)
 
+    def get_cynosure(self):
+        self._cynosure = IngredientGroup.objects.get(slug=self.kwargs['group'])
+
 
 class IngredientDetail(CynosureList):
 
@@ -115,6 +118,9 @@ class IngredientDetail(CynosureList):
 
     def get_queryset(self):
         return self.model.objects.filter(ingredient=self.cynosure).select_related('recipe')
+
+    def get_cynosure(self):
+        self._cynosure = Ingredient.objects.get(slug=self.kwargs['ingredient'])
 
 
 class CategoryView(ListView):
