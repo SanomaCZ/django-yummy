@@ -181,7 +181,7 @@ class CategoryReorder(View):
         response = HttpResponseRedirect(next_url)
 
         order_attr = kwargs.get('order_attr')
-        if order_attr not in conf.CATEGORY_ORDER_ATTR:
+        if order_attr not in conf.CATEGORY_ORDERING:
             order_attr = conf.CATEGORY_ORDER_DEFAULT
 
         if request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) != order_attr:
