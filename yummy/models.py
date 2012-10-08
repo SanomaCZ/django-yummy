@@ -303,6 +303,9 @@ class Recipe(models.Model):
 
         return groups
 
+    def get_absolute_url(self):
+        return reverse('yummy:recipe_detail', args=(self.category.path, self.slug, self.pk,))
+
 
 class RecipePhoto(models.Model):
 
