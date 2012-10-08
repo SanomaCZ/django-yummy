@@ -10,8 +10,8 @@ from yummy import conf
 from yummy.utils import import_module_member
 
 FUNC_QS_BY_RATING = conf.FUNC_QS_BY_RATING
-if conf.FUNC_QS_BY_RATING:
-    FUNC_QS_BY_RATING = import_module_member(conf.FUNC_QS_BY_RATING)
+if FUNC_QS_BY_RATING:
+    FUNC_QS_BY_RATING = import_module_member(FUNC_QS_BY_RATING)
 
 
 class JSONResponseMixin(object):
