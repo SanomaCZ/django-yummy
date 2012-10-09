@@ -75,7 +75,8 @@ class Ingredient(models.Model):
     name = models.CharField(_('Name'), max_length=128)
     slug = models.SlugField(_('Slug'), max_length=64, unique=True)
     genitive = models.CharField(_('Genitive'), max_length=128, blank=True)
-    default_unit = models.PositiveSmallIntegerField(choices=conf.UNIT_CHOICES, verbose_name=_('Default unit'))
+    default_unit = models.PositiveSmallIntegerField(choices=conf.UNIT_CHOICES,
+        verbose_name=_('Default unit'), null=True, blank=True)
 
     ndb_no = models.IntegerField(_('NDB id number'), blank=True, null=True)
 
