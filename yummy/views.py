@@ -165,6 +165,7 @@ class CategoryView(ListView):
             'current_order_attr': self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) or conf.CATEGORY_ORDER_DEFAULT,
             'current_photo_attr': self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all',
             'ranking_attrs': conf.CATEGORY_ORDERING,
+            'all_recipes_count': Recipe.objects.public().count(),
 
         })
         return data

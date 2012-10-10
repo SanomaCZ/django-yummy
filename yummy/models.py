@@ -1,4 +1,3 @@
-from django.template.defaultfilters import slugify
 from os import path
 from hashlib import md5
 from datetime import date
@@ -13,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 from django.utils.translation.trans_real import ugettext
+from django.template.defaultfilters import slugify
 
 from yummy import conf
 from yummy import managers

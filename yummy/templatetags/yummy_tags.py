@@ -77,7 +77,7 @@ class CategoriesNode(template.Node):
         else:
             qs = Category.objects.filter(parent__isnull=True)
 
-        context[self.varname] = qs
+        context[self.varname] = list(qs)
         return ''
 
 
