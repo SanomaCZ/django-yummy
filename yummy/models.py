@@ -79,6 +79,9 @@ class Ingredient(models.Model):
         verbose_name=_('Default unit'), null=True, blank=True)
 
     ndb_no = models.IntegerField(_('NDB id number'), blank=True, null=True)
+    is_approved = models.BooleanField(_('Approved'), default=True, db_index=True)
+
+    objects = managers.IngredientManager()
 
     def __unicode__(self):
         return self.name

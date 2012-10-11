@@ -59,3 +59,9 @@ class WeekMenuManager(models.Manager):
                     filter(even_week=is_even_week)
 
         return dict( [(one.day, one) for one in items ] )
+
+
+class IngredientManager(models.Manager):
+
+    def approved(self):
+        return self.get_query_set().filter(is_approved=True)
