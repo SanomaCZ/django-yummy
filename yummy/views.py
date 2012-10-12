@@ -49,7 +49,7 @@ class CynosureList(ListView):
             current_order_attr = conf.CATEGORY_ORDER_DEFAULT
 
         current_photo_attr = COOKIES.get(conf.CATEGORY_PHOTO_ATTR)
-        if current_order_attr not in conf.CATEGORY_PHOTO_OPTIONS:
+        if current_photo_attr not in conf.CATEGORY_PHOTO_OPTIONS:
             current_photo_attr = conf.CATEGORY_PHOTO_OPTIONS[0]
 
         data.update({
@@ -247,5 +247,6 @@ class AuthorList(OrderListView):
     template_name = 'yummy/cook/list.html'
 
     def get_queryset(self):
-        subset = Recipe.objects.public().distinct('owner').values_list('owner_id', flat=True)
-        return User.objects.filter(pk__in=subset)
+        return User.objects.filter(pk__in=Recipe.objects.public().
+            distinct('owner').values_list('owner_id', flat=True)
+        )
