@@ -22,15 +22,12 @@
 
 	{% for one in object_list %}
 		<div class="row">
-			<a href="{% url yummy:recipe_detail one.category.path one.slug one.pk %}">
-
-				<div class="span2 thumbnail">
-					<img src="{{ one.get_top_photo }}"/>
-				</div>
+			<a href="{% url yummy:author_recipes one.pk %}">
 				<div class="span4">
-					<h3>{{ one.title }}</h3>
+					<h3>{{ one.username }}</h3>
 				</div>
 			</a>
+			Počet receptů: {{ one.recipe_set.count }}
 		</div>
 	{% endfor %}
 
