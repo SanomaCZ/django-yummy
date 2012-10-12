@@ -9,8 +9,8 @@ from yummy.views import (CategoryView, IngredientView, RecipeDetail,
 INGREDIENT = slugify(_("ingredient"))
 
 urlpatterns = patterns('',
-    url(r'^%s/(?P<author_id>[\d]+)/$' % _("cooks"), AuthorRecipes.as_view(), name='author_recipes'),
-    url(r'^%s/$' % _("cooks"), AuthorList.as_view(), name='authors_list'),
+    url(r'^%s/(?P<author_id>[\d]+)/$' % slugify(_("cooks")), AuthorRecipes.as_view(), name='author_recipes'),
+    url(r'^%s/$' % slugify(_("cooks")), AuthorList.as_view(), name='authors_list'),
 
     url(r'^%s/detail/(?P<ingredient>[\w-]+)/$' % INGREDIENT, IngredientDetail.as_view(), name='ingredient_detail'),
     url(r'^%s/group/(?P<group>[\w-]+)/$' % INGREDIENT, IngredientGroupView.as_view(), name='ingredient_group'),
