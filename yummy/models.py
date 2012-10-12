@@ -415,7 +415,6 @@ class IngredientInRecipe(models.Model):
         return u"%s - %s" % (self.ingredient, self.recipe)
 
     class Meta:
-        unique_together = (('recipe', 'order'),)
         verbose_name = _('Ingredient in recipe')
         verbose_name_plural = _('Ingredients in recipe')
 
