@@ -3,13 +3,14 @@ from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
 
 from yummy.views import (CategoryView, IngredientView, RecipeDetail,
-                         CategoryReorder, DailyMenu, AuthorRecipes,
+                         CategoryReorder, DailyMenu, AuthorRecipes, AuthorList,
                          IngredientGroupView, IngredientDetail, CuisineView, CategoryDetail)
 
 INGREDIENT = slugify(_("ingredient"))
 
 urlpatterns = patterns('',
-    url(r'^%s/(?P<author_id>[\d]+)/$' % _("author"), AuthorRecipes.as_view(), name='author_recipes'),
+    url(r'^%s/(?P<author_id>[\d]+)/$' % _("cooks"), AuthorRecipes.as_view(), name='author_recipes'),
+    url(r'^%s/$' % _("cooks"), AuthorList.as_view(), name='authors_list'),
 
     url(r'^%s/detail/(?P<ingredient>[\w-]+)/$' % INGREDIENT, IngredientDetail.as_view(), name='ingredient_detail'),
     url(r'^%s/group/(?P<group>[\w-]+)/$' % INGREDIENT, IngredientGroupView.as_view(), name='ingredient_group'),

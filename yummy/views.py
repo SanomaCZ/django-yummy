@@ -137,7 +137,19 @@ class IngredientDetail(CynosureList):
         self._cynosure = Ingredient.objects.get(slug=self.kwargs['ingredient'])
 
 
-class CategoryView(ListView):
+class OrderListView(ListView):
+    def get_context_data(self, **kwargs):
+        data = super(OrderListView, self).get_context_data(**kwargs)
+        data.update({
+            'current_order_attr': self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) or conf.CATEGORY_ORDER_DEFAULT,
+            'current_photo_attr': self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all',
+            'ranking_attrs': conf.CATEGORY_ORDERING,
+            'all_recipes_count': Recipe.objects.public().count(),
+        })
+        return data
+
+
+class CategoryView(OrderListView):
     template_name = 'yummy/category/index.html'
     model = Recipe
 
@@ -158,17 +170,6 @@ class CategoryView(ListView):
         else:
             qs = qs.order_by(order_attr)
         return qs
-
-    def get_context_data(self, **kwargs):
-        data = super(CategoryView, self).get_context_data(**kwargs)
-        data.update({
-            'current_order_attr': self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) or conf.CATEGORY_ORDER_DEFAULT,
-            'current_photo_attr': self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all',
-            'ranking_attrs': conf.CATEGORY_ORDERING,
-            'all_recipes_count': Recipe.objects.public().count(),
-
-        })
-        return data
 
 
 class CategoryDetail(CynosureList, CategoryView):
@@ -239,3 +240,12 @@ class CuisineView(CynosureList):
 
     def get_queryset(self):
         return Recipe.objects.public().filter(cuisines__in=[self.cynosure])
+
+
+class AuthorList(OrderListView):
+    model = User
+    template_name = 'yummy/cook/list.html'
+
+    def get_queryset(self):
+        subset = Recipe.objects.public().distinct('owner').values_list('owner_id', flat=True)
+        return User.objects.filter(pk__in=subset)
