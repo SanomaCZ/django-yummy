@@ -332,11 +332,12 @@ class RecipePhoto(models.Model):
         verbose_name_plural = _('Recipe photos')
 
     def save(self, *args, **kwargs):
-        if self.photo.owner_id == self.recipe.owner_id:
+        #TODO - investigate infinite loop
+        ignore_order = kwargs.pop('ignore_order', False)
+        if self.photo.owner_id == self.recipe.owner_id and not ignore_order:
             self.manage_photo_order()
 
         super(RecipePhoto, self).save(*args, **kwargs)
-
         self.recipe.get_photos(recache=True)
 
     def manage_photo_order(self):
@@ -382,7 +383,7 @@ class RecipePhoto(models.Model):
 
         #save items in reversed order, due to unique_together
         for one in modified_items[::-1]:
-            one.save()
+            one.save(ignore_order=True)
 
 
 class IngredientInRecipeGroup(models.Model):
