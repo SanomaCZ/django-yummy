@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-04 14:59+0200\n"
-"PO-Revision-Date: 2012-10-04 13:26+0100\n"
+"POT-Creation-Date: 2012-10-16 12:50+0200\n"
+"PO-Revision-Date: 2012-10-16 12:55+0100\n"
 "Last-Translator: yedpodtrzitko <yed@vanyli.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -49,8 +49,9 @@ msgstr[2] ""
 msgctxt "unit"
 msgid "pc"
 msgid_plural "pcs"
-msgstr[0] ""
+msgstr[0] "ks"
 msgstr[1] ""
+msgstr[2] ""
 
 #: conf.py:6
 msgctxt "unit"
@@ -77,431 +78,649 @@ msgstr[1] ""
 msgctxt "unit"
 msgid "mililiter"
 msgid_plural "mililiters"
-msgstr[0] ""
+msgstr[0] "mililitr"
 msgstr[1] ""
+msgstr[2] ""
 
 #: conf.py:10
 msgctxt "unit"
 msgid "deciliter"
 msgid_plural "deciliters"
-msgstr[0] ""
+msgstr[0] "decilitr"
 msgstr[1] ""
+msgstr[2] ""
 
 #: conf.py:11
 msgctxt "unit"
 msgid "liter"
 msgid_plural "liters"
-msgstr[0] ""
+msgstr[0] "litr"
 msgstr[1] ""
+msgstr[2] ""
 
 #: conf.py:12
 msgctxt "unit"
-msgid "cup"
-msgid_plural "cups"
+msgid "packaging"
+msgid_plural "packagings"
+msgstr[0] "balení"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:13
+msgctxt "unit"
+msgid "package"
+msgid_plural "packages"
+msgstr[0] "balíček"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:14
+msgctxt "unit"
+msgid "part"
+msgid_plural "parts"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:15
+msgctxt "unit"
+msgid "cup"
+msgid_plural "cups"
+msgstr[0] "hrnek"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:16
+msgctxt "unit"
+msgid "handful"
+msgid_plural "handful"
+msgstr[0] "hrst"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:17
+msgctxt "unit"
+msgid "drop"
+msgid_plural "drops"
+msgstr[0] "kapka"
+msgstr[1] ""
+msgstr[2] ""
 
 #: conf.py:18
+msgctxt "unit"
+msgid "crubicle"
+msgid_plural "crubicles"
+msgstr[0] "kelímek"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:19
+msgctxt "unit"
+msgid "can"
+msgid_plural "cans"
+msgstr[0] "plechovka"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:20
+msgctxt "unit"
+msgid "scoop"
+msgid_plural "scoops"
+msgstr[0] "kopeček"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:21
+msgctxt "unit"
+msgid "cube"
+msgid_plural "cubes"
+msgstr[0] "kostka"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:22
+msgctxt "unit"
+msgid "ball"
+msgid_plural "balls"
+msgstr[0] "kulička"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:23
+msgctxt "unit"
+msgid "bottle"
+msgid_plural "bottles"
+msgstr[0] "lahev"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:24
+msgctxt "unit"
+msgid "spoon"
+msgid_plural "spoons"
+msgstr[0] "lžíce"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:25
+msgctxt "unit"
+msgid "teaspoon"
+msgid_plural "teaspoons"
+msgstr[0] "lžička"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:26
+msgctxt "unit"
+msgid "bowl"
+msgid_plural "bowls"
+msgstr[0] "miska"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:27
+msgctxt "unit"
+msgid "bud"
+msgid_plural "buds"
+msgstr[0] "palička"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:28
+msgctxt "unit"
+msgid "slice"
+msgid_plural "slices"
+msgstr[0] "plátek"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:30
+msgctxt "unit"
+msgid "jar"
+msgid_plural "jars"
+msgstr[0] "sklenice"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:31
+msgctxt "unit"
+msgid "sprig"
+msgid_plural "sprigs"
+msgstr[0] "snítka"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:32
+msgctxt "unit"
+msgid "clove"
+msgid_plural "cloves"
+msgstr[0] "stroužek"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:33
+msgctxt "unit"
+msgid "bunch"
+msgid_plural "bunches"
+msgstr[0] "svazek"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:34
+msgctxt "unit"
+msgid "crumb"
+msgid_plural "crumbs"
+msgstr[0] "špetka"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:35
+msgctxt "unit"
+msgid "teacup"
+msgid_plural "teacups"
+msgstr[0] "šálek"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:36
+msgctxt "unit"
+msgid "twig"
+msgid_plural "twigs"
+msgstr[0] "větvička"
+msgstr[1] ""
+msgstr[2] ""
+
+#: conf.py:43
 msgid "Cheapest"
 msgstr "Nejlevnější"
 
-#: conf.py:19
+#: conf.py:44
 msgid "Cheaper"
 msgstr "Levnější"
 
-#: conf.py:20
+#: conf.py:45
 msgid "Standard price"
 msgstr "Průměrné"
 
-#: conf.py:21
+#: conf.py:46
 msgid "Expensive"
 msgstr "Drahý"
 
-#: conf.py:22
+#: conf.py:47
 msgid "Most Expensive"
 msgstr "Nejdražší"
 
-#: conf.py:26
+#: conf.py:51
 msgid "Easy"
 msgstr "Snadný"
 
-#: conf.py:27
+#: conf.py:52
 msgid "Standard difficulty"
 msgstr "Středně"
 
-#: conf.py:28
+#: conf.py:53
 msgid "Difficult"
 msgstr "Náročný"
 
-#: conf.py:41
+#: conf.py:66
 msgid "by ranking"
 msgstr "hodnocení"
 
-#: conf.py:42
+#: conf.py:67
 msgid "by alphabet"
 msgstr "abecedy"
 
-#: conf.py:43
+#: conf.py:68
 msgid "by date"
 msgstr "data přidání"
 
-#: conf.py:50
+#: conf.py:75
 msgid "Monday"
 msgstr "Pondělí"
 
-#: conf.py:51
+#: conf.py:76
 msgid "Tuesday"
 msgstr "Úterý"
 
-#: conf.py:52
+#: conf.py:77
 msgid "Wednesday"
 msgstr "Středa"
 
-#: conf.py:53
+#: conf.py:78
 msgid "Thursday"
 msgstr "Čtvrtek"
 
-#: conf.py:54
+#: conf.py:79
 msgid "Friday"
 msgstr "Pátek"
 
-#: conf.py:55
+#: conf.py:80
 msgid "Saturday"
 msgstr "Sobota"
 
-#: conf.py:56
+#: conf.py:81
 msgid "Sunday"
 msgstr "Neděle"
 
-#: conf.py:60
+#: conf.py:85
 msgid "January"
 msgstr ""
 
-#: conf.py:61
+#: conf.py:86
 msgid "February"
 msgstr ""
 
-#: conf.py:62
+#: conf.py:87
 msgid "March"
 msgstr ""
 
-#: conf.py:63
+#: conf.py:88
 msgid "April"
 msgstr ""
 
-#: conf.py:64
+#: conf.py:89
 msgid "May"
 msgstr ""
 
-#: conf.py:65
+#: conf.py:90
 msgid "June"
 msgstr ""
 
-#: conf.py:66
+#: conf.py:91
 msgid "July"
 msgstr ""
 
-#: conf.py:67
+#: conf.py:92
 msgid "August"
 msgstr ""
 
-#: conf.py:68
+#: conf.py:93
 msgid "September"
 msgstr ""
 
-#: conf.py:69
+#: conf.py:94
 msgid "October"
 msgstr ""
 
-#: conf.py:70
+#: conf.py:95
 msgid "November"
 msgstr ""
 
-#: conf.py:71
+#: conf.py:96
 msgid "December"
 msgstr ""
 
-#: models.py:22 models.py:36 models.py:50 models.py:64
+#: models.py:23
+#: models.py:37
+#: models.py:56
+#: models.py:75
 msgid "Name"
 msgstr "Jméno"
 
-#: models.py:23 models.py:37 models.py:51 models.py:65 models.py:118
-#: models.py:212 models.py:447
+#: models.py:24
+#: models.py:38
+#: models.py:57
+#: models.py:76
+#: models.py:138
+#: models.py:234
+#: models.py:474
 msgid "Slug"
 msgstr "Slug"
 
-#: models.py:24 models.py:38 models.py:99 models.py:122
+#: models.py:25
+#: models.py:39
+#: models.py:119
+#: models.py:142
 msgid "Description"
 msgstr "Popis"
 
-#: models.py:30 models.py:219
+#: models.py:31
+#: models.py:241
 msgid "Cooking type"
 msgstr ""
 
-#: models.py:31
+#: models.py:32
 msgid "Cooking types"
 msgstr ""
 
-#: models.py:44
+#: models.py:45
 msgid "Cuisine"
 msgstr ""
 
-#: models.py:45 models.py:220
+#: models.py:46
+#: models.py:242
 msgid "Cuisines"
 msgstr ""
 
-#: models.py:57
+#: models.py:63
 msgid "Ingredient group"
 msgstr ""
 
-#: models.py:58
+#: models.py:64
 msgid "Ingredient groups"
 msgstr ""
 
-#: models.py:63 models.py:379
+#: models.py:74
+#: models.py:407
 msgid "Group"
 msgstr ""
 
-#: models.py:66
+#: models.py:77
 msgid "Genitive"
 msgstr ""
 
-#: models.py:67
+#: models.py:79
 msgid "Default unit"
 msgstr ""
 
-#: models.py:69
+#: models.py:81
 msgid "NDB id number"
 msgstr ""
 
-#: models.py:75 models.py:380
-msgid "Ingredient"
-msgstr ""
-
-#: models.py:76
-msgid "Ingredients"
-msgstr ""
-
-#: models.py:94
-msgid "Image"
-msgstr ""
-
-#: models.py:98 models.py:117 models.py:211 models.py:363 models.py:446
-msgid "Title"
-msgstr ""
-
-#: models.py:108 models.py:120 models.py:291
-msgid "Photo"
-msgstr ""
-
-#: models.py:109
-msgid "Photos"
-msgstr ""
-
-#: models.py:125 models.py:213 templates/yummy/ingredient/group.html:6
-msgid "Category"
-msgstr ""
-
-#: models.py:126
-msgid "Categories"
-msgstr ""
-
-#: models.py:173
-msgid "Parent category must be different than child."
-msgstr ""
-
-#: models.py:176
-msgid "A parent can't be a descendant of this category."
-msgstr ""
-
-#: models.py:179
-msgid "Path is not unique, change category title or slug."
-msgstr ""
-
-#: models.py:215 models.py:364
-msgid "Short description"
-msgstr ""
-
-#: models.py:216
-msgid "Preparation"
-msgstr ""
-
-#: models.py:217
-msgid "Hint"
-msgstr ""
-
-#: models.py:221
-msgid "Servings"
-msgstr ""
-
-#: models.py:223
-msgid "Price"
-msgstr ""
-
-#: models.py:224
-msgid "Preparation difficulty"
-msgstr ""
-
-#: models.py:225
-msgid "Preparation time (min)"
-msgstr ""
-
-#: models.py:226
-msgid "Caloric value"
-msgstr ""
-
-#: models.py:228
-msgid "User"
-msgstr ""
-
-#: models.py:229
+#: models.py:82
+#: models.py:251
 msgid "Approved"
 msgstr ""
 
-#: models.py:230 models.py:448
+#: models.py:90
+#: models.py:408
+msgid "Ingredient"
+msgstr "Surovina"
+
+#: models.py:91
+msgid "Ingredients"
+msgstr "Suroviny"
+
+#: models.py:114
+msgid "Image"
+msgstr "Obrázek"
+
+#: models.py:118
+#: models.py:137
+#: models.py:233
+#: models.py:391
+#: models.py:473
+msgid "Title"
+msgstr ""
+
+#: models.py:128
+#: models.py:140
+#: models.py:319
+msgid "Photo"
+msgstr "Fotografie"
+
+#: models.py:129
+msgid "Photos"
+msgstr "Fotografie"
+
+#: models.py:145
+#: models.py:235
+#: templates/yummy/ingredient/group.html:6
+msgid "Category"
+msgstr "Kategorie"
+
+#: models.py:146
+msgid "Categories"
+msgstr "Kategorie"
+
+#: models.py:193
+msgid "Parent category must be different than child."
+msgstr ""
+
+#: models.py:196
+msgid "A parent can't be a descendant of this category."
+msgstr ""
+
+#: models.py:199
+msgid "Path is not unique, change category title or slug."
+msgstr ""
+
+#: models.py:237
+#: models.py:392
+msgid "Short description"
+msgstr ""
+
+#: models.py:238
+msgid "Preparation"
+msgstr "Příprava"
+
+#: models.py:239
+msgid "Hint"
+msgstr "Rada"
+
+#: models.py:243
+msgid "Servings"
+msgstr "počet osob"
+
+#: models.py:245
+msgid "Price"
+msgstr "Cena"
+
+#: models.py:246
+msgid "Preparation difficulty"
+msgstr "Složitost přípravy"
+
+#: models.py:247
+msgid "Preparation time (min)"
+msgstr "doba přípravy (min.)"
+
+#: models.py:248
+msgid "Caloric value"
+msgstr "Kalorická hodnota"
+
+#: models.py:250
+msgid "User"
+msgstr ""
+
+#: models.py:252
+#: models.py:475
 msgid "Public"
-msgstr ""
+msgstr "Veřejný"
 
-#: models.py:244 models.py:290 models.py:362 models.py:378
+#: models.py:269
+#: models.py:318
+#: models.py:390
+#: models.py:406
 msgid "Recipe"
-msgstr ""
+msgstr "Recept"
 
-#: models.py:245 models.py:449
+#: models.py:270
+#: models.py:476
 msgid "Recipes"
-msgstr ""
+msgstr "Recepty"
 
-#: models.py:292
+#: models.py:320
 msgid "Visible"
-msgstr ""
+msgstr "Viditelný"
 
-#: models.py:293 models.py:365 models.py:383
+#: models.py:321
+#: models.py:393
+#: models.py:411
 msgid "Order"
-msgstr ""
+msgstr "Pořadí"
 
-#: models.py:303
+#: models.py:331
 msgid "Recipe photo"
-msgstr ""
+msgstr "Fotografie receptu"
 
-#: models.py:304
+#: models.py:332
 msgid "Recipe photos"
-msgstr ""
+msgstr "Fotografie receptu"
 
-#: models.py:372
+#: models.py:400
 msgid "Ingredients in recipe group"
 msgstr ""
 
-#: models.py:373
+#: models.py:401
 msgid "Ingredients in recipe groups"
 msgstr ""
 
-#: models.py:381
+#: models.py:409
 msgid "Amount"
 msgstr ""
 
-#: models.py:382
+#: models.py:410
 msgid "Unit"
 msgstr ""
 
-#: models.py:384
+#: models.py:412
 msgid "Note"
 msgstr ""
 
-#: models.py:391
+#: models.py:418
 msgid "Ingredient in recipe"
 msgstr ""
 
-#: models.py:392
+#: models.py:419
 msgid "Ingredients in recipe"
 msgstr ""
 
-#: models.py:399
+#: models.py:426
 msgid "Ratio"
 msgstr ""
 
-#: models.py:406
+#: models.py:433
 msgid "Unit conversion"
 msgstr ""
 
-#: models.py:407
+#: models.py:434
 msgid "Units conversions"
 msgstr ""
 
-#: models.py:414
+#: models.py:441
 msgid "Show from day"
 msgstr ""
 
-#: models.py:414
+#: models.py:441
 msgid "Recipe will show itself starting this day"
 msgstr ""
 
-#: models.py:415
+#: models.py:442
 msgid "Show until day (inclusive)"
 msgstr ""
 
-#: models.py:416
-msgid ""
-"Recipe shown until this day. This field is not required. The longer is "
-"recipe shown, the lower priority it has."
+#: models.py:443
+msgid "Recipe shown until this day. This field is not required. The longer is recipe shown, the lower priority it has."
 msgstr ""
 
-#: models.py:421
+#: models.py:448
 msgid "until forever"
 msgstr ""
 
-#: models.py:424
+#: models.py:451
 msgid "Recipe recommendation"
 msgstr ""
 
-#: models.py:425
+#: models.py:452
 msgid "Recipe recommendations"
 msgstr ""
 
-#: models.py:429
+#: models.py:456
 msgid "You can save recommendation only with approved recipe"
 msgstr ""
 
-#: models.py:432
+#: models.py:459
 msgid "Invalid chronology of border dates"
 msgstr ""
 
-#: models.py:456
+#: models.py:483
 msgid "Cookbook"
 msgstr ""
 
-#: models.py:457
+#: models.py:484
 msgid "Cookbooks"
 msgstr ""
 
-#: models.py:462
+#: models.py:489
 msgid "Day of the week"
 msgstr ""
 
-#: models.py:466
+#: models.py:493
 msgid "Menu for even week"
 msgstr ""
 
-#: models.py:468
+#: models.py:495
 msgid "odd"
 msgstr ""
 
-#: models.py:467
+#: models.py:494
 #, python-format
 msgid "Check if this day menu is for even week. Current week is %s."
 msgstr ""
 
-#: models.py:474
+#: models.py:501
 msgid "Menu of the day"
 msgstr ""
 
-#: models.py:475
+#: models.py:502
 msgid "Menus of the day"
 msgstr ""
 
-#: models.py:478
+#: models.py:505
 msgid "Even"
 msgstr ""
 
-#: models.py:478
+#: models.py:505
 msgid "Odd"
 msgstr ""
 
@@ -510,30 +729,26 @@ msgid "ingredient"
 msgstr ""
 
 #: urls.py:12
-msgid "author"
+#: urls.py:13
+msgid "cooks"
 msgstr ""
 
-#: views.py:94
-msgid "Group not found"
-msgstr ""
-
-#: views.py:126
-msgid "Ingredient not found"
-msgstr ""
-
-#: templates/yummy/author_recipes.html:6 templates/yummy/category/list.html:23
-msgid "Order recipes by"
-msgstr ""
-
-#: templates/yummy/author_recipes.html:24
-#: templates/yummy/category/list.html:41
-msgid "Show recipes only with photos"
-msgstr "Pouze s fotografií"
-
-#: templates/yummy/ingredient/detail.html:7
+#: templates/yummy/ingredient/detail.html:8
 msgid "Utilized in recipes"
 msgstr ""
 
 #: templates/yummy/ingredient/index.html:6
 msgid "By category"
 msgstr ""
+
+#~ msgctxt "unit"
+
+#~ msgid "bit"
+
+#~ msgid_plural "bits"
+#~ msgstr[0] "kousek"
+#~ msgstr[1] ""
+#~ msgstr[2] ""
+
+#~ msgid "Show recipes only with photos"
+#~ msgstr "Pouze s fotografií"

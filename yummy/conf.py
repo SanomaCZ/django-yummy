@@ -9,8 +9,33 @@ UNITS = (
     (4, npgettext('unit', 'mililiter', 'mililiters', 1), 'ml'),
     (5, npgettext('unit', 'deciliter', 'deciliters', 1), 'dl'),
     (6, npgettext('unit', 'liter', 'liters', 1), 'l'),
-    (100, npgettext('unit', 'cup', 'cups', 1), npgettext('unit', 'cup', 'cups', 1)),
+    (7, npgettext('unit', 'packaging', 'packagings', 1), 'pack'), #baleni
+    (8, npgettext('unit', 'package', 'packages', 1), 'pkg'), #balicek
+    (9, npgettext('unit', 'part', 'parts', 1), 'bit'), #dilek
+    (10, npgettext('unit', 'cup', 'cups', 1)), #hrnek
+    (11, npgettext('unit', 'handful', 'handful', 1)), #hrst
+    (12, npgettext('unit', 'drop', 'drops', 1)), #kapka
+    (13, npgettext('unit', 'crubicle', 'crubicles', 1)), #kelimek
+    (14, npgettext('unit', 'can', 'cans', 1)), #plechovka
+    (15, npgettext('unit', 'scoop', 'scoops', 1)), #kopecek
+    (16, npgettext('unit', 'cube', 'cubes', 1)), #kostka
+    (17, npgettext('unit', 'ball', 'balls', 1)), #kulicka
+    (18, npgettext('unit', 'bottle', 'bottles', 1)), #lahev
+    (19, npgettext('unit', 'spoon', 'spoons', 1)), #lzice
+    (20, npgettext('unit', 'teaspoon', 'teaspoons', 1)), #lzicka
+    (21, npgettext('unit', 'bowl', 'bowls', 1)), #miska
+    (22, npgettext('unit', 'bud', 'buds', 1)), #palicka
+    (23, npgettext('unit', 'slice', 'slices', 1)), #platek
+    #(24, npgettext('unit', 'can', 'cans', 1)), #plechovka
+    (25, npgettext('unit', 'jar', 'jars', 1)), #sklenice
+    (26, npgettext('unit', 'sprig', 'sprigs', 1)), #snitka
+    (27, npgettext('unit', 'clove', 'cloves', 1)), #strouzek
+    (28, npgettext('unit', 'bunch', 'bunches', 1)), #svazek
+    (29, npgettext('unit', 'crumb', 'crumbs', 1)), #spetka
+    (30, npgettext('unit', 'teacup', 'teacups', 1)), #salek
+    (31, npgettext('unit', 'twig', 'twigs', 1)), #vetvicka
 )
+
 UNIT_CHOICES = tuple(unit[:2] for unit in UNITS)
 
 
