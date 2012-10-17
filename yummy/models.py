@@ -128,6 +128,11 @@ class Photo(models.Model):
         verbose_name = _('Photo')
         verbose_name_plural = _('Photos')
 
+    def delete(self, *args, **kwargs):
+        storage, path = self.image.storage, self.image.path
+        super(Photo, self).delete(*args, **kwargs)
+        storage.delete(path)
+
 
 class Category(models.Model):
 
