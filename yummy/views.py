@@ -248,5 +248,4 @@ class AuthorList(OrderListView):
     template_name = 'yummy/cook/list.html'
 
     def get_queryset(self):
-        #TODO - do a better query
-        return User.objects.filter(pk__in=set(Recipe.objects.public().values_list('owner_id', flat=True)))
+        return User.objects.filter(recipe__is_approved=True).distinct('username')
