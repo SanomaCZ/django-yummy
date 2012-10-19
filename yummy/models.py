@@ -229,6 +229,7 @@ class Category(models.Model):
             return self.photo
         if self.parent:
             return self.parent.photo_hierarchic
+        return ""
 
 
 class Recipe(models.Model):
