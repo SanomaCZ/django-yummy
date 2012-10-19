@@ -95,6 +95,8 @@ class Ingredient(models.Model):
             self.slug = slugify(self.name)
         return super(Ingredient, self).save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        return reverse('yummy:ingredient_detail', args=(self.slug,))
 
 def upload_to(instance, filename):
     name, ext = path.splitext(filename)
