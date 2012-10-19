@@ -248,4 +248,4 @@ class AuthorList(OrderListView):
     template_name = 'yummy/cook/list.html'
 
     def get_queryset(self):
-        return User.objects.filter(recipe__is_approved=True).distinct('username')
+        return User.objects.filter(recipe__is_approved=True).distinct()
