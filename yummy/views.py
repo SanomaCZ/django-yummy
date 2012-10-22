@@ -141,13 +141,17 @@ class IngredientDetail(CynosureList):
 
 
 class OrderListView(ListView):
+
+    def get_objects_count(self):
+        return Recipe.objects.public().count()
+        
     def get_context_data(self, **kwargs):
         data = super(OrderListView, self).get_context_data(**kwargs)
         data.update({
             'current_order_attr': self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR) or conf.CATEGORY_ORDER_DEFAULT,
             'current_photo_attr': self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all',
             'ranking_attrs': conf.CATEGORY_ORDERING,
-            'all_recipes_count': Recipe.objects.public().count(),
+            'all_recipes_count': self.get_objects_count(),
         })
         return data
 
@@ -158,7 +162,10 @@ class CategoryView(OrderListView):
 
     def get_queryset(self):
         qs = self.model.objects.public()
+        qs = self.order_queryset(qs)
+        return qs
 
+    def order_queryset(self, qs):
         photo_attr = self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all'
         if photo_attr != 'all':
             #TODO - add photo filtering
