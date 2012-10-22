@@ -397,7 +397,7 @@ class RecipePhoto(models.Model):
 class IngredientInRecipeGroup(models.Model):
 
     recipe = models.ForeignKey(Recipe, verbose_name=_('Recipe'))
-    title = models.CharField(_('Title'), max_length=128, blank=True)
+    title = models.CharField(_('Title'), max_length=128)
     description = models.TextField(_('Short description'), blank=True)
     order = models.PositiveSmallIntegerField(_('Order'), default=1)
 
@@ -405,7 +405,7 @@ class IngredientInRecipeGroup(models.Model):
         return u"%s %s" % (self.recipe, self.title)
 
     class Meta:
-        unique_together = (('recipe', 'order'),)
+        #unique_together = (('recipe', 'order'),)
         verbose_name = _('Ingredients in recipe group')
         verbose_name_plural = _('Ingredients in recipe groups')
 
