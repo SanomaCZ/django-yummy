@@ -28,6 +28,8 @@ class JSONResponseMixin(object):
 
 class CynosureList(ListView):
 
+    context_cynosure_name = 'cynosure'
+
     @property
     def cynosure(self):
         return self._cynosure
@@ -57,7 +59,7 @@ class CynosureList(ListView):
             'current_order_attr': current_order_attr,
             'current_photo_attr': current_photo_attr,
             'ranking_attrs': conf.CATEGORY_ORDERING,
-            'cynosure': self.cynosure,
+            self.context_cynosure_name: self.cynosure,
         })
         return data
 
