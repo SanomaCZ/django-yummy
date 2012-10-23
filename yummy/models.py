@@ -151,6 +151,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')
+        ordering = ('path',)
 
     def __unicode__(self):
         if self.parent:
