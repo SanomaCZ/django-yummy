@@ -250,12 +250,12 @@ class Recipe(models.Model):
     hint = models.TextField(_('Hint'), blank=True)
 
     cooking_type = models.ForeignKey(CookingType, verbose_name=_('Cooking type'), blank=True, null=True)
-    cuisines = models.ManyToManyField(Cuisine, verbose_name=_('Cuisines'))
+    cuisines = models.ManyToManyField(Cuisine, verbose_name=_('Cuisines'), blank=True)
     servings = models.PositiveSmallIntegerField(_('Servings'), blank=True, null=True)
 
     price = models.SmallIntegerField(_('Price'), choices=conf.PRICING_CHOICES, default=3, db_index=True)
     difficulty = models.PositiveSmallIntegerField(_('Preparation difficulty'), choices=conf.DIFFICULTY_CHOICES, default=3, db_index=True)
-    preparation_time = models.PositiveSmallIntegerField(_('Preparation time (min)'))
+    preparation_time = models.PositiveSmallIntegerField(_('Preparation time (min)'), blank=True, null=True)
     caloric_value = models.PositiveIntegerField(_('Caloric value'), blank=True, null=True)
 
     owner = models.ForeignKey(User, verbose_name=_('User'))
