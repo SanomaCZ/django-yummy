@@ -153,6 +153,8 @@ class Category(models.Model):
         verbose_name_plural = _('Categories')
 
     def __unicode__(self):
+        if self.parent:
+            return "%s / %s" %(self.parent.title, self.title)
         return self.title
 
     def get_absolute_url(self):
