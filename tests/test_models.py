@@ -191,7 +191,7 @@ class TestCategoryModel(TestCase):
         tools.assert_true(self.c0.is_ancestor_of(self.c1))
 
     def test_unicode_returns_title(self):
-        tools.assert_equal("Mňam mňam", "%s" % self.c1.__unicode__())
+        tools.assert_equal("Ámen / Mňam mňam", "%s" % self.c1.__unicode__())
 
     def test_select_related(self):
         if DJANGO_VERSION[:2] < (1, 4):
