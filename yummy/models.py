@@ -13,7 +13,8 @@ from django.contrib.auth.models import User
 from django.utils.timezone import now
 from django.utils.translation.trans_real import ugettext
 from django.template.defaultfilters import slugify
-from recepty.cache import get_cached_object
+#from recepty.cache import get_cached_object
+#TODO caching ^
 
 from yummy import conf
 from yummy import managers
@@ -156,7 +157,7 @@ class Category(models.Model):
 
     def __unicode__(self):
         if self.parent:
-            return "%s / %s" %(unicode(get_cached_object(Category, pk=self.parent.pk)), self.title)
+            return "%s / %s" %(self.parent.title, self.title)
         return self.title
 
     def get_absolute_url(self):
