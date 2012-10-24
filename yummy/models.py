@@ -71,7 +71,7 @@ class IngredientGroup(models.Model):
 
 class Ingredient(models.Model):
 
-    group = models.ForeignKey(IngredientGroup, verbose_name=_('Group'), null=True)
+    group = models.ForeignKey(IngredientGroup, verbose_name=_('Group'), null=True, blank=True)
     name = models.CharField(_('Name'), max_length=128)
     slug = models.SlugField(_('Slug'), max_length=64, unique=True)
     genitive = models.CharField(_('Genitive'), max_length=128, blank=True)
