@@ -243,12 +243,30 @@ class TestRecipeModel(TestCase):
 
         recipe = create_recipe(owner=self.user, category=self.cat)
 
-        RecipePhoto.objects.create(recipe=recipe, photo=nonowner_photo, order=1)
         owner_recipe_photo = RecipePhoto.objects.create(recipe=recipe, photo=owner_photo, order=2)
+        RecipePhoto.objects.create(recipe=recipe, photo=nonowner_photo, order=1)
 
-        top_photo = recipe.get_top_photo()
+        tools.assert_equals(recipe.get_top_photo().pk, owner_recipe_photo.pk)
 
-        tools.assert_equals(top_photo.pk, owner_recipe_photo.pk)
+    def test_get_top_photo_respect_order(self):
+
+        recipe = create_recipe(owner=self.user, category=self.cat)
+
+        photo_1 = Photo.objects.create(width=1, height=1, owner=self.user)
+        photo_2 = Photo.objects.create(width=1, height=1, owner=self.user)
+
+        RecipePhoto.objects.create(recipe=recipe, photo=photo_1)
+        RecipePhoto.objects.create(recipe=recipe, photo=photo_2)
+
+        tools.assert_equals(photo_2.pk, recipe.get_top_photo().pk)
+
+    def test_get_top_photo_fallback(self):
+
+        recipe = create_recipe(owner=self.user, category=self.cat)
+
+        self.cat.photo = Photo.objects.create(width=1, height=1, owner=self.user)
+
+        tools.assert_equals(self.cat.photo.pk, recipe.get_top_photo().pk)
 
 
 class TestCookingTypeModel(TestCase):
