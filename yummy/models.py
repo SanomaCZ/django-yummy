@@ -264,8 +264,8 @@ class Recipe(models.Model):
     cuisines = models.ManyToManyField(Cuisine, verbose_name=_('Cuisines'), blank=True)
     servings = models.PositiveSmallIntegerField(_('Servings'), blank=True, null=True)
 
-    price = models.SmallIntegerField(_('Price'), choices=conf.PRICING_CHOICES, default=3, db_index=True)
-    difficulty = models.PositiveSmallIntegerField(_('Preparation difficulty'), choices=conf.DIFFICULTY_CHOICES, default=3, db_index=True)
+    price = models.SmallIntegerField(_('Price'), choices=conf.PRICING_CHOICES, default=3, db_index=True, null=True, blank=True)
+    difficulty = models.PositiveSmallIntegerField(_('Preparation difficulty'), choices=conf.DIFFICULTY_CHOICES, default=3, db_index=True, null=True, blank=True)
     preparation_time = models.PositiveSmallIntegerField(_('Preparation time (min)'), blank=True, null=True)
     caloric_value = models.PositiveIntegerField(_('Caloric value'), blank=True, null=True)
 
