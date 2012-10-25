@@ -247,7 +247,7 @@ class CuisineView(CynosureList):
         self._cynosure = Cuisine.objects.get(slug=self.kwargs['slug'])
 
     def get_queryset(self):
-        return Recipe.objects.public().filter(cuisines__in=[self.cynosure])
+        return Recipe.objects.public().filter(cuisines=self.cynosure)
 
 
 class AuthorList(OrderListView):
