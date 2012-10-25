@@ -167,9 +167,8 @@ class CategoryView(OrderListView):
     def order_queryset(self, qs):
         photo_attr = self.request.COOKIES.get(conf.CATEGORY_PHOTO_ATTR) or 'all'
         if photo_attr != 'all':
-            #TODO - add photo filtering
-            #qs = qs.filter()
-            pass
+            qs = qs.filter(recipephoto__isnull=False).distinct()
+
         order_attr = self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR)
         if order_attr not in conf.CATEGORY_ORDERING.keys():
             order_attr = conf.CATEGORY_ORDER_DEFAULT
