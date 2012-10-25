@@ -318,14 +318,11 @@ class Recipe(models.Model):
             return self.category.photo_hierarchic
 
     def groupped_ingredients(self):
-        #TODO - cache
-        ingredients = self.ingredientinrecipe_set.all()
+        ingredients = self.ingredientinrecipe_set.all().prefetch_related('group')
 
         groups = {}
-        NOGROUP = '__nogroup__'
         for one in ingredients:
-            ing_group = one.group or NOGROUP
-            groups.setdefault(ing_group, []).append(one)
+            groups.setdefault((one.group or '__nogroup__'), []).append(one)
 
         return groups
 
@@ -354,7 +351,6 @@ class RecipePhoto(models.Model):
         verbose_name_plural = _('Recipe photos')
 
     def save(self, *args, **kwargs):
-        #TODO - investigate infinite loop
         ignore_order = kwargs.pop('ignore_order', False)
         if self.photo.owner_id == self.recipe.owner_id and not ignore_order:
             self.manage_photo_order()
