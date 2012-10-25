@@ -31,7 +31,8 @@ class CuisineAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     raw_id_fields = ('photo',)
-    list_display = ('__unicode__', 'parent',)
+    list_display = ('title', 'chained_title', )
+    list_display_links = list_display
     ordering = ('path',)
     search_fields = ('title',)
 

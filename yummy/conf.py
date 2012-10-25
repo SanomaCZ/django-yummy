@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.utils.translation import npgettext, ugettext_lazy as _
+from yummy.utils import import_module_member
 
 UNITS = (
     (0, npgettext('unit', 'piece', 'pieces', 1), npgettext('unit', 'pc', 'pcs', 1)),
@@ -100,3 +101,10 @@ PHOTO_ORDER_GAP = 5
 
 # get function to be load and get qs as arg to return qs by rating
 FUNC_QS_BY_RATING = getattr(settings, 'YUMMY_FUNC_QS_BY_RATING', None)
+
+CACHE_TIMEOUT = 60 * 10
+
+CACHE_PREFIX = 'yummy:dummy'
+
+_CACHE_FUNCTION = getattr(settings, 'YUMMY_CACHE_OBJECT_FUNC', 'yummy.utils.cache.get_cached_model')
+GET_CACHE_FUNCTION = lambda: import_module_member(_CACHE_FUNCTION)

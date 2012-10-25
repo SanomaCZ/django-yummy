@@ -116,8 +116,8 @@ class TestCategoryModel(TestCase):
         super(TestCategoryModel, self).setUp()
         cache.clear()
 
-        self.c0 = Category.objects.create(title="Ámen", slug="amen")
-        self.c1 = Category.objects.create(parent=self.c0, title="Mňam mňam", slug="mnam-mnam")
+        self.c0 = Category.objects.create(title=u"Ámen", slug="amen")
+        self.c1 = Category.objects.create(parent=self.c0, title=u"Mňam mňam", slug="mnam-mnam")
 
     def tearDown(self):
         super(TestCategoryModel, self).tearDown()
@@ -191,7 +191,11 @@ class TestCategoryModel(TestCase):
         tools.assert_true(self.c0.is_ancestor_of(self.c1))
 
     def test_unicode_returns_title(self):
-        tools.assert_equal("Ámen / Mňam mňam", "%s" % self.c1.__unicode__())
+        tools.assert_equal(u"Mňam mňam", "%s" % self.c1.__unicode__())
+
+    def test_get_chained_title(self):
+        c2 =  Category.objects.create(parent=self.c1, title=u"Kůň", slug="kun")
+        tools.assert_equal(u"Ámen / Mňam mňam / Kůň", "%s" % c2.chained_title)
 
     def test_select_related(self):
         if DJANGO_VERSION[:2] < (1, 4):

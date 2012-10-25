@@ -13,11 +13,11 @@ from django.contrib.auth.models import User
 from django.utils.timezone import now
 from django.utils.translation.trans_real import ugettext
 from django.template.defaultfilters import slugify
-#from recepty.cache import get_cached_object
-#TODO caching ^
 
 from yummy import conf
 from yummy import managers
+
+get_cached_model = conf.GET_CACHE_FUNCTION()
 
 
 class CookingType(models.Model):
@@ -156,9 +156,18 @@ class Category(models.Model):
         ordering = ('path',)
 
     def __unicode__(self):
-        if self.parent:
-            return "%s / %s" %(self.parent.title, self.title)
         return self.title
+
+    def get_chained_title(self):
+        title = [self.title]
+        if self.parent_id:
+            parent = get_cached_model(Category, pk=self.parent_id)
+            title += parent.get_chained_title()
+        return title
+
+    @property
+    def chained_title(self):
+        return " / ".join(self.get_chained_title()[::-1])
 
     def get_absolute_url(self):
         return reverse('yummy:category_detail', args=(self.path,))
