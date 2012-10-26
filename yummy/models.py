@@ -317,7 +317,7 @@ class Recipe(models.Model):
             return self.category.photo_hierarchic
 
     def groupped_ingredients(self):
-        ingredients = self.ingredientinrecipe_set.all().prefetch_related('group')
+        ingredients = self.ingredientinrecipe_set.all().select_related('ingredient').prefetch_related('group')
 
         groups = {}
         for one in ingredients:

@@ -206,10 +206,18 @@ class TestCategoryModel(TestCase):
         tools.assert_equal('/category/amen/', self.c0.get_absolute_url())
         tools.assert_equal('/category/amen/mnam-mnam/', self.c1.get_absolute_url())
 
-    def test_resave_doesnt_complatint_about_path_nonuniqueness(self):
+    def test_cat_update_doesnt_complain_about_path_nonuniqueness(self):
         cat =  Category.objects.create(title="foo", slug="foo")
         cat.save()
         cat.clean() #expected to doesnt raise ValidationError
+
+    def test_different_cat_with_same_path_raises_validation_error(self):
+        cat =  Category.objects.create(title="foo", slug="foo")
+        cat.save()
+        cat.clean() #expected to doesnt raise ValidationError
+
+        cat2 = Category(title='foo', slug='foo')
+        tools.assert_raises(ValidationError, cat2.clean)
 
 
 class TestRecipeModel(TestCase):
