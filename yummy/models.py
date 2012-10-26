@@ -202,12 +202,11 @@ class Category(models.Model):
             path = '%s/%s' % (self.parent.path, self.slug)
         else:
             path = self.slug
-        try:
-            self.__class__.objects.get(path=path)
-        except self.__class__.DoesNotExist:
-            return True
-        else:
-            return False
+
+        qs = self.__class__.objects.filter(path=path)
+        if self.pk:
+            qs = qs.exclude(pk=self.pk)
+        return not bool(qs.count())
 
     def clean(self):
         if self == self.parent:
