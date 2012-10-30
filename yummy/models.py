@@ -402,6 +402,18 @@ class RecipePhoto(models.Model):
         for one in modified_items[::-1]:
             one.save(ignore_order=True)
 
+    @classmethod
+    def _bump_photos(cls, *args, **kwargs):
+        recipe_id = kwargs.get('instance').recipe_id
+        try:
+            recipe = Recipe.objects.get(pk=recipe_id)
+        except Recipe.DoesNotExist:
+            pass
+        else:
+            recipe.get_photos(recache=True)
+models.signals.post_save.connect(RecipePhoto._bump_photos, sender=RecipePhoto)
+models.signals.post_delete.connect(RecipePhoto._bump_photos, sender=RecipePhoto)
+
 
 class IngredientInRecipeGroup(models.Model):
 
