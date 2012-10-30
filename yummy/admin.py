@@ -100,8 +100,8 @@ class WeekMenuAdmin(admin.ModelAdmin):
 
     def selected_recipes(self, obj):
         return mark_safe(
-            """%(soup_label): %(soup)s<br/>
-            %(meal_label): %(meal)s<br/>
+            """%(soup_label)s: %(soup)s<br/>
+            %(meal_label)s: %(meal)s<br/>
             %(dessert_label)s: %(dessert)s""") %\
                dict(
                    soup=obj.soup,
