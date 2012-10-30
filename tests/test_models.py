@@ -247,22 +247,8 @@ class TestRecipeModel(TestCase):
         recipe = create_recipe(owner=self.user, category=self.cat, title=title)
         tools.assert_equals(True, title in unicode(recipe))
 
-    def test_reoder_owner_photo(self):
-
-        nonowner = User.objects.create_user(username='nonauthor')
-
-        nonowner_photo = Photo.objects.create(width=1, height=1, owner=nonowner)
-        owner_photo = Photo.objects.create(width=1, height=1, owner=self.user)
-
-        recipe = create_recipe(owner=self.user, category=self.cat)
-
-        owner_recipe_photo = RecipePhoto.objects.create(recipe=recipe, photo=owner_photo, order=2)
-        RecipePhoto.objects.create(recipe=recipe, photo=nonowner_photo, order=1)
-
-        tools.assert_equals(recipe.get_top_photo().pk, owner_recipe_photo.pk)
-
     def test_get_top_photo_respect_order(self):
-
+        print 'given test\n\n\n'
         recipe = create_recipe(owner=self.user, category=self.cat)
 
         photo_1 = Photo.objects.create(width=1, height=1, owner=self.user)
@@ -271,7 +257,7 @@ class TestRecipeModel(TestCase):
         RecipePhoto.objects.create(recipe=recipe, photo=photo_1)
         RecipePhoto.objects.create(recipe=recipe, photo=photo_2)
 
-        tools.assert_equals(photo_2.pk, recipe.get_top_photo().pk)
+        tools.assert_equals(photo_1.pk, recipe.get_top_photo().pk)
 
     def test_get_top_photo_fallback(self):
 

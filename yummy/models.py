@@ -297,7 +297,13 @@ class Recipe(models.Model):
         cache_key = '%s_recipe_photos' % self.pk
         cached_photos = cache.get(cache_key)
         if cached_photos is None or recache:
-            cached_photos = tuple(p.photo for p in self.recipephoto_set.visible().select_related('photo').order_by('order'))
+            cached_photos = []
+            qs = self.recipephoto_set.visible().select_related('photo').order_by('-order')
+            for one in qs:
+                if one.photo.owner_id == self.owner.pk:
+                    cached_photos.insert(0, one.photo)
+                else:
+                    cached_photos.append(one.photo)
             cache.set(cache_key, cached_photos)
 
         return cached_photos
@@ -336,7 +342,7 @@ class RecipePhoto(models.Model):
     recipe = models.ForeignKey(Recipe, verbose_name=_('Recipe'))
     photo = models.ForeignKey(Photo, verbose_name=_('Photo'))
     is_visible = models.BooleanField(_('Visible'), default=True)
-    order = models.PositiveSmallIntegerField(_('Order'), default=1, db_index=True)
+    order = models.PositiveSmallIntegerField(_('Order'), db_index=True)
 
     def __unicode__(self):
         return u"%d. %s" % (self.order, self.photo)
@@ -350,57 +356,9 @@ class RecipePhoto(models.Model):
         verbose_name_plural = _('Recipe photos')
 
     def save(self, *args, **kwargs):
-        ignore_order = kwargs.pop('ignore_order', False)
-        if self.photo.owner_id == self.recipe.owner_id and not ignore_order:
-            self.manage_photo_order()
-
+        if not self.order:
+            self.order = RecipePhoto.objects.filter(recipe=self.recipe).count() + 1
         super(RecipePhoto, self).save(*args, **kwargs)
-        self.recipe.get_photos(recache=True)
-
-    def manage_photo_order(self):
-        """
-        update photo's order if current photo belongs to recipe's owner:
-
-        - set current photo `order` value as lowest owner's but higher than non-owners
-        - if this value collides, bump following values
-            (also make there a gap to fit more photos w/o reordering in there)
-        """
-        photos = list(RecipePhoto.objects.filter(recipe=self.recipe).select_related('recipe', 'photo').order_by('order'))
-        if not photos:
-            return
-
-        last_owners_order_value = 0
-        following_photo_index = 0
-
-        #look for last owner's photo to set `order` value for current instance
-        for loop_index, one in enumerate(photos):
-            if one.photo.owner_id == self.recipe.owner_id:
-                last_owners_order_value = one.order
-            elif last_owners_order_value:
-                following_photo_index = loop_index
-                break
-
-        self.order = last_owners_order_value + 1
-
-        #now deal with colliding ids, if any
-        if photos[following_photo_index].order > self.order:
-            return
-
-        last_order_value = self.order
-        modified_items = []
-        for loop_index, one in enumerate(photos[following_photo_index:]):
-            if one.order > last_order_value:
-                #seems like ids don't collide anymore
-                break
-
-            order_bump = conf.PHOTO_ORDER_GAP if loop_index == 0 else 1
-            one.order = last_order_value + order_bump
-            last_order_value = one.order
-            modified_items.append(one)
-
-        #save items in reversed order, due to unique_together
-        for one in modified_items[::-1]:
-            one.save(ignore_order=True)
 
     @classmethod
     def _bump_photos(cls, *args, **kwargs):
