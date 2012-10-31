@@ -51,8 +51,8 @@ class YummyRecipeIndex(indexes.SearchIndex):
 
     def prepare_ingredient_groups(self, obj):
         g_set = set()
-        for i in obj.ingredientinrecipe_set.filter(group__isnull=False):
-            g_set.add(i.ingredient.group.name)
+        for g in obj.ingredientinrecipegroup_set.all():
+            g_set.add(g.title)
         return tuple(g_set)
 
     def get_model(self):
