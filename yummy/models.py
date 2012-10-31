@@ -122,6 +122,7 @@ class Photo(models.Model):
     title = models.CharField(_('Title'), max_length=64, blank=True)
     description = models.TextField(_('Description'), blank=True)
     is_redaction = models.BooleanField(default=False, editable=False)
+    created = models.DateTimeField(editable=False)
 
     owner = models.ForeignKey(User, editable=False)
 
@@ -137,6 +138,10 @@ class Photo(models.Model):
         super(Photo, self).delete(*args, **kwargs)
         storage.delete(path)
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.created = now()
+        return super(Photo, self).save(*args, **kwargs)
 
 class Category(models.Model):
 
@@ -342,7 +347,7 @@ class RecipePhoto(models.Model):
     recipe = models.ForeignKey(Recipe, verbose_name=_('Recipe'))
     photo = models.ForeignKey(Photo, verbose_name=_('Photo'))
     is_visible = models.BooleanField(_('Visible'), default=True)
-    order = models.PositiveSmallIntegerField(_('Order'), db_index=True)
+    order = models.PositiveSmallIntegerField(_('Order'), db_index=True, blank=True)
 
     def __unicode__(self):
         return u"%d. %s" % (self.order, self.photo)

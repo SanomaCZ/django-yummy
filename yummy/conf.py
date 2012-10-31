@@ -27,7 +27,7 @@ UNITS = (
     (21, npgettext('unit', 'bowl', 'bowls', 1)), #miska
     (22, npgettext('unit', 'bud', 'buds', 1)), #palicka
     (23, npgettext('unit', 'slice', 'slices', 1)), #platek
-    #(24, npgettext('unit', 'can', 'cans', 1)), #plechovka
+    (24, npgettext('unit', 'tin', 'tins', 1)), #konzerva
     (25, npgettext('unit', 'jar', 'jars', 1)), #sklenice
     (26, npgettext('unit', 'sprig', 'sprigs', 1)), #snitka
     (27, npgettext('unit', 'clove', 'cloves', 1)), #strouzek
@@ -35,6 +35,9 @@ UNITS = (
     (29, npgettext('unit', 'crumb', 'crumbs', 1)), #spetka
     (30, npgettext('unit', 'teacup', 'teacups', 1)), #salek
     (31, npgettext('unit', 'twig', 'twigs', 1)), #vetvicka
+    (32, npgettext('unit', 'serving', 'servings', 1)), #porce
+    (33, npgettext('unit', 'leaf', 'leaves', 1)), #list
+    (34, npgettext('unit', 'microphyll', 'microphylles', 1)), #listek, small leaf
 )
 
 UNIT_CHOICES = tuple(unit[:2] for unit in UNITS)
