@@ -39,6 +39,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class IngredientInRecipeInlineAdmin(admin.TabularInline):
     model = IngredientInRecipe
+    raw_id_fields = ('ingredient',)
     extra = 1
 
 
