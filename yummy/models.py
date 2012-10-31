@@ -342,7 +342,7 @@ class RecipePhoto(models.Model):
     recipe = models.ForeignKey(Recipe, verbose_name=_('Recipe'))
     photo = models.ForeignKey(Photo, verbose_name=_('Photo'))
     is_visible = models.BooleanField(_('Visible'), default=True)
-    order = models.PositiveSmallIntegerField(_('Order'), db_index=True)
+    order = models.PositiveSmallIntegerField(_('Order'), db_index=True, blank=True)
 
     def __unicode__(self):
         return u"%d. %s" % (self.order, self.photo)
