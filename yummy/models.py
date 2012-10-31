@@ -52,6 +52,9 @@ class Cuisine(models.Model):
             self.slug = slugify(self.name)
         return super(Cuisine, self).save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        return reverse('yummy:cuisine_detail', args=(self.slug,))
+
 
 class IngredientGroup(models.Model):
 
