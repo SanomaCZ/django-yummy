@@ -166,6 +166,11 @@ class Category(models.Model):
     def __unicode__(self):
         return self.title
 
+    def get_root_ancestor(self):
+        if self.parent_id:
+            return get_cached_model(Category, pk=self.parent_id).get_root_ancestor()
+        return self
+
     def get_chained_title(self):
         title = [self.title]
         if self.parent_id:

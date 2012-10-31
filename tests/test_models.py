@@ -219,6 +219,14 @@ class TestCategoryModel(TestCase):
         cat2 = Category(title='foo', slug='foo')
         tools.assert_raises(ValidationError, cat2.clean)
 
+    def test_get_root_ancestor(self):
+
+        c0 = Category.objects.create(title='foo')
+        c1 = Category.objects.create(parent=c0, title='bar')
+        c2 = Category.objects.create(parent=c1, title='baz')
+
+        tools.assert_equals(c2.get_root_ancestor(), c0)
+
 
 class TestRecipeModel(TestCase):
 
