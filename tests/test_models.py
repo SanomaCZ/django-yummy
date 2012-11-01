@@ -13,7 +13,7 @@ from nose import tools, SkipTest
 from yummy import conf
 
 from yummy.models import ( Category, Recipe, RecipeRecommendation, CookingType,
-    Cuisine, WeekMenu, IngredientGroup, Ingredient, Photo, RecipePhoto)
+    Cuisine, WeekMenu, IngredientGroup, Ingredient, Photo, RecipePhoto, IngredientInRecipe, IngredientInRecipeGroup)
 
 
 class MockedDate(date):
@@ -391,3 +391,43 @@ class TestWeekMenuModel(TestCase):
         obtained_item = WeekMenu.objects.get_actual()
 
         tools.assert_equals({}, obtained_item)
+
+
+class TestIngredientInRecipe(TestCase):
+
+    def setUp(self):
+        super(TestIngredientInRecipe, self).setUp()
+        cache.clear()
+
+        self.user = User.objects.create_user(username='foo')
+        self.cat = Category.objects.create(title="generic cat")
+        self.recipe = create_recipe(owner=self.user, category=self.cat)
+
+    def test_order_increasing(self):
+        i1 = Ingredient.objects.create(name='foobar')
+        i2 = Ingredient.objects.create(name='foobar2')
+
+        ir1 = IngredientInRecipe.objects.create(recipe=self.recipe, ingredient=i1)
+        ir2 = IngredientInRecipe.objects.create(recipe=self.recipe, ingredient=i2)
+
+        tools.assert_equals(ir1.order, 1)
+        tools.assert_equals(ir2.order, 2)
+
+
+
+class TestIngredientInRecipeGroup(TestCase):
+
+    def setUp(self):
+        super(TestIngredientInRecipeGroup, self).setUp()
+        cache.clear()
+
+        self.user = User.objects.create_user(username='foo')
+        self.cat = Category.objects.create(title="generic cat")
+        self.recipe = create_recipe(owner=self.user, category=self.cat)
+
+    def test_order_increasing(self):
+        ir1 = IngredientInRecipeGroup.objects.create(recipe=self.recipe)
+        ir2 = IngredientInRecipeGroup.objects.create(recipe=self.recipe)
+
+        tools.assert_equals(ir1.order, 1)
+        tools.assert_equals(ir2.order, 2)

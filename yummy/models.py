@@ -336,7 +336,7 @@ class Recipe(models.Model):
             return self.category.photo_hierarchic
 
     def groupped_ingredients(self):
-        ingredients = self.ingredientinrecipe_set.all().select_related('ingredient').prefetch_related('group')
+        ingredients = self.ingredientinrecipe_set.all().select_related('ingredient').prefetch_related('group').order_by('group__order')
 
         groups = {}
         for one in ingredients:
@@ -391,15 +391,19 @@ class IngredientInRecipeGroup(models.Model):
     recipe = models.ForeignKey(Recipe, verbose_name=_('Recipe'))
     title = models.CharField(_('Title'), max_length=128)
     description = models.TextField(_('Short description'), blank=True)
-    order = models.PositiveSmallIntegerField(_('Order'), default=1)
+    order = models.PositiveSmallIntegerField(_('Order'), db_index=True, blank=True)
 
     def __unicode__(self):
         return u"%s %s" % (self.recipe, self.title)
 
     class Meta:
-        #unique_together = (('recipe', 'order'),)
         verbose_name = _('Ingredients in recipe group')
         verbose_name_plural = _('Ingredients in recipe groups')
+
+    def save(self, *args, **kwargs):
+        if not self.order:
+            self.order = IngredientInRecipeGroup.objects.filter(recipe=self.recipe).count() + 1
+        super(IngredientInRecipeGroup, self).save(*args, **kwargs)
 
 
 class IngredientInRecipe(models.Model):
@@ -409,7 +413,7 @@ class IngredientInRecipe(models.Model):
     ingredient = models.ForeignKey(Ingredient, verbose_name=_('Ingredient'))
     amount = models.DecimalField(_('Amount'), max_digits=5, decimal_places=2, null=True, blank=True)
     unit = models.PositiveSmallIntegerField(_('Unit'), choices=conf.UNIT_CHOICES, null=True, blank=True)
-    order = models.PositiveSmallIntegerField(_('Order'), default=1, db_index=True)
+    order = models.PositiveSmallIntegerField(_('Order'), db_index=True, blank=True)
     note = models.CharField(_('Note'), max_length=255, blank=True)
 
     def __unicode__(self):
@@ -418,6 +422,11 @@ class IngredientInRecipe(models.Model):
     class Meta:
         verbose_name = _('Ingredient in recipe')
         verbose_name_plural = _('Ingredients in recipe')
+
+    def save(self, *args, **kwargs):
+        if not self.order:
+            self.order = IngredientInRecipe.objects.filter(recipe=self.recipe).count() + 1
+        super(IngredientInRecipe, self).save(*args, **kwargs)
 
 
 class UnitConversion(models.Model):
