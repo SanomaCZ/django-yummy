@@ -294,6 +294,7 @@ class Recipe(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super(Recipe, self).save(**kwargs)
+        self.groupped_ingredients(recache=True)
 
     class Meta:
         verbose_name = _('Recipe')
@@ -331,13 +332,18 @@ class Recipe(models.Model):
         else:
             return self.category.photo_hierarchic
 
-    def groupped_ingredients(self):
-        ingredients = self.ingredientinrecipe_set.all().select_related('ingredient').prefetch_related('group').order_by('group__order')
-
-        groups = {}
-        for one in ingredients:
-            groups.setdefault((one.group or '__nogroup__'), []).append(one)
-
+    def groupped_ingredients(self, recache=False):
+        cache_key = '%s_groupped_ingredients' % self.pk
+        groups = cache.get(cache_key)
+        if groups is None or recache:
+            qs = self.ingredientinrecipe_set.all().\
+                select_related('ingredient').\
+                prefetch_related('group').\
+                order_by('group__order', 'order')
+            groups = {}
+            for one in qs:
+                groups.setdefault((one.group or '__nogroup__'), []).append(one)
+            cache.set(cache_key, groups)
         return groups
 
     def get_absolute_url(self):
@@ -378,8 +384,6 @@ class RecipePhoto(models.Model):
             pass
         else:
             recipe.get_photos(recache=True)
-models.signals.post_save.connect(RecipePhoto._bump_photos, sender=RecipePhoto)
-models.signals.post_delete.connect(RecipePhoto._bump_photos, sender=RecipePhoto)
 
 
 class IngredientInRecipeGroup(models.Model):
@@ -509,3 +513,7 @@ class WeekMenu(models.Model):
 
     def __unicode__(self):
         return u"%s week, day %s" % (_("Even") if self.even_week else _("Odd"), self.get_day_display())
+
+
+models.signals.post_save.connect(RecipePhoto._bump_photos, sender=RecipePhoto)
+models.signals.post_delete.connect(RecipePhoto._bump_photos, sender=RecipePhoto)
