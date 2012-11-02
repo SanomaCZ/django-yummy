@@ -332,7 +332,19 @@ class Recipe(models.Model):
         else:
             return self.category.photo_hierarchic
 
-    def groupped_ingredients(self, recache=False):
+    def groupped_ingredients(self, recache=True):
+        """
+        order items by group's priority
+        if items are not in any group, set them into __nogroup__ group \
+            which has highest priority (lowest number)
+        to keep priorities while listing, conversion to list is needed
+            (dict doesn't keep order)
+
+        :param recache: force recache
+        :type recache: bool
+        :return: list of groups w/ items: (group, {prioriy:1, items:[]}
+        :rtype: list
+        """
         cache_key = '%s_groupped_ingredients' % self.pk
         groups = cache.get(cache_key)
         if groups is None or recache:
@@ -342,8 +354,12 @@ class Recipe(models.Model):
                 order_by('group__order', 'order')
             groups = {}
             for one in qs:
-                groups.setdefault((one.group or '__nogroup__'), []).append(one)
-            cache.set(cache_key, groups)
+                group_index = (one.group.title if one.group else '__nogroup__')
+                group_priority = (one.group.order if one.group else 0)
+                groups.setdefault(group_index, dict(items=[], priority=group_priority))['items'].append(one)
+
+            priorities_list = sorted(groups.items(), key=lambda x: x[1].get('priority'))
+            cache.set(cache_key, priorities_list)
         return groups
 
     def get_absolute_url(self):
