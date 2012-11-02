@@ -79,22 +79,21 @@ class DailyMenu(JSONResponseMixin, View):
     def arrange_menu_item(self, menu_item):
         arranged_item = {}
         for one in ('soup', 'meal', 'dessert'):
-            try:
-                actual_item = getattr(menu_item, one)
-            except AttributeError:
-                arranged_item[one] = {}
-            else:
-                try:
-                    image_url = actual_item.get_top_photo().image.url
-                except AttributeError:
-                    image_url = ''
+            actual_item = getattr(menu_item, one)
+            if not actual_item:
+                continue
 
-                arranged_item[one] = {
-                    'title': actual_item.title,
-                    'link': reverse('yummy:recipe_detail', args=(
-                        actual_item.category.path, actual_item.slug, actual_item.pk)),
-                    'image': image_url,
-                }
+            try:
+                image_url = actual_item.get_top_photo().image.url
+            except AttributeError:
+                image_url = ''
+
+            arranged_item[one] = {
+                'title': actual_item.title,
+                'link': reverse('yummy:recipe_detail', args=(
+                    actual_item.category.path, actual_item.slug, actual_item.pk)),
+                'image': image_url,
+            }
 
         return arranged_item
 
