@@ -335,10 +335,9 @@ class Recipe(models.Model):
     def groupped_ingredients(self, recache=False):
         """
         order items by group's priority
-        if items are not in any group, set them into __nogroup__ group \
+        if items are not in any group, set them into anonymous group \
             which has highest priority (lowest number)
         to keep priorities while listing, conversion to list is needed
-            (dict doesn't keep order)
 
         :param recache: force recache
         :type recache: bool
@@ -353,15 +352,13 @@ class Recipe(models.Model):
                 prefetch_related('group').\
                 order_by('group__order', 'order')
 
-            groups = {}
-            nogroup_items = []
+            tmp_groups = {}
             for one in qs:
-                if not one.group:
-                    nogroup_items.append(one)
-                else:
-                    groups.setdefault(one.group.order, (one.group.title, []))[1].append(one)
+                group_index = one.group.title if one.group else '__nogroup__'
+                group_priority = one.group.order if one.group else 0
+                tmp_groups.setdefault(group_index, dict(items=[], priority=group_priority))['items'].append(one)
 
-            groups = [(0, (None, nogroup_items))] + sorted(groups.items(), key=lambda x: x[0])
+            groups = sorted(tmp_groups.items(), key=lambda x: x[1].get('priority'))
             cache.set(cache_key, groups)
         return groups
 
