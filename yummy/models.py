@@ -17,6 +17,7 @@ from django.template.defaultfilters import slugify
 from yummy import conf
 from yummy import managers
 
+
 get_cached_model = conf.GET_CACHE_FUNCTION()
 
 
@@ -171,16 +172,11 @@ class Category(models.Model):
             return get_cached_model(Category, pk=self.parent_id).get_root_ancestor()
         return self
 
-    def get_chained_title(self):
-        title = [self.title]
-        if self.parent_id:
-            parent = get_cached_model(Category, pk=self.parent_id)
-            title += parent.get_chained_title()
-        return title
-
     @property
     def chained_title(self):
-        return " / ".join(self.get_chained_title()[::-1])
+        if self.parent_id:
+            return "%s / %s" % (get_cached_model(Category, pk=self.parent_id).chained_title, self.title)
+        return self.title
 
     def get_absolute_url(self):
         return reverse('yummy:category_detail', args=(self.path,))
