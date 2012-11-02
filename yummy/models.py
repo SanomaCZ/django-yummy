@@ -332,7 +332,7 @@ class Recipe(models.Model):
         else:
             return self.category.photo_hierarchic
 
-    def groupped_ingredients(self, recache=True):
+    def groupped_ingredients(self, recache=False):
         """
         order items by group's priority
         if items are not in any group, set them into __nogroup__ group \
@@ -354,13 +354,15 @@ class Recipe(models.Model):
                 order_by('group__order', 'order')
 
             groups = {}
+            nogroup_items = []
             for one in qs:
-                group_index = one.group.title if one.group else '__nogroup__'
-                group_priority = one.group.order if one.group else 0
-                groups.setdefault(group_index, dict(items=[], priority=group_priority))['items'].append(one)
+                if not one.group:
+                    nogroup_items.append(one)
+                else:
+                    groups.setdefault(one.group.order, (one.group.title, []))[1].append(one)
 
-            priorities_list = sorted(groups.items(), key=lambda x: x[1].get('priority'))
-            cache.set(cache_key, priorities_list)
+            groups = [(0, (None, nogroup_items))] + sorted(groups.items(), key=lambda x: x[0])
+            cache.set(cache_key, groups)
         return groups
 
     def get_absolute_url(self):
