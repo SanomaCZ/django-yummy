@@ -352,10 +352,11 @@ class Recipe(models.Model):
                 select_related('ingredient').\
                 prefetch_related('group').\
                 order_by('group__order', 'order')
+
             groups = {}
             for one in qs:
-                group_index = (one.group.title if one.group else '__nogroup__')
-                group_priority = (one.group.order if one.group else 0)
+                group_index = one.group.title if one.group else '__nogroup__'
+                group_priority = one.group.order if one.group else 0
                 groups.setdefault(group_index, dict(items=[], priority=group_priority))['items'].append(one)
 
             priorities_list = sorted(groups.items(), key=lambda x: x[1].get('priority'))
