@@ -255,6 +255,18 @@ class Category(models.Model):
             return self.parent.photo_hierarchic
         return ""
 
+    def get_recipes_count(self, recache=False):
+        cache_key = '%s_subcats_recipes_count' % self.pk
+        recipes_count = cache.get(cache_key)
+        if recipes_count is None or recache:
+            recipes_count = Recipe.objects.filter(is_public=True, is_approved=True, category=self).count()
+            children = Category.objects.filter(parent=self)
+            for one in children:
+                recipes_count += one.get_recipes_count()
+            cache.set(cache_key, recipes_count)
+
+        return recipes_count
+
 
 class Recipe(models.Model):
 
@@ -294,7 +306,9 @@ class Recipe(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super(Recipe, self).save(**kwargs)
+
         self.groupped_ingredients(recache=True)
+        self.category.get_recipes_count(recache=True)
 
     class Meta:
         verbose_name = _('Recipe')
