@@ -1,9 +1,10 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed
 from django.views.generic import ListView, DetailView, View
 from django.utils.simplejson import dumps
+
+from sorl.thumbnail import get_thumbnail
 
 from yummy.models import Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe, Cuisine
 from yummy import conf
@@ -85,14 +86,13 @@ class DailyMenu(JSONResponseMixin, View):
                 continue
 
             try:
-                image_url = actual_item.get_top_photo().image.url
+                image_url = get_thumbnail(actual_item.get_top_photo().image, '312x312', crop='center').url
             except AttributeError:
                 image_url = ''
 
             arranged_item[one] = {
                 'title': actual_item.title,
-                'link': reverse('yummy:recipe_detail', args=(
-                    actual_item.category.path, actual_item.slug, actual_item.pk)),
+                'link': actual_item.get_absolute_url(),
                 'image': image_url,
             }
 
