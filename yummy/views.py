@@ -28,6 +28,7 @@ class JSONResponseMixin(object):
 class CynosureList(ListView):
 
     context_cynosure_name = 'cynosure'
+    paginate_by = conf.LISTING_PAGINATE_BY
 
     @property
     def cynosure(self):
@@ -102,6 +103,7 @@ class IngredientView(ListView):
 
     template_name = 'yummy/ingredient/index.html'
     model = Ingredient
+    paginate_by = conf.LISTING_PAGINATE_BY
 
     def get_context_data(self, **kwargs):
         data = super(IngredientView, self).get_context_data(**kwargs)
@@ -139,6 +141,7 @@ class IngredientDetail(CynosureList):
 
 
 class OrderListView(ListView):
+    paginate_by = conf.LISTING_PAGINATE_BY
 
     def get_objects_count(self):
         return Recipe.objects.public().count()
@@ -181,6 +184,7 @@ class CategoryView(OrderListView):
 
 class CategoryDetail(CynosureList, CategoryView):
     template_name = 'yummy/category/detail.html'
+    paginate_by = conf.LISTING_PAGINATE_BY
 
     def get_cynosure(self):
         self._cynosure = Category.objects.get(path=self.kwargs['path'])
