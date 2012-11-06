@@ -195,12 +195,18 @@ class Category(models.Model):
     def get_children(self):
         return self.__class__.objects.filter(parent=self)
 
-    def get_descendants(self):
-        descendants = ()
-        for child_category in self.get_children():
-            descendants += (child_category,)
-            descendants += child_category.get_descendants()
-        return descendants
+    def get_descendants(self, recache=False):
+        cache_key = "%s_get_descendants"
+        cached_cats = cache.get(cache_key)
+        if cached_cats is None or recache:
+            cached_cats = ()
+            for child_category in self.get_children():
+                cached_cats += (child_category,)
+                cached_cats += child_category.get_descendants()
+
+            cache.set(cache_key, cached_cats)
+
+        return cached_cats
 
     @property
     def level(self):
@@ -228,7 +234,7 @@ class Category(models.Model):
             raise ValidationError(_('Path is not unique, change category title or slug.'))
 
     def save(self, **kwargs):
-        "Override save() to construct path based on the category's parent."
+        """Override save() to construct path based on the category's parent."""
         old_path = self.path
         if not self.slug:
             self.slug = slugify(self.title)
@@ -242,8 +248,11 @@ class Category(models.Model):
 
         super(Category, self).save(**kwargs)
 
-        if old_path != self.path and self.get_children().count():
-            # update descendants
+        if old_path != self.path:
+            if self.parent:
+                self.parent.get_descendants(recache=True)
+
+            # update descendants' path
             for cat in self.get_descendants():
                 cat.save(force_update=True)
 

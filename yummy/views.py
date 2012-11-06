@@ -187,7 +187,8 @@ class CategoryDetail(CynosureList, CategoryView):
 
     def get_queryset(self):
         qs = super(CategoryDetail, self).get_queryset()
-        qs = qs.filter(category=self.cynosure)
+        subcats = (self.cynosure,) + self.cynosure.get_descendants()
+        qs = qs.filter(category__in=subcats)
         return qs
 
 
