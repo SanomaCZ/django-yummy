@@ -134,7 +134,7 @@ class IngredientDetail(CynosureList):
     model = IngredientInRecipe
 
     def get_queryset(self):
-        return self.model.objects.filter(ingredient=self.cynosure).select_related('recipe')
+        return Recipe.objects.filter(ingredientinrecipe__ingredient=self.cynosure).distinct()
 
     def get_cynosure(self):
         self._cynosure = Ingredient.objects.get(slug=self.kwargs['ingredient'])
