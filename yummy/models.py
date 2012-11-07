@@ -196,7 +196,7 @@ class Category(models.Model):
         return self.__class__.objects.filter(parent=self)
 
     def get_descendants(self, recache=False):
-        cache_key = "%s_get_descendants"
+        cache_key = "%s_get_descendants" % self.pk
         cached_cats = cache.get(cache_key)
         if cached_cats is None or recache:
             cached_cats = ()
