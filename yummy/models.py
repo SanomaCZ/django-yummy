@@ -333,7 +333,7 @@ class Recipe(models.Model):
         cached_photos = cache.get(cache_key)
         if cached_photos is None or recache:
             cached_photos = []
-            qs = self.recipephoto_set.visible().select_related('photo').order_by('-order')
+            qs = self.recipephoto_set.visible().select_related('photo').order_by('order')
             for one in qs:
                 if one.photo.owner_id == self.owner.pk:
                     cached_photos.insert(0, one.photo)
