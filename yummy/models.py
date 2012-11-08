@@ -293,7 +293,7 @@ class Recipe(models.Model):
 
     cooking_type = models.ForeignKey(CookingType, verbose_name=_('Cooking type'), blank=True, null=True)
     cuisines = models.ManyToManyField(Cuisine, verbose_name=_('Cuisines'), blank=True)
-    servings = models.PositiveSmallIntegerField(_('Servings'), blank=True, null=True)
+    servings = models.PositiveSmallIntegerField(_('No. of servings'), blank=True, null=True)
 
     price = models.SmallIntegerField(_('Price'), choices=conf.PRICING_CHOICES, default=3, db_index=True, null=True, blank=True)
     difficulty = models.PositiveSmallIntegerField(_('Preparation difficulty'), choices=conf.DIFFICULTY_CHOICES, default=3, db_index=True, null=True, blank=True)

@@ -38,6 +38,7 @@ UNITS = (
     (32, npgettext('unit', 'serving', 'servings', 1)), #porce
     (33, npgettext('unit', 'leaf', 'leaves', 1)), #list
     (34, npgettext('unit', 'microphyll', 'microphylles', 1)), #listek, small leaf
+    (35, npgettext('unit', 'batch', 'batches', 1)), #davka
 )
 
 UNIT_CHOICES = tuple(unit[:2] for unit in UNITS)
