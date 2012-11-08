@@ -523,7 +523,7 @@ msgstr ""
 #: models.py:88
 #: models.py:304
 msgid "Approved"
-msgstr ""
+msgstr "Schválený"
 
 #: models.py:96
 #: models.py:454
