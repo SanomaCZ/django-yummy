@@ -99,7 +99,9 @@ class Ingredient(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-        return super(Ingredient, self).save(*args, **kwargs)
+        super(Ingredient, self).save(*args, **kwargs)
+
+        Ingredient.objects.get_names_list(recache=True)
 
     def get_absolute_url(self):
         return reverse('yummy:ingredient_detail', args=(self.slug,))

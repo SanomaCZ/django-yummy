@@ -1,4 +1,5 @@
 from datetime import date
+from django.core.cache import cache
 from django.db import models
 
 
@@ -65,3 +66,12 @@ class IngredientManager(models.Manager):
 
     def approved(self):
         return self.get_query_set().filter(is_approved=True)
+
+
+    def get_names_list(self, recache=False):
+        cache_key = 'ingredient_get_names_list'
+        ingredients = cache.get(cache_key)
+        if ingredients is None or recache:
+            ingredients = self.approved().values_list('name', flat=True)
+            cache.set(cache_key, ingredients)
+        return ingredients
