@@ -42,296 +42,296 @@ msgctxt "unit"
 msgid "piece"
 msgid_plural "pieces"
 msgstr[0] "kus"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "kusy"
+msgstr[2] "kusů"
 
 #: conf.py:6
 msgctxt "unit"
 msgid "pc"
 msgid_plural "pcs"
 msgstr[0] "ks"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "ks"
+msgstr[2] "ks"
 
 #: conf.py:7
 msgctxt "unit"
 msgid "gram"
 msgid_plural "grams"
 msgstr[0] "gram"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "gramy"
+msgstr[2] "gramů"
 
 #: conf.py:8
 msgctxt "unit"
 msgid "dekagram"
 msgid_plural "dekagrams"
 msgstr[0] "dekagram"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "dekagramy"
+msgstr[2] "dekagramů"
 
 #: conf.py:9
 msgctxt "unit"
 msgid "kilogram"
 msgid_plural "kilograms"
 msgstr[0] "kilogram"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "kilogramy"
+msgstr[2] "kilogramů"
 
 #: conf.py:10
 msgctxt "unit"
 msgid "mililiter"
 msgid_plural "mililiters"
 msgstr[0] "mililitr"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "mililitry"
+msgstr[2] "mililitrů"
 
 #: conf.py:11
 msgctxt "unit"
 msgid "deciliter"
 msgid_plural "deciliters"
 msgstr[0] "decilitr"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "decilitry"
+msgstr[2] "decilitrů"
 
 #: conf.py:12
 msgctxt "unit"
 msgid "liter"
 msgid_plural "liters"
 msgstr[0] "litr"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "litry"
+msgstr[2] "litrů"
 
 #: conf.py:13
 msgctxt "unit"
 msgid "packaging"
 msgid_plural "packagings"
 msgstr[0] "balení"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "balení"
+msgstr[2] "balení"
 
 #: conf.py:14
 msgctxt "unit"
 msgid "package"
 msgid_plural "packages"
 msgstr[0] "balíček"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "balíčky"
+msgstr[2] "balíčků"
 
 #: conf.py:15
 msgctxt "unit"
 msgid "part"
 msgid_plural "parts"
 msgstr[0] "dílek"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "dílky"
+msgstr[2] "dílků"
 
 #: conf.py:16
 msgctxt "unit"
 msgid "cup"
 msgid_plural "cups"
 msgstr[0] "hrnek"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "hrnky"
+msgstr[2] "hrnků"
 
 #: conf.py:17
 msgctxt "unit"
 msgid "handful"
 msgid_plural "handful"
 msgstr[0] "hrst"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "hrsti"
+msgstr[2] "hrstí"
 
 #: conf.py:18
 msgctxt "unit"
 msgid "drop"
 msgid_plural "drops"
 msgstr[0] "kapka"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "kapky"
+msgstr[2] "kapek"
 
 #: conf.py:19
 msgctxt "unit"
 msgid "crubicle"
 msgid_plural "crubicles"
 msgstr[0] "kelímek"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "kelímky"
+msgstr[2] "kelímků"
 
 #: conf.py:20
 msgctxt "unit"
 msgid "can"
 msgid_plural "cans"
 msgstr[0] "plechovka"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "plechovky"
+msgstr[2] "plechovek"
 
 #: conf.py:21
 msgctxt "unit"
 msgid "scoop"
 msgid_plural "scoops"
 msgstr[0] "kopeček"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "kopečky"
+msgstr[2] "kopečků"
 
 #: conf.py:22
 msgctxt "unit"
 msgid "cube"
 msgid_plural "cubes"
 msgstr[0] "kostka"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "kostky"
+msgstr[2] "kostek"
 
 #: conf.py:23
 msgctxt "unit"
 msgid "ball"
 msgid_plural "balls"
 msgstr[0] "kulička"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "kuličky"
+msgstr[2] "kuliček"
 
 #: conf.py:24
 msgctxt "unit"
 msgid "bottle"
 msgid_plural "bottles"
 msgstr[0] "lahev"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "lahve"
+msgstr[2] "lahví"
 
 #: conf.py:25
 msgctxt "unit"
 msgid "spoon"
 msgid_plural "spoons"
 msgstr[0] "lžíce"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "lžíce"
+msgstr[2] "lžic"
 
 #: conf.py:26
 msgctxt "unit"
 msgid "teaspoon"
 msgid_plural "teaspoons"
 msgstr[0] "lžička"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "lžičky"
+msgstr[2] "lžiček"
 
 #: conf.py:27
 msgctxt "unit"
 msgid "bowl"
 msgid_plural "bowls"
 msgstr[0] "miska"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "misky"
+msgstr[2] "misek"
 
 #: conf.py:28
 msgctxt "unit"
 msgid "bud"
 msgid_plural "buds"
 msgstr[0] "palička"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "paličky"
+msgstr[2] "paliček"
 
 #: conf.py:29
 msgctxt "unit"
 msgid "slice"
 msgid_plural "slices"
 msgstr[0] "plátek"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "plátky"
+msgstr[2] "plátků"
 
 #: conf.py:30
 msgctxt "unit"
 msgid "tin"
 msgid_plural "tins"
 msgstr[0] "konzerva"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "konzervy"
+msgstr[2] "konzerv"
 
 #: conf.py:31
 msgctxt "unit"
 msgid "jar"
 msgid_plural "jars"
 msgstr[0] "sklenice"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "sklenice"
+msgstr[2] "sklenic"
 
 #: conf.py:32
 msgctxt "unit"
 msgid "sprig"
 msgid_plural "sprigs"
 msgstr[0] "snítka"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "snítky"
+msgstr[2] "snítek"
 
 #: conf.py:33
 msgctxt "unit"
 msgid "clove"
 msgid_plural "cloves"
 msgstr[0] "stroužek"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "stroužky"
+msgstr[2] "stroužků"
 
 #: conf.py:34
 msgctxt "unit"
 msgid "bunch"
 msgid_plural "bunches"
 msgstr[0] "svazek"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "svazky"
+msgstr[2] "svazků"
 
 #: conf.py:35
 msgctxt "unit"
 msgid "crumb"
 msgid_plural "crumbs"
 msgstr[0] "špetka"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "špetky"
+msgstr[2] "špetek"
 
 #: conf.py:36
 msgctxt "unit"
 msgid "teacup"
 msgid_plural "teacups"
 msgstr[0] "šálek"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "šálky"
+msgstr[2] "šálků"
 
 #: conf.py:37
 msgctxt "unit"
 msgid "twig"
 msgid_plural "twigs"
 msgstr[0] "větvička"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "větvičky"
+msgstr[2] "větviček"
 
 #: conf.py:38
 msgctxt "unit"
 msgid "serving"
 msgid_plural "servings"
 msgstr[0] "porce"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "porce"
+msgstr[2] "porcí"
 
 #: conf.py:39
 msgctxt "unit"
 msgid "leaf"
 msgid_plural "leaves"
 msgstr[0] "list"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "listy"
+msgstr[2] "listů"
 
 #: conf.py:40
 msgctxt "unit"
 msgid "microphyll"
 msgid_plural "microphylles"
 msgstr[0] "lístek"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "lístky"
+msgstr[2] "lístků"
 
 #: conf.py:41
 msgctxt "unit"
 msgid "batch"
 msgid_plural "batches"
 msgstr[0] "dávka"
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "dávky"
+msgstr[2] "dávek"
 
 #: conf.py:48
 msgid "Cheapest"
