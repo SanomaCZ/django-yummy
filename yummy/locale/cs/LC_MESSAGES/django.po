@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-08 15:40+0100\n"
+"POT-Creation-Date: 2012-11-13 17:12+0100\n"
 "PO-Revision-Date: 2012-11-08 15:42+0100\n"
 "Last-Translator: yedpodtrzitko <yed@vanyli.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,27 +17,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
 
-#: admin.py:71
+#: admin.py:72
 msgid "No title"
 msgstr ""
 
-#: admin.py:110
+#: admin.py:111
 msgid "Soup"
 msgstr "Polévka"
 
-#: admin.py:111
+#: admin.py:112
 msgid "Meal"
 msgstr "Hlavní chod"
 
-#: admin.py:112
+#: admin.py:113
 msgid "Dessert"
 msgstr "Desert"
 
-#: admin.py:114
+#: admin.py:115
 msgid "Selected recipes"
 msgstr "Zvolené recepisy"
 
-#: conf.py:6
+#: conf.py:8
 msgctxt "unit"
 msgid "piece"
 msgid_plural "pieces"
@@ -45,7 +45,7 @@ msgstr[0] "kus"
 msgstr[1] "kusy"
 msgstr[2] "kusů"
 
-#: conf.py:6
+#: conf.py:8
 msgctxt "unit"
 msgid "pc"
 msgid_plural "pcs"
@@ -53,7 +53,7 @@ msgstr[0] "ks"
 msgstr[1] "ks"
 msgstr[2] "ks"
 
-#: conf.py:7
+#: conf.py:9
 msgctxt "unit"
 msgid "gram"
 msgid_plural "grams"
@@ -61,7 +61,7 @@ msgstr[0] "gram"
 msgstr[1] "gramy"
 msgstr[2] "gramů"
 
-#: conf.py:8
+#: conf.py:10
 msgctxt "unit"
 msgid "dekagram"
 msgid_plural "dekagrams"
@@ -69,7 +69,7 @@ msgstr[0] "dekagram"
 msgstr[1] "dekagramy"
 msgstr[2] "dekagramů"
 
-#: conf.py:9
+#: conf.py:11
 msgctxt "unit"
 msgid "kilogram"
 msgid_plural "kilograms"
@@ -77,7 +77,7 @@ msgstr[0] "kilogram"
 msgstr[1] "kilogramy"
 msgstr[2] "kilogramů"
 
-#: conf.py:10
+#: conf.py:12
 msgctxt "unit"
 msgid "mililiter"
 msgid_plural "mililiters"
@@ -85,7 +85,7 @@ msgstr[0] "mililitr"
 msgstr[1] "mililitry"
 msgstr[2] "mililitrů"
 
-#: conf.py:11
+#: conf.py:13
 msgctxt "unit"
 msgid "deciliter"
 msgid_plural "deciliters"
@@ -93,7 +93,7 @@ msgstr[0] "decilitr"
 msgstr[1] "decilitry"
 msgstr[2] "decilitrů"
 
-#: conf.py:12
+#: conf.py:14
 msgctxt "unit"
 msgid "liter"
 msgid_plural "liters"
@@ -101,7 +101,7 @@ msgstr[0] "litr"
 msgstr[1] "litry"
 msgstr[2] "litrů"
 
-#: conf.py:13
+#: conf.py:15
 msgctxt "unit"
 msgid "packaging"
 msgid_plural "packagings"
@@ -109,7 +109,7 @@ msgstr[0] "balení"
 msgstr[1] "balení"
 msgstr[2] "balení"
 
-#: conf.py:14
+#: conf.py:16
 msgctxt "unit"
 msgid "package"
 msgid_plural "packages"
@@ -117,7 +117,7 @@ msgstr[0] "balíček"
 msgstr[1] "balíčky"
 msgstr[2] "balíčků"
 
-#: conf.py:15
+#: conf.py:17
 msgctxt "unit"
 msgid "part"
 msgid_plural "parts"
@@ -125,7 +125,7 @@ msgstr[0] "dílek"
 msgstr[1] "dílky"
 msgstr[2] "dílků"
 
-#: conf.py:16
+#: conf.py:18
 msgctxt "unit"
 msgid "cup"
 msgid_plural "cups"
@@ -133,7 +133,7 @@ msgstr[0] "hrnek"
 msgstr[1] "hrnky"
 msgstr[2] "hrnků"
 
-#: conf.py:17
+#: conf.py:19
 msgctxt "unit"
 msgid "handful"
 msgid_plural "handful"
@@ -141,7 +141,7 @@ msgstr[0] "hrst"
 msgstr[1] "hrsti"
 msgstr[2] "hrstí"
 
-#: conf.py:18
+#: conf.py:20
 msgctxt "unit"
 msgid "drop"
 msgid_plural "drops"
@@ -149,7 +149,7 @@ msgstr[0] "kapka"
 msgstr[1] "kapky"
 msgstr[2] "kapek"
 
-#: conf.py:19
+#: conf.py:21
 msgctxt "unit"
 msgid "crubicle"
 msgid_plural "crubicles"
@@ -157,7 +157,7 @@ msgstr[0] "kelímek"
 msgstr[1] "kelímky"
 msgstr[2] "kelímků"
 
-#: conf.py:20
+#: conf.py:22
 msgctxt "unit"
 msgid "can"
 msgid_plural "cans"
@@ -165,7 +165,7 @@ msgstr[0] "plechovka"
 msgstr[1] "plechovky"
 msgstr[2] "plechovek"
 
-#: conf.py:21
+#: conf.py:23
 msgctxt "unit"
 msgid "scoop"
 msgid_plural "scoops"
@@ -173,7 +173,7 @@ msgstr[0] "kopeček"
 msgstr[1] "kopečky"
 msgstr[2] "kopečků"
 
-#: conf.py:22
+#: conf.py:24
 msgctxt "unit"
 msgid "cube"
 msgid_plural "cubes"
@@ -181,7 +181,7 @@ msgstr[0] "kostka"
 msgstr[1] "kostky"
 msgstr[2] "kostek"
 
-#: conf.py:23
+#: conf.py:25
 msgctxt "unit"
 msgid "ball"
 msgid_plural "balls"
@@ -189,7 +189,7 @@ msgstr[0] "kulička"
 msgstr[1] "kuličky"
 msgstr[2] "kuliček"
 
-#: conf.py:24
+#: conf.py:26
 msgctxt "unit"
 msgid "bottle"
 msgid_plural "bottles"
@@ -197,7 +197,7 @@ msgstr[0] "lahev"
 msgstr[1] "lahve"
 msgstr[2] "lahví"
 
-#: conf.py:25
+#: conf.py:27
 msgctxt "unit"
 msgid "spoon"
 msgid_plural "spoons"
@@ -205,7 +205,7 @@ msgstr[0] "lžíce"
 msgstr[1] "lžíce"
 msgstr[2] "lžic"
 
-#: conf.py:26
+#: conf.py:28
 msgctxt "unit"
 msgid "teaspoon"
 msgid_plural "teaspoons"
@@ -213,7 +213,7 @@ msgstr[0] "lžička"
 msgstr[1] "lžičky"
 msgstr[2] "lžiček"
 
-#: conf.py:27
+#: conf.py:29
 msgctxt "unit"
 msgid "bowl"
 msgid_plural "bowls"
@@ -221,7 +221,7 @@ msgstr[0] "miska"
 msgstr[1] "misky"
 msgstr[2] "misek"
 
-#: conf.py:28
+#: conf.py:30
 msgctxt "unit"
 msgid "bud"
 msgid_plural "buds"
@@ -229,7 +229,7 @@ msgstr[0] "palička"
 msgstr[1] "paličky"
 msgstr[2] "paliček"
 
-#: conf.py:29
+#: conf.py:31
 msgctxt "unit"
 msgid "slice"
 msgid_plural "slices"
@@ -237,7 +237,7 @@ msgstr[0] "plátek"
 msgstr[1] "plátky"
 msgstr[2] "plátků"
 
-#: conf.py:30
+#: conf.py:32
 msgctxt "unit"
 msgid "tin"
 msgid_plural "tins"
@@ -245,7 +245,7 @@ msgstr[0] "konzerva"
 msgstr[1] "konzervy"
 msgstr[2] "konzerv"
 
-#: conf.py:31
+#: conf.py:33
 msgctxt "unit"
 msgid "jar"
 msgid_plural "jars"
@@ -253,7 +253,7 @@ msgstr[0] "sklenice"
 msgstr[1] "sklenice"
 msgstr[2] "sklenic"
 
-#: conf.py:32
+#: conf.py:34
 msgctxt "unit"
 msgid "sprig"
 msgid_plural "sprigs"
@@ -261,7 +261,7 @@ msgstr[0] "snítka"
 msgstr[1] "snítky"
 msgstr[2] "snítek"
 
-#: conf.py:33
+#: conf.py:35
 msgctxt "unit"
 msgid "clove"
 msgid_plural "cloves"
@@ -269,7 +269,7 @@ msgstr[0] "stroužek"
 msgstr[1] "stroužky"
 msgstr[2] "stroužků"
 
-#: conf.py:34
+#: conf.py:36
 msgctxt "unit"
 msgid "bunch"
 msgid_plural "bunches"
@@ -277,7 +277,7 @@ msgstr[0] "svazek"
 msgstr[1] "svazky"
 msgstr[2] "svazků"
 
-#: conf.py:35
+#: conf.py:37
 msgctxt "unit"
 msgid "crumb"
 msgid_plural "crumbs"
@@ -285,7 +285,7 @@ msgstr[0] "špetka"
 msgstr[1] "špetky"
 msgstr[2] "špetek"
 
-#: conf.py:36
+#: conf.py:38
 msgctxt "unit"
 msgid "teacup"
 msgid_plural "teacups"
@@ -293,7 +293,7 @@ msgstr[0] "šálek"
 msgstr[1] "šálky"
 msgstr[2] "šálků"
 
-#: conf.py:37
+#: conf.py:39
 msgctxt "unit"
 msgid "twig"
 msgid_plural "twigs"
@@ -301,7 +301,7 @@ msgstr[0] "větvička"
 msgstr[1] "větvičky"
 msgstr[2] "větviček"
 
-#: conf.py:38
+#: conf.py:40
 msgctxt "unit"
 msgid "serving"
 msgid_plural "servings"
@@ -309,7 +309,7 @@ msgstr[0] "porce"
 msgstr[1] "porce"
 msgstr[2] "porcí"
 
-#: conf.py:39
+#: conf.py:41
 msgctxt "unit"
 msgid "leaf"
 msgid_plural "leaves"
@@ -317,7 +317,7 @@ msgstr[0] "list"
 msgstr[1] "listy"
 msgstr[2] "listů"
 
-#: conf.py:40
+#: conf.py:42
 msgctxt "unit"
 msgid "microphyll"
 msgid_plural "microphylles"
@@ -325,7 +325,7 @@ msgstr[0] "lístek"
 msgstr[1] "lístky"
 msgstr[2] "lístků"
 
-#: conf.py:41
+#: conf.py:43
 msgctxt "unit"
 msgid "batch"
 msgid_plural "batches"
@@ -333,152 +333,140 @@ msgstr[0] "dávka"
 msgstr[1] "dávky"
 msgstr[2] "dávek"
 
-#: conf.py:48
+#: conf.py:50
 msgid "Cheapest"
 msgstr "Nejlevnější"
 
-#: conf.py:49
+#: conf.py:51
 msgid "Cheaper"
 msgstr "Levnější"
 
-#: conf.py:50
+#: conf.py:52
 msgid "Standard price"
 msgstr "Průměrný"
 
-#: conf.py:51
+#: conf.py:53
 msgid "Expensive"
 msgstr "Drahý"
 
-#: conf.py:52
+#: conf.py:54
 msgid "Most Expensive"
 msgstr "Nejdražší"
 
-#: conf.py:56
+#: conf.py:58
 msgid "Easy"
 msgstr "Snadný"
 
-#: conf.py:57
+#: conf.py:59
 msgid "Standard difficulty"
 msgstr "Střední"
 
-#: conf.py:58
+#: conf.py:60
 msgid "Difficult"
 msgstr "Náročný"
 
-#: conf.py:71
+#: conf.py:73
 msgid "by ranking"
 msgstr "hodnocení"
 
-#: conf.py:72
+#: conf.py:74
 msgid "by alphabet"
 msgstr "abecedy"
 
-#: conf.py:73
+#: conf.py:75
 msgid "by date"
 msgstr "data přidání"
 
-#: conf.py:80
+#: conf.py:82
 msgid "Monday"
 msgstr "Pondělí"
 
-#: conf.py:81
+#: conf.py:83
 msgid "Tuesday"
 msgstr "Úterý"
 
-#: conf.py:82
+#: conf.py:84
 msgid "Wednesday"
 msgstr "Středa"
 
-#: conf.py:83
+#: conf.py:85
 msgid "Thursday"
 msgstr "Čtvrtek"
 
-#: conf.py:84
+#: conf.py:86
 msgid "Friday"
 msgstr "Pátek"
 
-#: conf.py:85
+#: conf.py:87
 msgid "Saturday"
 msgstr "Sobota"
 
-#: conf.py:86
+#: conf.py:88
 msgid "Sunday"
 msgstr "Neděle"
 
-#: conf.py:90
+#: conf.py:92
 msgid "January"
 msgstr ""
 
-#: conf.py:91
+#: conf.py:93
 msgid "February"
 msgstr ""
 
-#: conf.py:92
+#: conf.py:94
 msgid "March"
 msgstr ""
 
-#: conf.py:93
+#: conf.py:95
 msgid "April"
 msgstr ""
 
-#: conf.py:94
+#: conf.py:96
 msgid "May"
 msgstr ""
 
-#: conf.py:95
+#: conf.py:97
 msgid "June"
 msgstr ""
 
-#: conf.py:96
+#: conf.py:98
 msgid "July"
 msgstr ""
 
-#: conf.py:97
+#: conf.py:99
 msgid "August"
 msgstr ""
 
-#: conf.py:98
+#: conf.py:100
 msgid "September"
 msgstr ""
 
-#: conf.py:99
+#: conf.py:101
 msgid "October"
 msgstr ""
 
-#: conf.py:100
+#: conf.py:102
 msgid "November"
 msgstr ""
 
-#: conf.py:101
+#: conf.py:103
 msgid "December"
 msgstr ""
 
-#: models.py:26
-#: models.py:40
-#: models.py:62
-#: models.py:81
+#: models.py:26 models.py:40 models.py:62 models.py:81
 msgid "Name"
 msgstr "Jméno"
 
-#: models.py:27
-#: models.py:41
-#: models.py:63
-#: models.py:82
-#: models.py:158
-#: models.py:287
-#: models.py:525
+#: models.py:27 models.py:41 models.py:63 models.py:82 models.py:158
+#: models.py:287 models.py:526
 msgid "Slug"
 msgstr "Slug"
 
-#: models.py:28
-#: models.py:42
-#: models.py:129
-#: models.py:162
+#: models.py:28 models.py:42 models.py:129 models.py:162
 msgid "Description"
 msgstr "Popis"
 
-#: models.py:34
-#: models.py:294
+#: models.py:34 models.py:294
 msgid "Cooking type"
 msgstr ""
 
@@ -490,8 +478,7 @@ msgstr ""
 msgid "Cuisine"
 msgstr "Kuchyně"
 
-#: models.py:49
-#: models.py:295
+#: models.py:49 models.py:295
 msgid "Cuisines"
 msgstr ""
 
@@ -503,8 +490,7 @@ msgstr ""
 msgid "Ingredient groups"
 msgstr ""
 
-#: models.py:80
-#: models.py:453
+#: models.py:80 models.py:454
 msgid "Group"
 msgstr ""
 
@@ -520,13 +506,11 @@ msgstr ""
 msgid "NDB id number"
 msgstr ""
 
-#: models.py:88
-#: models.py:304
+#: models.py:88 models.py:304
 msgid "Approved"
 msgstr "Schválený"
 
-#: models.py:96
-#: models.py:454
+#: models.py:96 models.py:455
 msgid "Ingredient"
 msgstr "Surovina"
 
@@ -538,17 +522,11 @@ msgstr "Suroviny"
 msgid "Image"
 msgstr "Obrázek"
 
-#: models.py:128
-#: models.py:157
-#: models.py:286
-#: models.py:433
-#: models.py:524
+#: models.py:128 models.py:157 models.py:286 models.py:434 models.py:525
 msgid "Title"
 msgstr ""
 
-#: models.py:139
-#: models.py:160
-#: models.py:399
+#: models.py:139 models.py:160 models.py:399
 msgid "Photo"
 msgstr "Fotografie"
 
@@ -556,9 +534,7 @@ msgstr "Fotografie"
 msgid "Photos"
 msgstr "Fotografie"
 
-#: models.py:165
-#: models.py:288
-#: templates/yummy/ingredient/group.html:6
+#: models.py:165 models.py:288 templates/yummy/ingredient/group.html:6
 msgid "Category"
 msgstr "Kategorie"
 
@@ -578,8 +554,7 @@ msgstr ""
 msgid "Path is not unique, change category title or slug."
 msgstr ""
 
-#: models.py:290
-#: models.py:434
+#: models.py:290 models.py:435
 msgid "Short description"
 msgstr ""
 
@@ -615,20 +590,15 @@ msgstr "Kalorická hodnota"
 msgid "User"
 msgstr ""
 
-#: models.py:305
-#: models.py:526
+#: models.py:305 models.py:527
 msgid "Public"
 msgstr "Veřejný"
 
-#: models.py:325
-#: models.py:398
-#: models.py:432
-#: models.py:452
+#: models.py:325 models.py:398 models.py:433 models.py:453
 msgid "Recipe"
 msgstr "Recept"
 
-#: models.py:326
-#: models.py:527
+#: models.py:326 models.py:528
 msgid "Recipes"
 msgstr "Recepty"
 
@@ -637,133 +607,137 @@ msgid "Visible"
 msgstr "Viditelný"
 
 #: models.py:401
-#: models.py:435
-#: models.py:457
+msgid "Checked"
+msgstr "Zkontrolováno"
+
+#: models.py:402 models.py:436 models.py:458
 msgid "Order"
 msgstr "Pořadí"
 
-#: models.py:411
+#: models.py:412
 msgid "Recipe photo"
 msgstr "Fotografie receptu"
 
-#: models.py:412
+#: models.py:413
 msgid "Recipe photos"
 msgstr "Fotografie receptu"
 
-#: models.py:441
+#: models.py:442
 msgid "Ingredients in recipe group"
 msgstr ""
 
-#: models.py:442
+#: models.py:443
 msgid "Ingredients in recipe groups"
 msgstr ""
 
-#: models.py:455
+#: models.py:456
 msgid "Amount"
 msgstr "Množství"
 
-#: models.py:456
+#: models.py:457
 msgid "Unit"
 msgstr "Měrná jednotka"
 
-#: models.py:458
+#: models.py:459
 msgid "Note"
 msgstr "Poznámka"
 
-#: models.py:464
+#: models.py:465
 msgid "Ingredient in recipe"
 msgstr "Surovina v receptu"
 
-#: models.py:465
+#: models.py:466
 msgid "Ingredients in recipe"
 msgstr "Suroviny v receptu"
 
-#: models.py:477
+#: models.py:478
 msgid "Ratio"
 msgstr "Poměr"
 
-#: models.py:484
+#: models.py:485
 msgid "Unit conversion"
 msgstr ""
 
-#: models.py:485
+#: models.py:486
 msgid "Units conversions"
 msgstr ""
 
-#: models.py:492
+#: models.py:493
 msgid "Show from day"
 msgstr "Ode dne"
 
-#: models.py:492
+#: models.py:493
 msgid "Recipe will show itself starting this day"
 msgstr "Recept bude zobrazován od tohoto dne"
 
-#: models.py:493
+#: models.py:494
 msgid "Show until day (inclusive)"
 msgstr "Do dne (včetně)"
 
-#: models.py:494
-msgid "Recipe shown until this day. This field is not required. The longer is recipe shown, the lower priority it has."
+#: models.py:495
+msgid ""
+"Recipe shown until this day. This field is not required. The longer is "
+"recipe shown, the lower priority it has."
 msgstr ""
 
-#: models.py:499
+#: models.py:500
 msgid "until forever"
 msgstr "navždy"
 
-#: models.py:502
+#: models.py:503
 msgid "Recipe recommendation"
 msgstr ""
 
-#: models.py:503
+#: models.py:504
 msgid "Recipe recommendations"
 msgstr ""
 
-#: models.py:507
+#: models.py:508
 msgid "You can save recommendation only with approved recipe"
 msgstr ""
 
-#: models.py:510
+#: models.py:511
 msgid "Invalid chronology of border dates"
 msgstr "Chronologie hraničních dat je porušena"
 
-#: models.py:534
+#: models.py:535
 msgid "Cookbook"
 msgstr "Kuchařka"
 
-#: models.py:535
+#: models.py:536
 msgid "Cookbooks"
 msgstr "Kuchařky"
 
-#: models.py:540
+#: models.py:541
 msgid "Day of the week"
 msgstr "Den v týdnu"
 
-#: models.py:544
+#: models.py:545
 msgid "Menu for even week"
 msgstr "Menu pro sudý týden"
 
-#: models.py:546
+#: models.py:547
 msgid "odd"
 msgstr "lichý"
 
-#: models.py:545
+#: models.py:546
 #, python-format
 msgid "Check if this day menu is for even week. Current week is %s."
 msgstr "Zaškrtněte v případě, je-li menu pro sudý týden. Současný týden je %s."
 
-#: models.py:552
+#: models.py:553
 msgid "Menu of the day"
 msgstr "Denní menu"
 
-#: models.py:553
+#: models.py:554
 msgid "Menus of the day"
 msgstr "Denní menu"
 
-#: models.py:556
+#: models.py:557
 msgid "Even"
 msgstr "Sudý"
 
-#: models.py:556
+#: models.py:557
 msgid "Odd"
 msgstr "Lichý"
 
@@ -771,8 +745,7 @@ msgstr "Lichý"
 msgid "ingredient"
 msgstr "Surovina"
 
-#: urls.py:12
-#: urls.py:13
+#: urls.py:12 urls.py:13
 msgid "cooks"
 msgstr "kuchaři"
 
@@ -785,9 +758,7 @@ msgid "By category"
 msgstr "Dle kategorie"
 
 #~ msgctxt "unit"
-
 #~ msgid "bit"
-
 #~ msgid_plural "bits"
 #~ msgstr[0] "kousek"
 #~ msgstr[1] ""

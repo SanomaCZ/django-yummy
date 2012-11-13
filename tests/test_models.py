@@ -7,7 +7,7 @@ from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django import VERSION as DJANGO_VERSION
-from mock import patch
+from mock import patch, Mock
 
 from nose import tools, SkipTest
 from yummy import conf
@@ -256,16 +256,15 @@ class TestRecipeModel(TestCase):
         tools.assert_equals(True, title in unicode(recipe))
 
     def test_get_top_photo_respect_order(self):
-        print 'given test\n\n\n'
         recipe = create_recipe(owner=self.user, category=self.cat)
 
         photo_1 = Photo.objects.create(width=1, height=1, owner=self.user)
         photo_2 = Photo.objects.create(width=1, height=1, owner=self.user)
 
-        RecipePhoto.objects.create(recipe=recipe, photo=photo_1)
-        RecipePhoto.objects.create(recipe=recipe, photo=photo_2)
+        RecipePhoto.objects.create(pk=100, recipe=recipe, photo=photo_1, is_visible=True)
+        RecipePhoto.objects.create(pk=200, recipe=recipe, photo=photo_2, is_visible=True)
 
-        tools.assert_equals(photo_1.pk, recipe.get_top_photo().pk)
+        tools.assert_equals(photo_2.pk, recipe.get_top_photo().pk)
 
     def test_get_top_photo_fallback(self):
 
