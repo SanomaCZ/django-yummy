@@ -1,6 +1,3 @@
 PIL
 Django>=1.4,<1.5
 south>=0.7
-
-# TODO: remove this dependency from yummy.views
-sorl-thumbnail

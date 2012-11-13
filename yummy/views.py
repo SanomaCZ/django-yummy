@@ -4,15 +4,21 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRespons
 from django.views.generic import ListView, DetailView, View
 from django.utils.simplejson import dumps
 
-from sorl.thumbnail import get_thumbnail
-
 from yummy.models import Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe, Cuisine
 from yummy import conf
 from yummy.utils import import_module_member
 
+
 FUNC_QS_BY_RATING = conf.FUNC_QS_BY_RATING
 if FUNC_QS_BY_RATING:
     FUNC_QS_BY_RATING = import_module_member(FUNC_QS_BY_RATING)
+
+GET_THUMBNAIL_FUNC = conf.GET_THUMBNAIL_FUNC
+if GET_THUMBNAIL_FUNC:
+    GET_THUMBNAIL_FUNC = import_module_member(GET_THUMBNAIL_FUNC)
+    print GET_THUMBNAIL_FUNC
+else:
+    GET_THUMBNAIL_FUNC = lambda img: img
 
 
 class JSONResponseMixin(object):
@@ -86,7 +92,7 @@ class DailyMenu(JSONResponseMixin, View):
                 continue
 
             try:
-                image_url = get_thumbnail(actual_item.get_top_photo().image, '312x312', crop='center').url
+                image_url = GET_THUMBNAIL_FUNC(actual_item.get_top_photo().image).url
             except AttributeError:
                 image_url = ''
 
