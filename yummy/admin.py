@@ -1,11 +1,32 @@
 from django.contrib import admin
+from django.contrib.admin import RelatedFieldListFilter
 from django.contrib.admin.widgets import ForeignKeyRawIdWidget
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from yummy.models import (Category, CookingType, Cuisine, Ingredient,
     IngredientGroup, UnitConversion, Recipe, IngredientInRecipe,
-    IngredientInRecipeGroup, Photo, RecipePhoto, RecipeRecommendation, CookBook, WeekMenu)
+    IngredientInRecipeGroup, Photo, RecipePhoto, RecipeRecommendation,
+    CookBook, WeekMenu)
+
+
+class SubCategoryFilter(RelatedFieldListFilter):
+
+    def __init__(self, field, request, params, model, model_admin, field_path):
+        other_model = Category
+        self.lookup_kwarg = 'category__path__istartswith'
+        self.lookup_kwarg_isnull = 'foo' #not sure what to use here
+        self.lookup_val = request.GET.get(self.lookup_kwarg, None)
+        self.lookup_val_isnull = request.GET.get(self.lookup_kwarg_isnull, None)
+
+        self.lookup_choices = tuple((one.path, one.title) for one in Category.objects.filter(parent__isnull=True))
+        super(RelatedFieldListFilter, self).__init__(
+            field, request, params, model, model_admin, field_path)
+        if hasattr(field, 'verbose_name'):
+            self.lookup_title = field.verbose_name
+        else:
+            self.lookup_title = other_model._meta.verbose_name
+        self.title = self.lookup_title
 
 
 class ApprovedRecipeRaw(ForeignKeyRawIdWidget):
@@ -57,8 +78,14 @@ class RecipeAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     inlines = [IngredientInRecipeInlineAdmin, RecipePhotoInlineAdmin]
     search_fields = ('title',)
-    list_filter = ('is_approved', 'is_public', 'category',)
-    list_display = ('title', 'is_approved', 'is_public')
+    list_filter = ('is_approved', 'is_public', ('category__path', SubCategoryFilter))
+    list_display = ('title', 'category', 'is_approved', 'is_public')
+
+    def lookup_allowed(self, lookup, value):
+        #see https://code.djangoproject.com/ticket/19182
+        if lookup == 'category__path__istartswith':
+            return True
+        return super(RecipeAdmin, self).lookup_allowed(lookup, value)
 
 
 class PhotoAdmin(admin.ModelAdmin):
