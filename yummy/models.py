@@ -303,6 +303,7 @@ class Recipe(models.Model):
     owner = models.ForeignKey(User, verbose_name=_('User'))
     is_approved = models.BooleanField(_('Approved'), default=False, db_index=True)
     is_public = models.BooleanField(_('Public'), default=True)
+    is_checked = models.BooleanField(_("Is checked"), default=False)
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
 

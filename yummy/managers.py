@@ -23,6 +23,9 @@ class RecipeManager(models.Manager):
     def approved(self):
         return self.get_query_set().filter(is_approved=True)
 
+    def checked(self):
+        return self.public().filter(is_checked=True)
+
     def get_query_set(self):
         return super(RecipeManager, self).get_query_set().select_related()
 

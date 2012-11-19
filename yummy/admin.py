@@ -78,8 +78,13 @@ class RecipeAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     inlines = [IngredientInRecipeInlineAdmin, RecipePhotoInlineAdmin]
     search_fields = ('title',)
-    list_filter = ('is_approved', 'is_public', ('category__path', SubCategoryFilter))
+    list_filter = ('is_approved', 'is_public', 'is_checked', ('category__path', SubCategoryFilter))
     list_display = ('title', 'category', 'is_approved', 'is_public')
+    actions = ['set_checked']
+
+    def set_checked(self, request, queryset):
+        queryset.update(is_checked=True)
+    set_checked.short_description = _("Mark given photos as checked")
 
     def lookup_allowed(self, lookup, value):
         #see https://code.djangoproject.com/ticket/19182
