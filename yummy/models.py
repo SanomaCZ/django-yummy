@@ -520,13 +520,33 @@ class RecipeRecommendation(models.Model):
         super(RecipeRecommendation, self).save(*args, **kwargs)
 
 
+class CookBookRecipe(models.Model):
+
+    cookbook = models.ForeignKey('CookBook')
+    recipe = models.ForeignKey('Recipe')
+    note = models.CharField(_("Note"), max_length=255, blank=True)
+    added = models.DateField(_("Added"))
+
+    class Meta:
+        unique_together = (
+            ('cookbook', 'recipe'),
+        )
+        verbose_name = _("Cookbook's recipes")
+        verbose_name = _("Cookbooks' recipes")
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.added = date.today()
+        return super(CookBookRecipe, self).save(*args, **kwargs)
+
+
 class CookBook(models.Model):
 
     owner = models.ForeignKey(User)
     title = models.CharField(_("Title"), max_length=128)
     slug = models.SlugField(_("Slug"), max_length=128)
     is_public = models.BooleanField(_("Public"), default=True)
-    recipes = models.ManyToManyField(Recipe, verbose_name=_('Recipes'))
+    recipes = models.ManyToManyField(Recipe, verbose_name=_('Recipes'), through=CookBookRecipe)
 
     def __unicode__(self):
         return u"%s's cookbok: %s" % (self.owner, self.title)
@@ -535,6 +555,10 @@ class CookBook(models.Model):
         unique_together = (('owner', 'slug'),)
         verbose_name = _('Cookbook')
         verbose_name_plural = _('Cookbooks')
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        return super(CookBook, self).save(*args, **kwargs)
 
 
 class WeekMenu(models.Model):

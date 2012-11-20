@@ -117,3 +117,5 @@ GET_CACHE_FUNCTION = lambda: import_module_member(_CACHE_FUNCTION)
 LISTING_PAGINATE_BY = getattr(settings, 'YUMMY_LISTING_PAGINATE_BY', 15)
 
 GET_THUMBNAIL_FUNC = getattr(settings, 'YUMMY_GET_THUMBNAIL_FUNC', None)
+
+DEFAULT_COOKBOOK = _("Favorite recipes")

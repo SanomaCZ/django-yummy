@@ -1,10 +1,13 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed
-from django.views.generic import ListView, DetailView, View
+from django.shortcuts import render_to_response
+from django.views.generic import ListView, DetailView, View, CreateView
 from django.utils.simplejson import dumps
+from django.utils.translation import ugettext_lazy as _
 
-from yummy.models import Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe, Cuisine
+from yummy.forms import FavoriteRecipeForm
+from yummy.models import Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe, Cuisine, CookBookRecipe
 from yummy import conf
 from yummy.utils import import_module_member
 
@@ -265,3 +268,36 @@ class AuthorList(OrderListView):
 
     def get_queryset(self):
         return User.objects.filter(recipe__is_approved=True).distinct()
+
+
+class FavoriteRecipeAdd(CreateView):
+
+    form_class = FavoriteRecipeForm
+    template_name = 'yummy/cookbook/fill.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(FavoriteRecipeAdd, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        data = super(FavoriteRecipeAdd, self).get_context_data(**kwargs)
+        data['recipe_id'] = self.kwargs['recipe_id']
+        return data
+
+    def get_initial(self):
+        return {
+            'recipe': self.kwargs['recipe_id']
+        }
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return render_to_response('yummy/cookbook/fill_success.html')
+
+    def get(self, request, *args, **kwargs):
+        try:
+            CookBookRecipe.objects.get(recipe_id=kwargs['recipe_id'], cookbook__owner=request.user)
+        except CookBookRecipe.DoesNotExist:
+            return super(FavoriteRecipeAdd, self).get(request, *args, **kwargs)
+        else:
+            return render_to_response('yummy/cookbook/fill_exists.html')

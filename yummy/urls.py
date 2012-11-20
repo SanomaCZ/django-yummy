@@ -2,9 +2,11 @@ from django.conf.urls import patterns, url
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
 
-from yummy.views import (CategoryView, IngredientView, RecipeDetail,
-                         CategoryReorder, DailyMenu, AuthorRecipes, AuthorList,
-                         IngredientGroupView, IngredientDetail, CuisineView, CategoryDetail)
+from yummy.views import (
+    CategoryView, IngredientView, RecipeDetail, CategoryReorder, DailyMenu,
+    AuthorRecipes, AuthorList, IngredientGroupView, IngredientDetail,
+    CuisineView, CategoryDetail, FavoriteRecipeAdd
+)
 
 INGREDIENT = slugify(_("ingredient"))
 
@@ -23,6 +25,7 @@ urlpatterns = patterns('',
 
     url(r'^cuisine/(?P<slug>[\w/-]+)/$', CuisineView.as_view(), name='cuisine_detail'),
 
+    url(r'^cookbook/add/(?P<recipe_id>\d+)/$', FavoriteRecipeAdd.as_view(), name='cookbook_recipe_add'),
 
     url(r'^category_reorder/(?P<order_attr>[\w-]+)/$', CategoryReorder.as_view(), name='category_reorder'),
     url(r'^category_reorder/(?P<order_attr>[\w-]+)/(?P<photo_attr>\w+)/$', CategoryReorder.as_view(), name='category_reorder'),
