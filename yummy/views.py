@@ -1,13 +1,20 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed
+from django.http import (
+    Http404, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed,
+    HttpResponseForbidden
+)
 from django.shortcuts import render_to_response
+from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.views.generic import ListView, DetailView, View, CreateView
 from django.utils.simplejson import dumps
-from django.utils.translation import ugettext_lazy as _
 
 from yummy.forms import FavoriteRecipeForm
-from yummy.models import Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe, Cuisine, CookBookRecipe
+from yummy.models import (
+    Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe,
+    Cuisine, CookBookRecipe
+)
 from yummy import conf
 from yummy.utils import import_module_member
 
@@ -236,6 +243,16 @@ class RecipeDetail(DetailView):
             return self.model.objects.get(pk=self.kwargs.get('recipe_id'), slug=self.kwargs.get('recipe_slug'))
         except self.model.DoesNotExist:
             raise Http404("Given recipe not found")
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not self.object.is_public and self.object.owner != self.request.user:
+            response = render_to_string("yummy/recipe/private.html",
+                                        self.get_context_data(),
+                                        context_instance=RequestContext(request))
+            return HttpResponseForbidden(response)
+
+        return super(RecipeDetail, self).get(request, *args, **kwargs)
 
 
 class AuthorRecipes(CynosureList):
