@@ -548,6 +548,8 @@ class CookBook(models.Model):
     is_public = models.BooleanField(_("Public"), default=True)
     recipes = models.ManyToManyField(Recipe, verbose_name=_('Recipes'), through=CookBookRecipe)
 
+    objects = managers.CookBookManager()
+
     def __unicode__(self):
         return u"%s's cookbok: %s" % (self.owner, self.title)
 
