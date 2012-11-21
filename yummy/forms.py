@@ -18,7 +18,7 @@ class FavoriteRecipeForm(forms.ModelForm):
 
         cookbooks = list(CookBook.objects.filter(owner=self.user))
         if not cookbooks:
-            cookbooks = [CookBook.objects.get_or_create(owner=self.user, title=unicode(conf.DEFAULT_COOKBOOK))]
+            cookbooks = [CookBook.objects.get_or_create(owner=self.user, title=unicode(conf.DEFAULT_COOKBOOK))[0]]
 
         self.fields['cookbook'].choices = [(one.pk, one.title) for one in cookbooks]
 
