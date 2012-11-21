@@ -1,0 +1,33 @@
+{% extends BASE_TEMPLATE %}
+
+{% load i18n %}
+
+{% block content %}
+
+	<div id="content" class="row">
+		<section class="left-column span8">
+
+			<h3 class="title border">
+				{% trans "cookbook" %}: {{ cynosure.title }}
+			</h3>
+
+			{% block items-list %}
+				<div class="cook-list row">
+					{% for one in object_list %}
+						<div class="span4">
+							<a href="{{ one.get_absolute_url }}">
+								{{ one.title }}
+							</a>
+						</div>
+					{% empty %}
+						<h3>
+							{% trans "Cookbook is empty yet" %}
+						</h3>
+					{% endfor %}
+				</div>
+			{% endblock items-list %}
+
+		</section>
+
+	</div>
+{% endblock %}

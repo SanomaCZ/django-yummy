@@ -10,10 +10,10 @@ from django.template.loader import render_to_string
 from django.views.generic import ListView, DetailView, View, CreateView
 from django.utils.simplejson import dumps
 
-from yummy.forms import FavoriteRecipeForm
+from yummy.forms import FavoriteRecipeForm, CookBookAddForm
 from yummy.models import (
     Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe,
-    Cuisine, CookBookRecipe
+    Cuisine, CookBookRecipe, CookBook
 )
 from yummy import conf
 from yummy.utils import import_module_member
@@ -318,3 +318,41 @@ class FavoriteRecipeAdd(CreateView):
             return super(FavoriteRecipeAdd, self).get(request, *args, **kwargs)
         else:
             return render_to_response('yummy/cookbook/fill_exists.html')
+
+
+class CookBookList(CynosureList):
+    template_name = 'yummy/cookbook/list.html'
+
+    def get_cynosure(self):
+        self._cynosure = User.objects.get(username=self.kwargs['username'])
+
+    def get_queryset(self):
+        qs = CookBook.objects.filter(owner=self.cynosure)
+        if self.cynosure != self.request.user:
+            qs = qs.filter(is_public=True)
+        return qs
+
+
+class CookBookDetail(CynosureList):
+    template_name = 'yummy/cookbook/detail.html'
+
+    def get_cynosure(self):
+        self._cynosure = CookBook.objects.get(slug=self.kwargs['cookbook'], owner__username=self.kwargs['username'])
+
+    def get_queryset(self):
+        if self.cynosure.owner != self.request.user:
+            qs = Recipe.objects.public().filter(cookbook=self.cynosure)
+        else:
+            qs = Recipe.objects.filter(cookbook=self.cynosure)
+        return qs
+
+
+class CookbookAdd(CreateView):
+    template_name = 'yummy/cookbook/new.html'
+    model = CookBook
+    form_class = CookBookAddForm
+
+    def get_initial(self):
+        return {
+            'owner': self.request.user
+        }

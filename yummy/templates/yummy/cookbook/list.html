@@ -1,0 +1,27 @@
+{% extends BASE_TEMPLATE %}
+{% load i18n %}
+
+{% block content %}
+	<div id="content" class="row">
+		<section class="left-column span8">
+
+			{% trans "Cookbooks list" %}
+
+			<h3>
+				<a href="{% url yummy:cookbook_add %}">
+					{% trans "Add a new coookbook" %}
+				</a>
+			</h3>
+
+			<div class="cook-list row">
+				{% for one in object_list %}
+					<div class="span4">
+						<a href="{{ one.get_absolute_url }}">
+							{{ one.title }}
+						</a>
+					</div>
+				{% endfor %}
+			</div>
+	</div>
+
+{% endblock %}

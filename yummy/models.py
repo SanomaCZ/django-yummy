@@ -201,9 +201,9 @@ class Category(models.Model):
         cache_key = "%s_get_descendants" % self.pk
         cached_cats = cache.get(cache_key)
         if cached_cats is None or recache:
-            cached_cats = ()
+            cached_cats = []
             for child_category in self.get_children():
-                cached_cats += (child_category,)
+                cached_cats += [child_category]
                 cached_cats += child_category.get_descendants()
 
             cache.set(cache_key, cached_cats)
@@ -537,7 +537,15 @@ class CookBookRecipe(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.added = date.today()
+
+        self.cookbook.get_recipes_count(recache=True)
         return super(CookBookRecipe, self).save(*args, **kwargs)
+
+
+    def delete(self, *args, **kwargs):
+        cookbook = self.cookbook
+        super(CookBookRecipe, self).delete(*args, **kwargs)
+        cookbook.get_recipes_count(recache=True)
 
 
 class CookBook(models.Model):
@@ -561,6 +569,23 @@ class CookBook(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         return super(CookBook, self).save(*args, **kwargs)
+
+    def get_recipes_count(self, recache=False):
+        cache_key = "%s_get_cookbook_recipes" % self.pk
+        recipes_count = cache.get(cache_key)
+        if recipes_count is None or recache:
+            recipes_count = CookBookRecipe.objects.filter(cookbook=self).count()
+            cache.set(cache_key, recipes_count)
+        return recipes_count
+
+    def get_top_photo(self):
+        recipes = self.recipes.all().order_by('id')[:1]
+        if not recipes:
+            return None
+        return recipes[0].get_top_photo()
+
+    def get_absolute_url(self):
+        return reverse('yummy:cookbook_detail', args=(self.owner.username, self.slug))
 
 
 class WeekMenu(models.Model):

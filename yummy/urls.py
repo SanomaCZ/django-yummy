@@ -5,10 +5,12 @@ from django.template.defaultfilters import slugify
 from yummy.views import (
     CategoryView, IngredientView, RecipeDetail, CategoryReorder, DailyMenu,
     AuthorRecipes, AuthorList, IngredientGroupView, IngredientDetail,
-    CuisineView, CategoryDetail, FavoriteRecipeAdd
-)
+    CuisineView, CategoryDetail, FavoriteRecipeAdd, CookBookList,
+    CookBookDetail, CookbookAdd)
+
 
 INGREDIENT = slugify(_("ingredient"))
+COOKBOOK = slugify(_("cookbook"))
 
 urlpatterns = patterns('',
     url(r'^%s/(?P<author_id>[\d]+)/$' % slugify(_("cooks")), AuthorRecipes.as_view(), name='author_recipes'),
@@ -25,7 +27,10 @@ urlpatterns = patterns('',
 
     url(r'^cuisine/(?P<slug>[\w/-]+)/$', CuisineView.as_view(), name='cuisine_detail'),
 
-    url(r'^cookbook/add/(?P<recipe_id>\d+)/$', FavoriteRecipeAdd.as_view(), name='cookbook_recipe_add'),
+    url(r'^%s/add/(?P<recipe_id>\d+)/$' % COOKBOOK, FavoriteRecipeAdd.as_view(), name='cookbook_recipe_add'),
+    url(r'^%s/new/$' % COOKBOOK, CookbookAdd.as_view(), name='cookbook_add'),
+    url(r'^%s/list/(?P<username>[-\w]+)/$' % COOKBOOK, CookBookList.as_view(), name='cookbook_list'),
+    url(r'^%s/list/(?P<username>[-\w]+)/(?P<cookbook>[-\w]+)/$' % COOKBOOK, CookBookDetail.as_view(), name='cookbook_detail'),
 
     url(r'^category_reorder/(?P<order_attr>[\w-]+)/$', CategoryReorder.as_view(), name='category_reorder'),
     url(r'^category_reorder/(?P<order_attr>[\w-]+)/(?P<photo_attr>\w+)/$', CategoryReorder.as_view(), name='category_reorder'),

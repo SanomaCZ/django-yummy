@@ -1,4 +1,6 @@
 from django import forms
+from django.template.defaultfilters import slugify
+from django.utils.translation import ugettext_lazy as _
 
 from yummy.models import CookBookRecipe, CookBook
 
@@ -7,7 +9,7 @@ class FavoriteRecipeForm(forms.ModelForm):
 
     class Meta:
         model = CookBookRecipe
-        fields = ('cookbook', 'note', 'recipe')
+        fields = ('cookbook', 'note', 'recipe',)
 
 
     def __init__(self, *args, **kwargs):
@@ -26,5 +28,24 @@ class FavoriteRecipeForm(forms.ModelForm):
     def clean(self):
         data = self.cleaned_data
         data['owner'] = self.user.pk
+
+        return data
+
+
+class CookBookAddForm(forms.ModelForm):
+
+    class Meta:
+        model = CookBook
+        fields = ('title', 'is_public', 'owner',)
+
+    def __init__(self, *args, **kwargs):
+        super(CookBookAddForm, self).__init__(*args, **kwargs)
+        self.fields['owner'].widget = forms.HiddenInput()
+
+    def clean(self):
+        data = self.cleaned_data
+
+        if CookBook.objects.filter(slug=slugify(data['title']), owner=data['owner']).count():
+            raise forms.ValidationError(_("Cookbook with given title already exists"))
 
         return data
