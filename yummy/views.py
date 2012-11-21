@@ -9,6 +9,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.views.generic import ListView, DetailView, View, CreateView
 from django.utils.simplejson import dumps
+from django.utils.translation import ugettext_lazy as _
 
 from yummy.forms import FavoriteRecipeForm, CookBookAddForm
 from yummy.models import (
@@ -291,6 +292,11 @@ class FavoriteRecipeAdd(CreateView):
 
     form_class = FavoriteRecipeForm
     template_name = 'yummy/cookbook/fill.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden(_("This function is available to logged users only"))
+        return super(FavoriteRecipeAdd, self).dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
         kwargs = super(FavoriteRecipeAdd, self).get_form_kwargs()

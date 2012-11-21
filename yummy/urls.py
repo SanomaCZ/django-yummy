@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, url
+from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
 
@@ -28,7 +29,7 @@ urlpatterns = patterns('',
     url(r'^cuisine/(?P<slug>[\w/-]+)/$', CuisineView.as_view(), name='cuisine_detail'),
 
     url(r'^%s/add/(?P<recipe_id>\d+)/$' % COOKBOOK, FavoriteRecipeAdd.as_view(), name='cookbook_recipe_add'),
-    url(r'^%s/new/$' % COOKBOOK, CookbookAdd.as_view(), name='cookbook_add'),
+    url(r'^%s/new/$' % COOKBOOK, login_required(CookbookAdd.as_view()), name='cookbook_add'),
     url(r'^%s/list/(?P<username>[-\w]+)/$' % COOKBOOK, CookBookList.as_view(), name='cookbook_list'),
     url(r'^%s/list/(?P<username>[-\w]+)/(?P<cookbook>[-\w]+)/$' % COOKBOOK, CookBookDetail.as_view(), name='cookbook_detail'),
 
