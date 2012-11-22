@@ -582,7 +582,7 @@ class CookBook(models.Model):
     def get_top_photo(self):
         recipes = self.recipes.all().order_by('id')[:1]
         if not recipes:
-            return None
+            return ""
         return recipes[0].get_top_photo()
 
     def get_absolute_url(self):
