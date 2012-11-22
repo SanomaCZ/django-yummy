@@ -8,7 +8,9 @@ from yummy import conf
 class CookBookManager(models.Manager):
 
     def create_default(self, user):
-        return self.get_query_set().get_or_create(owner=user, title=unicode(conf.DEFAULT_COOKBOOK))
+        return self.get_query_set().get_or_create(owner=user, is_default=True, defaults={
+            'title': unicode(conf.DEFAULT_COOKBOOK)
+        })
 
 
 class RecipePhotoManager(models.Manager):

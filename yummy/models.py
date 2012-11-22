@@ -555,6 +555,7 @@ class CookBook(models.Model):
     slug = models.SlugField(_("Slug"), max_length=128)
     is_public = models.BooleanField(_("Public"), default=True)
     recipes = models.ManyToManyField(Recipe, verbose_name=_('Recipes'), through=CookBookRecipe)
+    is_default = models.BooleanField(_("Default cookbook"), default=False)
 
     objects = managers.CookBookManager()
 

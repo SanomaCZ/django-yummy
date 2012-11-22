@@ -3,14 +3,14 @@ from django.contrib.messages.storage.base import BaseStorage
 from django.contrib.sessions.backends.file import SessionStore
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponseForbidden
 from django.test import TestCase
 
 from nose import tools
 
 from yummy import conf
 from yummy.models import Category, Cuisine, Recipe, Ingredient, IngredientGroup, CookBook
-from yummy.views import FavoriteRecipeAdd
+from yummy.views import FavoriteRecipeAdd, CookBookRemove, CookBookAdd
 
 
 def init_request():
@@ -107,3 +107,13 @@ class TestCookBookViews(TestCase):
         view(self.request, recipe_id=self.recipe.pk)
 
         tools.assert_equals(1, CookBook.objects.filter(owner=self.user).count())
+
+    def test_delete_default_cookbook_returns_403(self):
+        CookBook.objects.create(is_default=True, owner=self.user, title='foo')
+
+        self.request.method = 'post'
+
+        view = CookBookRemove.as_view()
+        res = view(self.request, slug='foo')
+
+        tools.assert_equals(type(res), HttpResponseForbidden)

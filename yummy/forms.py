@@ -36,7 +36,7 @@ class CookBookAddForm(forms.ModelForm):
 
     class Meta:
         model = CookBook
-        fields = ('title', 'is_public', 'owner',)
+        fields = ('id', 'title', 'is_public', 'owner',)
 
     def __init__(self, *args, **kwargs):
         super(CookBookAddForm, self).__init__(*args, **kwargs)
@@ -45,7 +45,17 @@ class CookBookAddForm(forms.ModelForm):
     def clean(self):
         data = self.cleaned_data
 
-        if CookBook.objects.filter(slug=slugify(data['title']), owner=data['owner']).count():
+        qs = CookBook.objects.filter(slug=slugify(data['title']), owner=data['owner'])
+        if self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
+
+        if qs.count():
             raise forms.ValidationError(_("Cookbook with given title already exists"))
 
         return data
+
+class CookBookDeleteForm(forms.ModelForm):
+
+    class Meta:
+        model = CookBook
+        fields = ('id',)

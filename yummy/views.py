@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
 from django.http import (
     Http404, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed,
     HttpResponseForbidden
@@ -7,11 +8,12 @@ from django.http import (
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
-from django.views.generic import ListView, DetailView, View, CreateView
+from django.views.generic import ListView, DetailView, View, CreateView, UpdateView, DeleteView
 from django.utils.simplejson import dumps
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic.detail import SingleObjectTemplateResponseMixin
 
-from yummy.forms import FavoriteRecipeForm, CookBookAddForm
+from yummy.forms import FavoriteRecipeForm, CookBookAddForm, CookBookDeleteForm
 from yummy.models import (
     Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe,
     Cuisine, CookBookRecipe, CookBook
@@ -353,7 +355,7 @@ class CookBookDetail(CynosureList):
         return qs
 
 
-class CookbookAdd(CreateView):
+class CookBookMixin(SingleObjectTemplateResponseMixin):
     template_name = 'yummy/cookbook/new.html'
     model = CookBook
     form_class = CookBookAddForm
@@ -362,3 +364,35 @@ class CookbookAdd(CreateView):
         return {
             'owner': self.request.user
         }
+
+
+class CookBookAdd(CreateView, CookBookMixin):
+    pass
+
+
+class CookBookEdit(UpdateView, CookBookMixin):
+    pass
+
+
+class CookBookRemove(DeleteView):
+
+    def get_object(self, queryset=None):
+        try:
+            return CookBook.objects.get(slug=self.kwargs['slug'], owner=self.request.user)
+        except CookBook.DoesNotExist:
+            raise Http404(unicode(_("Given cookbook doesn't exists")))
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if self.object.is_default:
+            return HttpResponseForbidden(unicode(_("Cannot delete default cookbook")))
+
+        form = CookBookDeleteForm(data=request.POST, instance=self.object)
+        if form.is_valid():
+            self.object.delete()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('yummy:cookbook_list', args=(self.request.user.username,))
