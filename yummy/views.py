@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
+from django.forms import forms
 from django.http import (
     Http404, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed,
     HttpResponseForbidden
@@ -396,3 +397,38 @@ class CookBookRemove(DeleteView):
 
     def get_success_url(self):
         return reverse('yummy:cookbook_list', args=(self.request.user.username,))
+
+
+class FavoriteRecipeRemove(DeleteView):
+
+    template_name = 'yummy/cookbook/recipe_remove.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden(_("This function is available to logged users only"))
+        return super(FavoriteRecipeRemove, self).dispatch(request, *args, **kwargs)
+
+    def form_invalid(self, form):
+        return render_to_response('yummy/cookbook/recipe_remove_fail.html')
+
+    def form_valid(self, form):
+        self.get_object().delete()
+        return render_to_response('yummy/cookbook/recipe_remove_success.html')
+
+    def get_object(self, queryset=None):
+        try:
+            return CookBookRecipe.objects.get(recipe_id=self.kwargs['recipe_id'], cookbook__owner=self.request.user)
+        except CookBookRecipe.DoesNotExist:
+            raise Http404(unicode("Given recipe not found"))
+
+    def post(self, request, *args, **kwargs):
+        #dummy form to check CSRF
+        form = forms.Form(data=request.POST)
+        if form.is_valid():
+            return self.form_valid(form)
+        return self.form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        data = super(FavoriteRecipeRemove, self).get_context_data(**kwargs)
+        data['form'] = forms.Form()
+        return data

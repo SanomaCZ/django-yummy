@@ -541,7 +541,6 @@ class CookBookRecipe(models.Model):
         self.cookbook.get_recipes_count(recache=True)
         return super(CookBookRecipe, self).save(*args, **kwargs)
 
-
     def delete(self, *args, **kwargs):
         cookbook = self.cookbook
         super(CookBookRecipe, self).delete(*args, **kwargs)
