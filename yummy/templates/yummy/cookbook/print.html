@@ -1,0 +1,16 @@
+<html>
+<head>
+	<script>
+		window.print();
+	</script>
+</head>
+<body>
+{% for one in object_list %}
+
+	{{ one.title }}
+
+	<p style="page-break-after:always;"></p>
+
+{% endfor %}
+</body>
+</html>

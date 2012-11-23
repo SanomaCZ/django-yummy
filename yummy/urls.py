@@ -7,7 +7,8 @@ from yummy.views import (
     CategoryView, IngredientView, RecipeDetail, CategoryReorder, DailyMenu,
     AuthorRecipes, AuthorList, IngredientGroupView, IngredientDetail,
     CuisineView, CategoryDetail, FavoriteRecipeAdd, CookBookList,
-    CookBookDetail, CookBookAdd, CookBookEdit, CookBookRemove, FavoriteRecipeRemove)
+    CookBookDetail, CookBookAdd, CookBookEdit, CookBookRemove,
+    FavoriteRecipeRemove, CookBookPrint)
 
 
 INGREDIENT = slugify(_("ingredient"))
@@ -36,6 +37,8 @@ urlpatterns = patterns('',
     url(r'^%s/new/$' % COOKBOOK, login_required(CookBookAdd.as_view()), name='cookbook_add'),
     url(r'^%s/edit/(?P<slug>[-\w\d]+)/$' % COOKBOOK, login_required(CookBookEdit.as_view()), name='cookbook_edit'),
     url(r'^%s/remove/(?P<slug>[-\w\d]+)/$' % COOKBOOK, login_required(CookBookRemove.as_view()), name='cookbook_remove'),
+    url(r'^%s/print/(?P<username>[-\w\d]+)/(?P<cookbook>[-\w]+)/$' % COOKBOOK, CookBookPrint.as_view(), name='cookbook_print'),
+
 
     url(r'^category_reorder/(?P<order_attr>[\w-]+)/$', CategoryReorder.as_view(), name='category_reorder'),
     url(r'^category_reorder/(?P<order_attr>[\w-]+)/(?P<photo_attr>\w+)/$', CategoryReorder.as_view(), name='category_reorder'),

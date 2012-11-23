@@ -59,7 +59,7 @@ class CynosureList(ListView):
 
     def get(self, request, *args, **kwargs):
         try:
-            self.get_cynosure()
+            self._cynosure = self.get_cynosure()
         except ObjectDoesNotExist:
             raise Http404("Page not found")
         return super(CynosureList, self).get(request, *args, **kwargs)
@@ -144,7 +144,7 @@ class IngredientGroupView(CynosureList):
         return self.model.objects.filter(group=self.cynosure)
 
     def get_cynosure(self):
-        self._cynosure = IngredientGroup.objects.get(slug=self.kwargs['group'])
+        return IngredientGroup.objects.get(slug=self.kwargs['group'])
 
 
 class IngredientDetail(CynosureList):
@@ -156,7 +156,7 @@ class IngredientDetail(CynosureList):
         return Recipe.objects.filter(ingredientinrecipe__ingredient=self.cynosure).distinct()
 
     def get_cynosure(self):
-        self._cynosure = Ingredient.objects.get(slug=self.kwargs['ingredient'])
+        return Ingredient.objects.get(slug=self.kwargs['ingredient'])
 
 
 class OrderListView(ListView):
@@ -206,7 +206,7 @@ class CategoryDetail(CynosureList, CategoryView):
     paginate_by = conf.LISTING_PAGINATE_BY
 
     def get_cynosure(self):
-        self._cynosure = Category.objects.get(path=self.kwargs['path'])
+        return Category.objects.get(path=self.kwargs['path'])
 
     def get_queryset(self):
         qs = super(CategoryDetail, self).get_queryset()
@@ -265,7 +265,7 @@ class AuthorRecipes(CynosureList):
     model = Recipe
 
     def get_cynosure(self):
-        self._cynosure = User.objects.get(pk=self.kwargs['author_id'])
+        return User.objects.get(pk=self.kwargs['author_id'])
 
     def get_queryset(self):
         return self.model.objects.public().filter(owner=self.cynosure)
@@ -277,7 +277,7 @@ class CuisineView(CynosureList):
     template_name = 'yummy/recipe/cuisine.html'
 
     def get_cynosure(self):
-        self._cynosure = Cuisine.objects.get(slug=self.kwargs['slug'])
+        return Cuisine.objects.get(slug=self.kwargs['slug'])
 
     def get_queryset(self):
         return Recipe.objects.public().filter(cuisines=self.cynosure)
@@ -333,7 +333,7 @@ class CookBookList(CynosureList):
     template_name = 'yummy/cookbook/list.html'
 
     def get_cynosure(self):
-        self._cynosure = User.objects.get(username=self.kwargs['username'])
+        return User.objects.get(username=self.kwargs['username'])
 
     def get_queryset(self):
         qs = CookBook.objects.filter(owner=self.cynosure)
@@ -346,7 +346,7 @@ class CookBookDetail(CynosureList):
     template_name = 'yummy/cookbook/detail.html'
 
     def get_cynosure(self):
-        self._cynosure = CookBook.objects.get(slug=self.kwargs['cookbook'], owner__username=self.kwargs['username'])
+        return CookBook.objects.get(slug=self.kwargs['cookbook'], owner__username=self.kwargs['username'])
 
     def get_queryset(self):
         if self.cynosure.owner != self.request.user:
@@ -354,6 +354,17 @@ class CookBookDetail(CynosureList):
         else:
             qs = Recipe.objects.filter(cookbook=self.cynosure)
         return qs
+
+
+class CookBookPrint(CynosureList):
+
+    template_name = 'yummy/cookbook/print.html'
+
+    def get_cynosure(self):
+        return CookBook.objects.get(slug=self.kwargs['cookbook'], owner__username=self.kwargs['username'])
+
+    def get_queryset(self):
+        return Recipe.objects.filter(cookbookrecipe__cookbook=self.cynosure)
 
 
 class CookBookMixin(SingleObjectTemplateResponseMixin):
