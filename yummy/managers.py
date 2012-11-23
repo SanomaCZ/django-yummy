@@ -12,6 +12,15 @@ class CookBookManager(models.Manager):
             'title': unicode(conf.DEFAULT_COOKBOOK)
         })
 
+    def get_user_recipes_count(self, owner, recache=False):
+        cache_key = "%s_get_all_cookbooks_recipes" % owner.pk
+        recipes_count = cache.get(cache_key)
+        if recipes_count is None or recache:
+            from yummy.models import CookBookRecipe
+            recipes_count = CookBookRecipe.objects.filter(cookbook__owner=owner).count()
+            cache.set(cache_key, recipes_count)
+        return recipes_count
+
 
 class RecipePhotoManager(models.Manager):
 

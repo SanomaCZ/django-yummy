@@ -1,7 +1,7 @@
 from datetime import date
 from django import template
 
-from yummy.models import RecipeRecommendation, WeekMenu, Category, CookBookRecipe
+from yummy.models import RecipeRecommendation, WeekMenu, Category, CookBookRecipe, CookBook
 from yummy import conf
 
 register = template.Library()
@@ -111,3 +111,16 @@ def yummy_get_categories(parser, token):
 @register.filter
 def in_cookbook(recipe, owner):
     return bool(CookBookRecipe.objects.filter(recipe=recipe, cookbook__owner=owner).count())
+
+
+@register.simple_tag
+def cookbook_recipes_count(user):
+    """
+    return count of user's favorite recipes
+
+    syntax::
+
+        {% cookbook_recipes_count owner %}
+    """
+    count = CookBook.objects.get_user_recipes_count(owner=user)
+    return count
