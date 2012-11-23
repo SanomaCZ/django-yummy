@@ -383,7 +383,9 @@ class CookBookAdd(CreateView, CookBookMixin):
 
 
 class CookBookEdit(UpdateView, CookBookMixin):
-    pass
+
+    def get_object(self, queryset=None):
+        return CookBook.objects.get(slug=self.kwargs['slug'], owner=self.request.user)
 
 
 class CookBookRemove(DeleteView):
