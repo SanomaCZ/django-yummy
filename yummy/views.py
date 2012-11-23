@@ -412,8 +412,9 @@ class FavoriteRecipeRemove(DeleteView):
         return render_to_response('yummy/cookbook/recipe_remove_fail.html')
 
     def form_valid(self, form):
-        self.get_object().delete()
-        return render_to_response('yummy/cookbook/recipe_remove_success.html')
+        object = self.get_object()
+        object.delete()
+        return render_to_response('yummy/cookbook/recipe_remove_success.html', {'object': object})
 
     def get_object(self, queryset=None):
         try:
