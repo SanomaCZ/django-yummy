@@ -11,6 +11,7 @@ test_requires = [
     'nose',
     'coverage',
     'mock',
+    'PIL',
 ]
 
 long_description = open('README.rst').read()
