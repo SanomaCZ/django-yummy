@@ -10,6 +10,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.views.generic import ListView, DetailView, View, CreateView, UpdateView, DeleteView
+from django.template.defaultfilters import slugify
 from django.utils.simplejson import dumps
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import SingleObjectTemplateResponseMixin
@@ -333,7 +334,7 @@ class CookBookList(CynosureList):
     template_name = 'yummy/cookbook/list.html'
 
     def get_cynosure(self):
-        return User.objects.get(username=self.kwargs['username'])
+        return User.objects.get(pk=self.kwargs['user_id'])
 
     def get_queryset(self):
         qs = CookBook.objects.filter(owner=self.cynosure)
@@ -346,7 +347,7 @@ class CookBookDetail(CynosureList):
     template_name = 'yummy/cookbook/detail.html'
 
     def get_cynosure(self):
-        return CookBook.objects.get(slug=self.kwargs['cookbook'], owner__username=self.kwargs['username'])
+        return CookBook.objects.get(slug=self.kwargs['cookbook'], owner__pk=self.kwargs['user_id'])
 
     def get_queryset(self):
         if self.cynosure.owner != self.request.user:
@@ -361,7 +362,7 @@ class CookBookPrint(CynosureList):
     template_name = 'yummy/cookbook/print.html'
 
     def get_cynosure(self):
-        return CookBook.objects.get(slug=self.kwargs['cookbook'], owner__username=self.kwargs['username'])
+        return CookBook.objects.get(slug=self.kwargs['cookbook'], owner__pk=self.kwargs['user_id'])
 
     def get_queryset(self):
         return Recipe.objects.filter(cookbookrecipe__cookbook=self.cynosure)
@@ -409,7 +410,8 @@ class CookBookRemove(DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse('yummy:cookbook_list', args=(self.request.user.username,))
+        user = self.request.user
+        return reverse('yummy:cookbook_list', args=(slugify(user.username), user.pk,))
 
 
 class FavoriteRecipeRemove(DeleteView):

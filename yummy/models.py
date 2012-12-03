@@ -585,7 +585,8 @@ class CookBook(models.Model):
         return recipes[0].get_top_photo()
 
     def get_absolute_url(self):
-        return reverse('yummy:cookbook_detail', args=(self.owner.username, self.slug))
+        owner = self.owner
+        return reverse('yummy:cookbook_detail', args=(slugify(owner.username), owner.pk, self.slug))
 
 
 class WeekMenu(models.Model):
