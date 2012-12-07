@@ -7,7 +7,7 @@ install_requires = [
     'south>=0.7',
 ]
 
-test_requires = [
+tests_require = [
     'nose',
     'coverage',
     'mock',
@@ -49,5 +49,5 @@ setup(
     install_requires=install_requires,
 
     test_suite='tests.run_tests.run_all',
-    test_requires=test_requires,
+    tests_require=tests_require,
 )
