@@ -1,5 +1,6 @@
 from datetime import date
 from django import template
+from django.core.cache import cache
 
 from yummy.models import RecipeRecommendation, WeekMenu, Category, CookBookRecipe, CookBook
 from yummy import conf
@@ -11,9 +12,17 @@ class RecommendationNode(template.Node):
     def __init__(self, count, varname):
         self.count, self.varname = count, varname
 
+    def _get_recommendations(self):
+        key = 'reciperecommendations:%d' % self.count
+        r = cache.get(key)
+        if r is None:
+            qs = RecipeRecommendation.objects.get_actual()
+            r = tuple(one.recipe for one in qs[:self.count])
+            cache.set(key, r, conf.CACHE_TIMEOUT)
+        return r
+
     def render(self, context):
-        qs = RecipeRecommendation.objects.get_actual()
-        context[self.varname] = tuple(one.recipe for one in qs[:self.count])
+        context[self.varname] = self._get_recommendations()
         return ''
 
 
@@ -55,9 +64,13 @@ def yummy_day_menu():
     :return: context data for inclusion tag decorator
     :rtype: dict
     """
-    menu = WeekMenu.objects.get_actual()
-
     current_day = date.isoweekday(date.today())
+    key = 'yummy_day_menus:%s' % current_day
+    menu = cache.get(key)
+    if menu is None:
+        menu = WeekMenu.objects.get_actual()
+        cache.set(key, menu, conf.CACHE_TIMEOUT_LONG)
+
     return {
         'current_week_day': current_day,
         'current_menu': menu.get(current_day) or {},
