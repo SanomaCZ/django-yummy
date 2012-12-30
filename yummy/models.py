@@ -17,8 +17,10 @@ from django.template.defaultfilters import slugify
 from yummy import conf
 from yummy import managers
 
-
-get_cached_model = conf.GET_CACHE_FUNCTION()
+try:
+    from ella.core.cache.fields import CachedForeignKey
+except ImportError:
+    CachedForeignKey = models.ForeignKey
 
 
 class CookingType(models.Model):
@@ -77,7 +79,7 @@ class IngredientGroup(models.Model):
 
 class Ingredient(models.Model):
 
-    group = models.ForeignKey(IngredientGroup, verbose_name=_('Group'), null=True, blank=True)
+    group = CachedForeignKey(IngredientGroup, verbose_name=_('Group'), null=True, blank=True)
     name = models.CharField(_('Name'), max_length=128)
     slug = models.SlugField(_('Slug'), max_length=64, unique=True)
     genitive = models.CharField(_('Genitive'), max_length=128, blank=True)
@@ -105,6 +107,7 @@ class Ingredient(models.Model):
 
     def get_absolute_url(self):
         return reverse('yummy:ingredient_detail', args=(self.slug,))
+
 
 def upload_to(instance, filename):
     name, ext = path.splitext(filename)
@@ -149,15 +152,16 @@ class Photo(models.Model):
             self.created = now()
         return super(Photo, self).save(*args, **kwargs)
 
+
 class Category(models.Model):
 
     objects = managers.CategoryManager()
 
-    parent = models.ForeignKey('self', null=True, blank=True)
+    parent = CachedForeignKey('self', null=True, blank=True)
     title = models.CharField(_('Title'), max_length=128)
     slug = models.SlugField(_('Slug'), max_length=64)
     # fake recipe photo
-    photo = models.ForeignKey(Photo, verbose_name=_('Photo'), null=True, blank=True)
+    photo = CachedForeignKey(Photo, verbose_name=_('Photo'), null=True, blank=True)
     path = models.CharField(max_length=255, editable=False, unique=True)
     description = models.TextField(_('Description'), blank=True)
 
@@ -170,14 +174,14 @@ class Category(models.Model):
         return self.title
 
     def get_root_ancestor(self):
-        if self.parent_id:
-            return get_cached_model(Category, pk=self.parent_id).get_root_ancestor()
+        if self.parent is not None:
+            return self.parent.get_root_ancestor()
         return self
 
     @property
     def chained_title(self):
-        if self.parent_id:
-            return "%s / %s" % (get_cached_model(Category, pk=self.parent_id).chained_title, self.title)
+        if self.parent:
+            return "%s / %s" % (self.parent.chained_title, self.title)
         return self.title
 
     def get_absolute_url(self):
@@ -285,13 +289,13 @@ class Recipe(models.Model):
 
     title = models.CharField(_('Title'), max_length=128)
     slug = models.SlugField(_('Slug'), max_length=64, unique=True)
-    category = models.ForeignKey(Category, verbose_name=_("Category"))
+    category = CachedForeignKey(Category, verbose_name=_("Category"))
 
     description = models.TextField(_('Short description'), blank=True)
     preparation = models.TextField(_('Preparation'))
     hint = models.TextField(_('Hint'), blank=True)
 
-    cooking_type = models.ForeignKey(CookingType, verbose_name=_('Cooking type'), blank=True, null=True)
+    cooking_type = CachedForeignKey(CookingType, verbose_name=_('Cooking type'), blank=True, null=True)
     cuisines = models.ManyToManyField(Cuisine, verbose_name=_('Cuisines'), blank=True)
     servings = models.PositiveSmallIntegerField(_('No. of servings'), blank=True, null=True)
 
@@ -300,7 +304,7 @@ class Recipe(models.Model):
     preparation_time = models.PositiveSmallIntegerField(_('Preparation time (min)'), blank=True, null=True)
     caloric_value = models.PositiveIntegerField(_('Caloric value'), blank=True, null=True)
 
-    owner = models.ForeignKey(User, verbose_name=_('User'))
+    owner = CachedForeignKey(User, verbose_name=_('User'))
     is_approved = models.BooleanField(_('Approved'), default=False, db_index=True)
     is_public = models.BooleanField(_('Public'), default=True)
     is_checked = models.BooleanField(_("Is checked"), default=False)
@@ -375,7 +379,6 @@ class Recipe(models.Model):
         if groups is None or recache:
             qs = self.ingredientinrecipe_set.all().\
                 select_related('ingredient').\
-                prefetch_related('group').\
                 order_by('group__order', 'order')
 
             tmp_groups = {}
@@ -396,8 +399,8 @@ class RecipePhoto(models.Model):
 
     objects = managers.RecipePhotoManager()
 
-    recipe = models.ForeignKey(Recipe, verbose_name=_('Recipe'))
-    photo = models.ForeignKey(Photo, verbose_name=_('Photo'))
+    recipe = CachedForeignKey(Recipe, verbose_name=_('Recipe'))
+    photo = CachedForeignKey(Photo, verbose_name=_('Photo'))
     is_visible = models.BooleanField(_('Visible'), default=True)
     is_checked = models.BooleanField(_('Checked'), default=False)
     order = models.PositiveSmallIntegerField(_('Order'), db_index=True, blank=True)
@@ -431,7 +434,7 @@ class RecipePhoto(models.Model):
 
 class IngredientInRecipeGroup(models.Model):
 
-    recipe = models.ForeignKey(Recipe, verbose_name=_('Recipe'))
+    recipe = CachedForeignKey(Recipe, verbose_name=_('Recipe'))
     title = models.CharField(_('Title'), max_length=128)
     description = models.TextField(_('Short description'), blank=True)
     order = models.PositiveSmallIntegerField(_('Order'), db_index=True, blank=True)
@@ -451,9 +454,9 @@ class IngredientInRecipeGroup(models.Model):
 
 class IngredientInRecipe(models.Model):
 
-    recipe = models.ForeignKey(Recipe, verbose_name=_('Recipe'))
-    group = models.ForeignKey(IngredientInRecipeGroup, verbose_name=_('Group'), null=True, blank=True)
-    ingredient = models.ForeignKey(Ingredient, verbose_name=_('Ingredient'))
+    recipe = CachedForeignKey(Recipe, verbose_name=_('Recipe'))
+    group = CachedForeignKey(IngredientInRecipeGroup, verbose_name=_('Group'), null=True, blank=True)
+    ingredient = CachedForeignKey(Ingredient, verbose_name=_('Ingredient'))
     amount = models.DecimalField(_('Amount'), max_digits=5, decimal_places=2, null=True, blank=True)
     unit = models.PositiveSmallIntegerField(_('Unit'), choices=conf.UNIT_CHOICES, null=True, blank=True)
     order = models.PositiveSmallIntegerField(_('Order'), db_index=True, blank=True)
@@ -495,7 +498,7 @@ class RecipeRecommendation(models.Model):
     day_to = models.DateField(_("Show until day (inclusive)"), blank=True, null=True,
                               help_text=_("Recipe shown until this day. This field is not required. "
                                             "The longer is recipe shown, the lower priority it has."))
-    recipe = models.ForeignKey(Recipe)
+    recipe = CachedForeignKey(Recipe)
 
     def __unicode__(self):
         return u"'%s', %s - %s" % (self.recipe, self.day_from, (self.day_to or _('until forever')))
@@ -522,8 +525,8 @@ class RecipeRecommendation(models.Model):
 
 class CookBookRecipe(models.Model):
 
-    cookbook = models.ForeignKey('CookBook')
-    recipe = models.ForeignKey('Recipe')
+    cookbook = CachedForeignKey('CookBook')
+    recipe = CachedForeignKey('Recipe')
     note = models.CharField(_("Note"), max_length=255, blank=True)
     added = models.DateField(_("Added"))
 
@@ -549,7 +552,7 @@ class CookBookRecipe(models.Model):
 
 class CookBook(models.Model):
 
-    owner = models.ForeignKey(User)
+    owner = CachedForeignKey(User)
     title = models.CharField(_("Title"), max_length=128)
     slug = models.SlugField(_("Slug"), max_length=128)
     is_public = models.BooleanField(_("Public"), default=True)
@@ -592,9 +595,9 @@ class CookBook(models.Model):
 class WeekMenu(models.Model):
 
     day = models.IntegerField(_("Day of the week"), choices=conf.WEEK_DAYS)
-    soup = models.ForeignKey(Recipe, blank=True, null=True, related_name="menu_soup")
-    meal = models.ForeignKey(Recipe, blank=True, null=True, related_name="menu_meal")
-    dessert = models.ForeignKey(Recipe, blank=True, null=True, related_name="menu_dessert")
+    soup = CachedForeignKey(Recipe, blank=True, null=True, related_name="menu_soup")
+    meal = CachedForeignKey(Recipe, blank=True, null=True, related_name="menu_meal")
+    dessert = CachedForeignKey(Recipe, blank=True, null=True, related_name="menu_dessert")
     even_week = models.BooleanField(_("Menu for even week"), default=False,
                                     help_text=_("Check if this day menu is for even week. Current week is %s." % \
                                                 ugettext("odd" if date.isocalendar(date.today())[1] % 2 else "even")))
