@@ -62,16 +62,25 @@ class IngredientInRecipeInlineAdmin(admin.TabularInline):
     model = IngredientInRecipe
     extra = 1
 
+    def queryset(self, request):
+        return super(IngredientInRecipeInlineAdmin, self).queryset(request).select_related()
+
 
 class IngredientInRecipeGroupInlineAdmin(admin.TabularInline):
     model = IngredientInRecipeGroup
     extra = 1
+
+    def queryset(self, request):
+        return super(IngredientInRecipeGroupInlineAdmin, self).queryset(request).select_related()
 
 
 class RecipePhotoInlineAdmin(admin.TabularInline):
     model = RecipePhoto
     raw_id_fields = ('photo', )
     extra = 1
+
+    def queryset(self, request):
+        return super(RecipePhotoInlineAdmin, self).queryset(request).select_related()
 
 
 class RecipeAdmin(admin.ModelAdmin):
