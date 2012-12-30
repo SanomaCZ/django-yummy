@@ -48,7 +48,7 @@ def yummy_recipe_recommendation(parser, token):
         raise template.TemplateSyntaxError('Usage: {% yummy_recipe_recommendation [<count>] as <variable> %}')
 
     varname = bits[-1]
-    count = conf.RECIPE_RECOMMENDATIONS_COUNT if len(bits) == 3 else bits[1]
+    count = conf.RECIPE_RECOMMENDATIONS_COUNT if len(bits) == 3 else int(bits[1])
 
     return RecommendationNode(count, varname)
 
