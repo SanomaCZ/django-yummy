@@ -87,10 +87,18 @@ class CategoriesNode(template.Node):
         if self.category is not None:
             c = template.Variable(self.category).resolve(context)
             qs = Category.objects.filter(parent=c)
+            pk = c.pk
         else:
             qs = Category.objects.filter(parent__isnull=True)
+            pk = 0
 
-        context[self.varname] = list(qs)
+        key = 'yummy_get_categories:%d' % pk
+        c = cache.get(key)
+        if c is None:
+            c = list(qs)
+            cache.set(key, c, conf.CACHE_TIMEOUT_LONG)
+
+        context[self.varname] = c
         return ''
 
 
