@@ -474,6 +474,13 @@ class IngredientInRecipe(models.Model):
             self.order = IngredientInRecipe.objects.filter(recipe=self.recipe).count() + 1
         super(IngredientInRecipe, self).save(*args, **kwargs)
 
+    @property
+    def inflect_unit(self):
+        f = conf.DICT_UNITS[self.unit]
+        num_parts = str(self.amount).split(".")
+        num = self.amount if len(num_parts) == 1 else 5
+        return f(num)
+
 
 class UnitConversion(models.Model):
 

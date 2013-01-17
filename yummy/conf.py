@@ -1,49 +1,50 @@
 from django.conf import settings
-from django.utils.translation import npgettext, ugettext_lazy as _
+from django.utils.translation import npgettext_lazy, ugettext_lazy as _
 
 from yummy.utils import import_module_member
 
 
 UNITS = (
-    (0, npgettext('unit', 'piece', 'pieces', 1), npgettext('unit', 'pc', 'pcs', 1)),
-    (1, npgettext('unit', 'gram', 'grams', 1), 'g'),
-    (2, npgettext('unit', 'dekagram', 'dekagrams', 1), 'dkg'),
-    (3, npgettext('unit', 'kilogram', 'kilograms', 1), 'kg'),
-    (4, npgettext('unit', 'mililiter', 'mililiters', 1), 'ml'),
-    (5, npgettext('unit', 'deciliter', 'deciliters', 1), 'dl'),
-    (6, npgettext('unit', 'liter', 'liters', 1), 'l'),
-    (7, npgettext('unit', 'packaging', 'packagings', 1), 'pack'), #baleni
-    (8, npgettext('unit', 'package', 'packages', 1), 'pkg'), #balicek
-    (9, npgettext('unit', 'part', 'parts', 1), 'bit'), #dilek
-    (10, npgettext('unit', 'cup', 'cups', 1)), #hrnek
-    (11, npgettext('unit', 'handful', 'handful', 1)), #hrst
-    (12, npgettext('unit', 'drop', 'drops', 1)), #kapka
-    (13, npgettext('unit', 'crubicle', 'crubicles', 1)), #kelimek
-    (14, npgettext('unit', 'can', 'cans', 1)), #plechovka
-    (15, npgettext('unit', 'scoop', 'scoops', 1)), #kopecek
-    (16, npgettext('unit', 'cube', 'cubes', 1)), #kostka
-    (17, npgettext('unit', 'ball', 'balls', 1)), #kulicka
-    (18, npgettext('unit', 'bottle', 'bottles', 1)), #lahev
-    (19, npgettext('unit', 'spoon', 'spoons', 1)), #lzice
-    (20, npgettext('unit', 'teaspoon', 'teaspoons', 1)), #lzicka
-    (21, npgettext('unit', 'bowl', 'bowls', 1)), #miska
-    (22, npgettext('unit', 'bud', 'buds', 1)), #palicka
-    (23, npgettext('unit', 'slice', 'slices', 1)), #platek
-    (24, npgettext('unit', 'tin', 'tins', 1)), #konzerva
-    (25, npgettext('unit', 'jar', 'jars', 1)), #sklenice
-    (26, npgettext('unit', 'sprig', 'sprigs', 1)), #snitka
-    (27, npgettext('unit', 'clove', 'cloves', 1)), #strouzek
-    (28, npgettext('unit', 'bunch', 'bunches', 1)), #svazek
-    (29, npgettext('unit', 'crumb', 'crumbs', 1)), #spetka
-    (30, npgettext('unit', 'teacup', 'teacups', 1)), #salek
-    (31, npgettext('unit', 'twig', 'twigs', 1)), #vetvicka
-    (32, npgettext('unit', 'serving', 'servings', 1)), #porce
-    (33, npgettext('unit', 'leaf', 'leaves', 1)), #list
-    (34, npgettext('unit', 'microphyll', 'microphylles', 1)), #listek, small leaf
-    (35, npgettext('unit', 'batch', 'batches', 1)), #davka
+    (0, lambda c=1: npgettext_lazy('unit', 'piece', 'pieces', c), lambda c=1: npgettext_lazy('unit', 'pc', 'pcs', c)),
+    (1, lambda c=1: npgettext_lazy('unit', 'gram', 'grams', c), 'g'),
+    (2, lambda c=1: npgettext_lazy('unit', 'dekagram', 'dekagrams', c), 'dkg'),
+    (3, lambda c=1: npgettext_lazy('unit', 'kilogram', 'kilograms', c), 'kg'),
+    (4, lambda c=1: npgettext_lazy('unit', 'mililiter', 'mililiters', c), 'ml'),
+    (5, lambda c=1: npgettext_lazy('unit', 'deciliter', 'deciliters', c), 'dl'),
+    (6, lambda c=1: npgettext_lazy('unit', 'liter', 'liters', c), 'l'),
+    (7, lambda c=1: npgettext_lazy('unit', 'packaging', 'packagings', c), 'pack'), #baleni
+    (8, lambda c=1: npgettext_lazy('unit', 'package', 'packages', c), 'pkg'), #balicek
+    (9, lambda c=1: npgettext_lazy('unit', 'part', 'parts', c), 'bit'), #dilek
+    (10, lambda c=1: npgettext_lazy('unit', 'cup', 'cups', c)), #hrnek
+    (11, lambda c=1: npgettext_lazy('unit', 'handful', 'handful', c)), #hrst
+    (12, lambda c=1: npgettext_lazy('unit', 'drop', 'drops', c)), #kapka
+    (13, lambda c=1: npgettext_lazy('unit', 'crubicle', 'crubicles', c)), #kelimek
+    (14, lambda c=1: npgettext_lazy('unit', 'can', 'cans', c)), #plechovka
+    (15, lambda c=1: npgettext_lazy('unit', 'scoop', 'scoops', c)), #kopecek
+    (16, lambda c=1: npgettext_lazy('unit', 'cube', 'cubes', c)), #kostka
+    (17, lambda c=1: npgettext_lazy('unit', 'ball', 'balls', c)), #kulicka
+    (18, lambda c=1: npgettext_lazy('unit', 'bottle', 'bottles', c)), #lahev
+    (19, lambda c=1: npgettext_lazy('unit', 'spoon', 'spoons', c)), #lzice
+    (20, lambda c=1: npgettext_lazy('unit', 'teaspoon', 'teaspoons', c)), #lzicka
+    (21, lambda c=1: npgettext_lazy('unit', 'bowl', 'bowls', c)), #miska
+    (22, lambda c=1: npgettext_lazy('unit', 'bud', 'buds', c)), #palicka
+    (23, lambda c=1: npgettext_lazy('unit', 'slice', 'slices', c)), #platek
+    (24, lambda c=1: npgettext_lazy('unit', 'tin', 'tins', c)), #konzerva
+    (25, lambda c=1: npgettext_lazy('unit', 'jar', 'jars', c)), #sklenice
+    (26, lambda c=1: npgettext_lazy('unit', 'sprig', 'sprigs', c)), #snitka
+    (27, lambda c=1: npgettext_lazy('unit', 'clove', 'cloves', c)), #strouzek
+    (28, lambda c=1: npgettext_lazy('unit', 'bunch', 'bunches', c)), #svazek
+    (29, lambda c=1: npgettext_lazy('unit', 'crumb', 'crumbs', c)), #spetka
+    (30, lambda c=1: npgettext_lazy('unit', 'teacup', 'teacups', c)), #salek
+    (31, lambda c=1: npgettext_lazy('unit', 'twig', 'twigs', c)), #vetvicka
+    (32, lambda c=1: npgettext_lazy('unit', 'serving', 'servings', c)), #porce
+    (33, lambda c=1: npgettext_lazy('unit', 'leaf', 'leaves', c)), #list
+    (34, lambda c=1: npgettext_lazy('unit', 'microphyll', 'microphylles', c)), #listek, small leaf
+    (35, lambda c=1: npgettext_lazy('unit', 'batch', 'batches', c)), #davka
 )
 
-UNIT_CHOICES = tuple(unit[:2] for unit in UNITS)
+UNIT_CHOICES = tuple((unit[0], unit[1]()) for unit in UNITS)
+DICT_UNITS = dict(tuple(unit[:2] for unit in UNITS))
 
 
 PRICING_CHOICES = (
