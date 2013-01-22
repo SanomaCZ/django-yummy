@@ -81,14 +81,13 @@ class WeekMenuManager(models.Manager):
                     select_related('soup', 'meal', 'dessert').\
                     filter(even_week=is_even_week)
 
-        return dict( [(one.day, one) for one in items ] )
+        return dict([(one.day, one) for one in items])
 
 
 class IngredientManager(models.Manager):
 
     def approved(self):
         return self.get_query_set().filter(is_approved=True)
-
 
     def get_names_list(self, recache=False):
         cache_key = 'ingredient_get_names_list'
