@@ -477,6 +477,13 @@ class IngredientInRecipe(models.Model):
     @property
     def inflect_unit(self):
         f = conf.DICT_UNITS[self.unit]
+        i = int(self.amount)
+
+        # if decimal amount is equal to int(amount) return
+        if self.amount == i:
+            return f(i)
+
+        # else use 3th translation form
         num_parts = str(self.amount).split(".")
         num = self.amount if len(num_parts) == 1 else 5
         return f(num)
