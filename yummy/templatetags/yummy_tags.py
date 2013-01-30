@@ -145,3 +145,54 @@ def cookbook_recipes_count(user):
     """
     count = CookBook.objects.get_user_recipes_count(owner=user)
     return count
+
+
+class UserCookbookItemsNode(template.Node):
+    def __init__(self, owner, recipe, count, varname):
+        self.owner, self.recipe = owner, recipe
+        self.count, self.varname = count, varname
+
+    def render(self, context):
+        owner = template.Variable(self.owner).resolve(context)
+        recipe = template.Variable(self.recipe).resolve(context)
+        items = CookBook.objects.get_user_cookbook_items_for_recipe(owner=owner, recipe=recipe)
+        if self.count == 1:
+            try:
+                item = items[0]
+            except IndexError:
+                item = None
+            context[self.varname] = item
+            return ''
+        elif self.count:
+            items = items[:self.count]
+        context[self.varname] = items
+        return ''
+
+
+@register.tag
+def yummy_user_cookbook_items(parser, token):
+    """
+    Get N or all of user's cookbook items for given recipe
+
+    syntax::
+
+        {% yummy_user_cookbook_items owner recipe [<count>] as <var> %}
+
+    examples::
+
+        {% yummy_user_cookbook_items user recipe as user_cookbook_items  %}
+        {% yummy_user_cookbook_items user recipe 5 as user_cookbook_items %}
+
+    """
+
+    bits = token.split_contents()
+
+    if len(bits) not in (5, 6) or bits[-2] != 'as':
+        raise template.TemplateSyntaxError('Usage: {% yummy_user_cookbook_items owner recipe [<count>] as <variable> %}')
+
+    varname = bits[-1]
+    owner = bits[1]
+    recipe = bits[2]
+    count = None if len(bits) == 5 else int(bits[3])
+
+    return UserCookbookItemsNode(owner, recipe, count, varname)

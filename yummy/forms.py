@@ -11,7 +11,6 @@ class FavoriteRecipeForm(forms.ModelForm):
         model = CookBookRecipe
         fields = ('cookbook', 'note', 'recipe',)
 
-
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
 
@@ -24,6 +23,7 @@ class FavoriteRecipeForm(forms.ModelForm):
         self.fields['cookbook'].choices = [(one.pk, one.title) for one in cookbooks]
 
         self.fields['recipe'].widget = forms.HiddenInput()
+        self.fields['note'].widget = forms.Textarea()
 
     def clean(self):
         data = self.cleaned_data
@@ -53,6 +53,7 @@ class CookBookAddForm(forms.ModelForm):
             raise forms.ValidationError(_("Cookbook with given title already exists"))
 
         return data
+
 
 class CookBookDeleteForm(forms.ModelForm):
 

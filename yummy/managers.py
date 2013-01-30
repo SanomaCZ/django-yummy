@@ -21,6 +21,15 @@ class CookBookManager(models.Manager):
             cache.set(cache_key, recipes_count)
         return recipes_count
 
+    def get_user_cookbook_items_for_recipe(self, owner, recipe, recache=False):
+        cache_key = "recipe_%s_cbowner_%s_get_cookbook_items" % (recipe.pk, owner.pk)
+        items = cache.get(cache_key)
+        if items is None or recache:
+            from yummy.models import CookBookRecipe
+            items = CookBookRecipe.objects.filter(cookbook__owner=owner, recipe=recipe)
+            cache.set(cache_key, list(items))
+        return items
+
 
 class RecipePhotoManager(models.Manager):
 

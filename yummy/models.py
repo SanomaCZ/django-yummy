@@ -555,13 +555,22 @@ class CookBookRecipe(models.Model):
         if not self.pk:
             self.added = date.today()
 
+        ret_value = super(CookBookRecipe, self).save(*args, **kwargs)
+
         self.cookbook.get_recipes_count(recache=True)
-        return super(CookBookRecipe, self).save(*args, **kwargs)
+        self.cookbook.__class__.objects.get_user_cookbook_items_for_recipe(self.cookbook.owner,
+                                                                           self.recipe,
+                                                                           recache=True)
+        return ret_value
 
     def delete(self, *args, **kwargs):
         cookbook = self.cookbook
+        recipe = self.recipe
         super(CookBookRecipe, self).delete(*args, **kwargs)
         cookbook.get_recipes_count(recache=True)
+        cookbook.__class__.objects.get_user_cookbook_items_for_recipe(cookbook.owner,
+                                                                      recipe,
+                                                                      recache=True)
 
 
 class CookBook(models.Model):
