@@ -476,6 +476,8 @@ class IngredientInRecipe(models.Model):
 
     @property
     def inflect_unit(self):
+        if self.unit is None or self.amount is None:
+            return ""
         f = conf.DICT_UNITS[self.unit]
         i = int(self.amount)
 
