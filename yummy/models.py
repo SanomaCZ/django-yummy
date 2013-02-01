@@ -418,7 +418,8 @@ class RecipePhoto(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.order:
-            self.order = RecipePhoto.objects.filter(recipe=self.recipe).count() + 1
+            order = RecipePhoto.objects.filter(recipe=self.recipe).values_list('order', flat=True).order_by("-order")
+            self.order = order[0] + 1 if order else 1
         super(RecipePhoto, self).save(*args, **kwargs)
 
     @classmethod
