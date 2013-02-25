@@ -2,7 +2,6 @@ from setuptools import setup, find_packages
 import yummy
 
 install_requires = [
-    'setuptools>=0.6b1',
     'Django>=1.4,<1.5',
     'south>=0.7',
 ]
@@ -48,6 +47,6 @@ setup(
     ],
     install_requires=install_requires,
 
-    test_suite='tests.run_tests.run_all',
+    test_suite='nose.collector',
     tests_require=tests_require,
 )

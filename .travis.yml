@@ -1,6 +1,5 @@
 language: python
 python:
-  - "2.5"
   - "2.6"
   - "2.7"
 install:
@@ -9,4 +8,4 @@ install:
    - python setup.py develop
 env:
   - DJANGO_VERSION=1.4.2
-script: python setup.py test
+script: python setup.py nosetests
