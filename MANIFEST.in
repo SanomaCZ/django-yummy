@@ -6,3 +6,5 @@ recursive-include yummy *
 
 global-exclude .coverage
 global-exclude nosetests.xml
+global-exclude *.pyc
+global-exclude *.pyo
