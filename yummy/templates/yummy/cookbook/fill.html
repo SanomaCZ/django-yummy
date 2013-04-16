@@ -1,4 +1,5 @@
-<form action="{% url yummy:cookbook_recipe_add recipe_id %}" method="POST">
+{% load url from future %}
+<form action="{% url "yummy:cookbook_recipe_add" recipe_id %}" method="POST">
 	{% csrf_token %}
 	{{ form.as_p }}
 	<input type="submit" value="Přidat"/>

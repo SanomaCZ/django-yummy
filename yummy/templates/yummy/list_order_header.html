@@ -1,14 +1,16 @@
+{% load url from future %}
+
 <span>Display:</span>
 <select class="list"  onchange="location.href=this.options[this.selectedIndex].value">
 {% for loop_order_id, loop_order_trans in ranking_attrs.items %}
-	<option {% if current_order_attr == loop_order_id %}selected="selected"{% endif %} value="{% url yummy:category_reorder loop_order_id %}?next_url={{ request.path }}">{{ loop_order_trans }}</option>
+	<option {% if current_order_attr == loop_order_id %}selected="selected"{% endif %} value="{% url "yummy:category_reorder" loop_order_id %}?next_url={{ request.path }}">{{ loop_order_trans }}</option>
 {% endfor %}
 </select>
 {% if current_photo_attr == 'photos' %}
-	<a href="{% url yummy:category_reorder current_order_attr 'all' %}?next_url={{ request.path }}">
+	<a href="{% url "yummy:category_reorder" current_order_attr 'all' %}?next_url={{ request.path }}">
 	<input type="checkbox" checked="checked"/>
 {% else %}
-	<a href="{% url yummy:category_reorder current_order_attr 'photos' %}?next_url={{ request.path }}">
+	<a href="{% url "yummy:category_reorder" current_order_attr 'photos' %}?next_url={{ request.path }}">
 	<input type="checkbox"/>
 {% endif %}<span>only with photos</span>
 </a>

@@ -1,5 +1,6 @@
 {% extends BASE_TEMPLATE %}
 {% load i18n %}
+{% load url from future %}
 
 {% block content %}
 
@@ -8,7 +9,7 @@
 		<ul class="unstyled">
 			{% for one in category.get_descendants %}
 				<li>
-					<a href="{% url yummy:category_detail one.path %}">
+					<a href="{% url "yummy:category_detail" one.path %}">
 						{{ one.title }}
 					</a>
 				</li>
@@ -22,7 +23,7 @@
 
 	{% for one in object_list %}
 		<div class="row">
-			<a href="{% url yummy:recipe_detail one.category.path one.slug one.pk %}">
+			<a href="{% url "yummy:recipe_detail" one.category.path one.slug one.pk %}">
 
 				<div class="span2 thumbnail">
 					<img src="{{ one.get_top_photo }}"/>
