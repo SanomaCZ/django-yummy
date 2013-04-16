@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import yummy
 
 install_requires = [
-    'Django>=1.4,<1.5',
+    'Django>=1.4,<1.6',
     'south>=0.7',
 ]
 

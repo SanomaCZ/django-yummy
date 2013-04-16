@@ -8,4 +8,5 @@ install:
    - python setup.py develop
 env:
   - DJANGO_VERSION=1.4.2
+  - DJANGO_VERSION=1.5.1
 script: python setup.py nosetests
