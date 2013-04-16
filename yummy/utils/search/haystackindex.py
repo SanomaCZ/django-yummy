@@ -58,7 +58,7 @@ class YummyRecipeIndex(indexes.SearchIndex):
     def get_model(self):
         return Recipe
 
-    def index_queryset(self):
+    def index_queryset(self, using=None):
         return self.get_model().objects.public()
 
     def get_updated_field(self):
