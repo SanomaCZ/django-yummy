@@ -198,21 +198,20 @@ class Category(models.Model):
             return True
         return self.is_ancestor_of(category.parent)
 
-    def get_children(self):
-        return self.__class__.objects.filter(parent=self)
-
-    def get_descendants(self, recache=False):
-        cache_key = "%s_get_descendants" % self.pk
+    def get_children(self, recache=False):
+        cache_key = "%s_direct_descendants" % self.pk
         cached_cats = cache.get(cache_key)
         if cached_cats is None or recache:
-            cached_cats = []
-            for child_category in self.get_children():
-                cached_cats += [child_category]
-                cached_cats += child_category.get_descendants()
-
+            cached_cats = list(self.__class__.objects.filter(parent=self))
             cache.set(cache_key, cached_cats)
-
         return cached_cats
+
+    def get_descendants(self, recache=False):
+        cats = []
+        for child_category in self.get_children(recache):
+            cats += [child_category]
+            cats += child_category.get_descendants()
+        return cats
 
     @property
     def level(self):
