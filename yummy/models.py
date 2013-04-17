@@ -5,6 +5,7 @@ from datetime import date
 from django.db import models
 from django.db import IntegrityError
 from django.core.cache import cache
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_str
@@ -296,7 +297,7 @@ class Recipe(models.Model):
 
     cooking_type = CachedForeignKey(CookingType, verbose_name=_('Cooking type'), blank=True, null=True)
     cuisines = models.ManyToManyField(Cuisine, verbose_name=_('Cuisines'), blank=True)
-    servings = models.PositiveSmallIntegerField(_('No. of servings'), choices=[(one, one) for one in xrange(1, 17)], blank=True, null=True)
+    servings = models.PositiveSmallIntegerField(_('No. of servings'), choices=getattr(settings, 'YUMMY_SERVINGS_CHOICES', None), blank=True, null=True)
 
     price = models.SmallIntegerField(_('Price'), choices=conf.PRICING_CHOICES, default=3, db_index=True, null=True, blank=True)
     difficulty = models.PositiveSmallIntegerField(_('Preparation difficulty'), choices=conf.DIFFICULTY_CHOICES, default=3, db_index=True, null=True, blank=True)
