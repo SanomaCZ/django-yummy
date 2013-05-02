@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from yummy.models import (Category, CookingType, Cuisine, Ingredient,
     IngredientGroup, UnitConversion, Recipe, IngredientInRecipe,
     IngredientInRecipeGroup, Photo, RecipePhoto, RecipeRecommendation,
-    CookBook, WeekMenu)
+    CookBook, WeekMenu, ShoppingList, ShoppingListItem)
 
 
 class SubCategoryFilter(RelatedFieldListFilter):
@@ -183,4 +183,5 @@ admin.site.register(WeekMenu, WeekMenuAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(IngredientGroup, IngredientGroupAdmin)
 
-admin.site.register([CookingType, UnitConversion, IngredientInRecipeGroup, IngredientInRecipe, CookBook])
+admin.site.register([CookingType, UnitConversion, IngredientInRecipeGroup, IngredientInRecipe, CookBook,
+                     ShoppingList, ShoppingListItem])
