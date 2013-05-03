@@ -8,11 +8,12 @@ from yummy.views import (
     AuthorRecipes, AuthorList, IngredientGroupView, IngredientDetail,
     CuisineView, CategoryDetail, FavoriteRecipeAdd, CookBookList,
     CookBookDetail, CookBookAdd, CookBookEdit, CookBookRemove,
-    FavoriteRecipeRemove, CookBookPrint)
+    FavoriteRecipeRemove, CookBookPrint, ShoppingListView, ShoppingListDetailView)
 
 
 INGREDIENT = slugify(_("ingredient"))
 COOKBOOK = slugify(_("cookbook"))
+SHOPPING_LIST = slugify(_("Shopping list"))
 
 urlpatterns = patterns('',
     url(r'^%s/(?P<author_id>[\d]+)/$' % slugify(_("cooks")), AuthorRecipes.as_view(), name='author_recipes'),
@@ -32,6 +33,10 @@ urlpatterns = patterns('',
     url(r'^%s/edit/(?P<slug>[-\w\d]+)/$' % COOKBOOK, login_required(CookBookEdit.as_view()), name='cookbook_edit'),
     url(r'^%s/remove/(?P<slug>[-\w\d]+)/$' % COOKBOOK, login_required(CookBookRemove.as_view()), name='cookbook_remove'),
     url(r'^%s/print/(?P<username_slug>[\w-]+)-(?P<user_id>[\d]+)/(?P<cookbook>[-\w]+)/$' % COOKBOOK, CookBookPrint.as_view(), name='cookbook_print'),
+
+    # shopping lists urls
+    url(r'^%s/list/(?P<username_slug>[\w-]+)-(?P<user_id>[\d]+)/$' % SHOPPING_LIST, ShoppingListView.as_view(), name='shopping_lists'),
+    url(r'^%s/list/(?P<username_slug>[\w-]+)-(?P<user_id>[\d]+)/(?P<pk>[\d]+)//$' % SHOPPING_LIST, ShoppingListDetailView.as_view(), name='shopping_list_detail'),
 
     # Must be after cookbook urls becouse of regular check char '/' in cat_path
     url(r'^(?P<cat_path>[\w/-]+)/(?P<recipe_slug>[\w-]+)-(?P<recipe_id>[\d]+)/$', RecipeDetail.as_view(), name='recipe_detail'),

@@ -18,7 +18,7 @@ from django.views.generic.detail import SingleObjectTemplateResponseMixin
 from yummy.forms import FavoriteRecipeForm, CookBookAddForm, CookBookDeleteForm
 from yummy.models import (
     Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe,
-    Cuisine, CookBookRecipe, CookBook
+    Cuisine, CookBookRecipe, CookBook, ShoppingList, ShoppingListItem
 )
 from yummy import conf
 from yummy.utils import import_module_member
@@ -448,3 +448,11 @@ class FavoriteRecipeRemove(DeleteView):
         data = super(FavoriteRecipeRemove, self).get_context_data(**kwargs)
         data['form'] = forms.Form()
         return data
+
+
+class ShoppingListView(ListView):
+    model = ShoppingList
+
+
+class ShoppingListDetailView(DetailView):
+    pass
