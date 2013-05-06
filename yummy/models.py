@@ -1,3 +1,6 @@
+from django.core import serializers
+import simplejson as json
+
 from os import path
 from hashlib import md5
 from datetime import date
@@ -377,9 +380,7 @@ class Recipe(models.Model):
         cache_key = '%s_groupped_ingredients' % self.pk
         groups = cache.get(cache_key)
         if groups is None or recache:
-            qs = self.ingredientinrecipe_set.all().\
-                select_related('ingredient').\
-                order_by('group__order', 'order')
+            qs = IngredientInRecipe.objects.filter(recipe=self).select_related('ingredient').order_by('group__order', 'order')
 
             tmp_groups = {}
             for one in qs:
