@@ -1,6 +1,3 @@
-from django.core import serializers
-import simplejson as json
-
 from os import path
 from hashlib import md5
 from datetime import date
