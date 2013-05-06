@@ -15,7 +15,7 @@ from django.utils.simplejson import dumps
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import SingleObjectTemplateResponseMixin
 
-from yummy.forms import FavoriteRecipeForm, CookBookAddForm, CookBookDeleteForm
+from yummy.forms import FavoriteRecipeForm, CookBookAddForm, CookBookDeleteForm, CookBookEditForm
 from yummy.models import (
     Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe,
     Cuisine, CookBookRecipe, CookBook
@@ -446,5 +446,31 @@ class FavoriteRecipeRemove(DeleteView):
 
     def get_context_data(self, **kwargs):
         data = super(FavoriteRecipeRemove, self).get_context_data(**kwargs)
+        #dummy form to check CSRF
         data['form'] = forms.Form()
         return data
+
+
+class FavoriteRecipeEdit(UpdateView):
+    template_name = 'yummy/cookbook/recipe_edit.html'
+    form_class = CookBookEditForm
+
+    def get_object(self, queryset=None):
+        try:
+            return CookBookRecipe.objects.get(recipe__slug=self.kwargs['slug'],
+                                              cookbook__slug=self.kwargs['cookbook_slug'],
+                                              cookbook__owner=self.request.user)
+        except CookBookRecipe.DoesNotExist:
+            raise Http404(unicode("Given recipe not found"))
+
+    def form_valid(self, form):
+        self.object.note = form.cleaned_data['note']
+        self.object.save()
+
+        return HttpResponse(self.object.note)
+
+    def form_invalid(self, form):
+        self.object.note = form.cleaned_data['note']
+        self.object.save()
+
+        return HttpResponse(self.object.note)
