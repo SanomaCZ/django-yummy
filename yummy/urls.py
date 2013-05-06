@@ -39,7 +39,7 @@ urlpatterns = patterns('',
 
     # shopping lists urls
     url(r'^%s/list/(?P<username_slug>[\w-]+)-(?P<user_id>[\d]+)/$' % SHOPPING_LIST, ShoppingListView.as_view(), name='shopping_lists'),
-    url(r'^%s/list/(?P<username_slug>[\w-]+)-(?P<user_id>[\d]+)/(?P<pk>[\d]+)//$' % SHOPPING_LIST, ShoppingListDetailView.as_view(), name='shopping_list_detail'),
+    url(r'^%s/list/(?P<username_slug>[\w-]+)-(?P<user_id>[\d]+)/(?P<pk>[\d]+)/$' % SHOPPING_LIST, ShoppingListDetailView.as_view(), name='shopping_list_detail'),
 
     # Must be after cookbook urls becouse of regular check char '/' in cat_path
     url(r'^(?P<cat_path>[\w/-]+)/(?P<recipe_slug>[\w-]+)-(?P<recipe_id>[\d]+)/$', RecipeDetail.as_view(), name='recipe_detail'),
