@@ -639,5 +639,36 @@ class WeekMenu(models.Model):
         return u"%s week, day %s" % (_("Even") if self.even_week else _("Odd"), self.get_day_display())
 
 
+class ShoppingList(models.Model):
+
+    owner = CachedForeignKey(User)
+    title = models.CharField(_("Title"), max_length=155)
+    note = models.TextField(_("Note"), blank=True)
+
+    def __unicode__(self):
+        return u"%s: %s" % (_("Shopping list"), self.title)
+
+    class Meta:
+        verbose_name = _("Shopping list")
+        verbose_name_plural = _("Shopping lists")
+
+
+class ShoppingListItem(models.Model):
+
+    shopping_list = CachedForeignKey(ShoppingList)
+    ingredient = CachedForeignKey(Ingredient, verbose_name=_('Ingredient'))
+    amount = models.DecimalField(_('Amount'), max_digits=5, decimal_places=2, null=True, blank=True)
+    unit = models.PositiveSmallIntegerField(_('Unit'), choices=conf.UNIT_CHOICES, null=True, blank=True)
+    note = models.CharField(_('Note'), max_length=255, blank=True)
+
+    def __unicode__(self):
+        return u"%s %s %s" % (self.ingredient, _("in shopping list"), self.shopping_list.title)
+
+    class Meta:
+        unique_together = (('shopping_list', 'ingredient'),)
+        verbose_name = _("Shopping list item")
+        verbose_name_plural = _("Shopping list items")
+
+
 models.signals.post_save.connect(RecipePhoto._bump_photos, sender=RecipePhoto)
 models.signals.post_delete.connect(RecipePhoto._bump_photos, sender=RecipePhoto)
