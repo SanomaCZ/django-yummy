@@ -137,7 +137,7 @@ class Photo(models.Model):
     owner = models.ForeignKey(User, editable=False)
 
     def __unicode__(self):
-        return self.image.url
+        return unicode(self.image.url)
 
     class Meta:
         verbose_name = _('Photo')
