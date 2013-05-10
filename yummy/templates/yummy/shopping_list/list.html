@@ -1,0 +1,28 @@
+{% extends BASE_TEMPLATE %}
+{% load url from future %}
+{% load i18n %}
+
+{% block content %}
+	<div id="content" class="row">
+		<section class="left-column span8">
+
+			{% trans "Shopping lists" %}
+
+			<h3>
+				<a href="{% url 'yummy:shopping_list_add' %}">
+					{% trans "Add a new shopping list" %}
+				</a>
+			</h3>
+
+			<div class="shopping-list row">
+				{% for one in object_list %}
+					<div class="span4">
+						<a href="{{ one.get_absolute_url }}">
+							{{ one.title }}
+						</a>
+					</div>
+				{% endfor %}
+			</div>
+	</div>
+
+{% endblock %}

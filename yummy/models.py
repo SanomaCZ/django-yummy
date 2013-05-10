@@ -451,7 +451,26 @@ class IngredientInRecipeGroup(models.Model):
         super(IngredientInRecipeGroup, self).save(*args, **kwargs)
 
 
-class IngredientInRecipe(models.Model):
+class InflectUnitMixIn(object):
+
+    @property
+    def inflect_unit(self):
+        if self.unit is None or self.amount is None:
+            return ""
+        f = conf.DICT_UNITS[self.unit]
+        i = int(self.amount)
+
+        # if decimal amount is equal to int(amount) return
+        if self.amount == i:
+            return f(i)
+
+        # else use 3th translation form
+        num_parts = str(self.amount).split(".")
+        num = self.amount if len(num_parts) == 1 else 5
+        return f(num)
+
+
+class IngredientInRecipe(models.Model, InflectUnitMixIn):
 
     recipe = CachedForeignKey(Recipe, verbose_name=_('Recipe'))
     group = CachedForeignKey(IngredientInRecipeGroup, verbose_name=_('Group'), null=True, blank=True)
@@ -472,22 +491,6 @@ class IngredientInRecipe(models.Model):
         if not self.order:
             self.order = IngredientInRecipe.objects.filter(recipe=self.recipe).count() + 1
         super(IngredientInRecipe, self).save(*args, **kwargs)
-
-    @property
-    def inflect_unit(self):
-        if self.unit is None or self.amount is None:
-            return ""
-        f = conf.DICT_UNITS[self.unit]
-        i = int(self.amount)
-
-        # if decimal amount is equal to int(amount) return
-        if self.amount == i:
-            return f(i)
-
-        # else use 3th translation form
-        num_parts = str(self.amount).split(".")
-        num = self.amount if len(num_parts) == 1 else 5
-        return f(num)
 
 
 class UnitConversion(models.Model):
@@ -650,8 +653,16 @@ class ShoppingList(models.Model):
         verbose_name = _("Shopping list")
         verbose_name_plural = _("Shopping lists")
 
+    def get_absolute_url(self):
+        owner = self.owner
+        return reverse('yummy:shopping_list_detail', args=(slugify(owner.username),
+                                                           owner.pk,
+                                                           slugify(self.title),
+                                                           self.pk,
+                                                           ))
 
-class ShoppingListItem(models.Model):
+
+class ShoppingListItem(models.Model, InflectUnitMixIn):
 
     shopping_list = CachedForeignKey(ShoppingList)
     ingredient = CachedForeignKey(Ingredient, verbose_name=_('Ingredient'))

@@ -3,7 +3,7 @@ from django.template.defaultfilters import slugify
 from django.utils.html import strip_tags, escape
 from django.utils.translation import ugettext_lazy as _
 
-from yummy.models import CookBookRecipe, CookBook
+from yummy.models import CookBookRecipe, CookBook, ShoppingList
 
 
 class FavoriteRecipeForm(forms.ModelForm):
@@ -76,3 +76,33 @@ class CookBookEditForm(forms.ModelForm):
     def clean_note(self):
         data = self.cleaned_data
         return escape(strip_tags(data['note']))
+
+
+class ShoppingListAddForm(forms.ModelForm):
+
+    class Meta:
+        model = ShoppingList
+        fields = ('id', 'title', 'note', 'owner',)
+
+    def __init__(self, *args, **kwargs):
+        super(ShoppingListAddForm, self).__init__(*args, **kwargs)
+        self.fields['owner'].widget = forms.HiddenInput()
+
+    def clean(self):
+        data = self.cleaned_data
+
+        qs = ShoppingList.objects.filter(title=data['title'], owner=data['owner'])
+        if self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
+
+        if qs.count():
+            raise forms.ValidationError(_("Shopping list with given title already exists"))
+
+        return data
+
+
+class ShoppingListDeleteForm(forms.ModelForm):
+
+    class Meta:
+        model = ShoppingList
+        fields = ('id',)

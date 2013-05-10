@@ -15,7 +15,10 @@ from django.utils.simplejson import dumps
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import SingleObjectTemplateResponseMixin
 
-from yummy.forms import FavoriteRecipeForm, CookBookAddForm, CookBookDeleteForm, CookBookEditForm
+from yummy.forms import (
+    FavoriteRecipeForm, CookBookAddForm, CookBookDeleteForm, CookBookEditForm,
+    ShoppingListAddForm, ShoppingListDeleteForm
+)
 from yummy.models import (
     Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe,
     Cuisine, CookBookRecipe, CookBook, ShoppingList, ShoppingListItem
@@ -165,7 +168,7 @@ class OrderListView(ListView):
 
     def get_objects_count(self):
         return Recipe.objects.public().count()
-        
+
     def get_context_data(self, **kwargs):
         data = super(OrderListView, self).get_context_data(**kwargs)
         data.update({
@@ -194,7 +197,7 @@ class CategoryView(OrderListView):
         order_attr = self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR)
         if order_attr not in conf.CATEGORY_ORDERING.keys():
             order_attr = conf.CATEGORY_ORDER_DEFAULT
-        
+
         if order_attr == 'by_rating' and FUNC_QS_BY_RATING:
             qs = FUNC_QS_BY_RATING(qs)
         else:
@@ -476,9 +479,97 @@ class FavoriteRecipeEdit(UpdateView):
         return HttpResponse(self.object.note)
 
 
-class ShoppingListView(ListView):
+class ShoppingListView(CynosureList):
+    template_name = 'yummy/shopping_list/list.html'
+
+    def get_cynosure(self):
+        return User.objects.get(pk=self.kwargs['user_id'])
+
+    def get_queryset(self):
+        qs = ShoppingList.objects.filter(owner=self.cynosure)
+        return qs
+
+    def get(self, request, *args, **kwargs):
+        return super(CynosureList, self).get(request, *args, **kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            self._cynosure = self.get_cynosure()
+        except ObjectDoesNotExist:
+            raise Http404("Page not found")
+        if self.cynosure != self.request.user:
+            return HttpResponseForbidden(_("Only owner can see this page"))
+        return super(ShoppingListView, self).dispatch(request, *args, **kwargs)
+
+
+class ShoppingListDetailView(CynosureList):
+    template_name = 'yummy/shopping_list/detail.html'
+
+    def get_cynosure(self):
+        return ShoppingList.objects.get(pk=self.kwargs['sl_id'])
+
+    def get_queryset(self):
+        qs = ShoppingListItem.objects.filter(shopping_list=self.cynosure)
+        return qs
+
+    def get(self, request, *args, **kwargs):
+        return super(CynosureList, self).get(request, *args, **kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            self._cynosure = self.get_cynosure()
+        except ObjectDoesNotExist:
+            raise Http404("Page not found")
+        if self.cynosure.owner != self.request.user:
+            return HttpResponseForbidden(_("Only owner can see this page"))
+        return super(ShoppingListDetailView, self).dispatch(request, *args, **kwargs)
+
+
+class ShoppingListPrint(ShoppingListDetailView):
+
+    template_name = 'yummy/shopping_list/print.html'
+
+
+class ShoppingListMixin(SingleObjectTemplateResponseMixin):
+    template_name = 'yummy/shopping_list/new.html'
     model = ShoppingList
+    #TODO: create ShoppingListAddForm
+    form_class = ShoppingListAddForm
+
+    def get_initial(self):
+        return {
+            'owner': self.request.user
+        }
 
 
-class ShoppingListDetailView(DetailView):
+class ShoppingListAdd(CreateView, ShoppingListMixin):
     pass
+
+
+class ShoppingListEdit(UpdateView, ShoppingListMixin):
+
+    def get_object(self, queryset=None):
+        return ShoppingList.objects.get(pk=self.kwargs['sl_id'], owner=self.request.user)
+
+
+class ShoppingListRemove(DeleteView):
+
+    def get_object(self, queryset=None):
+        try:
+            return ShoppingList.objects.get(pk=self.kwargs['sl_id'], owner=self.request.user)
+        except ShoppingList.DoesNotExist:
+            raise Http404(unicode(_("Given shopping list doesn't exists")))
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        #TODO: create ShoppingListDeleteForm
+        form = ShoppingListDeleteForm(data=request.POST, instance=self.object)
+        if form.is_valid():
+            self.object.delete()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        user = self.request.user
+        return reverse('yummy:shopping_lists', args=(slugify(user.username), user.pk,))
