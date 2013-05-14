@@ -678,6 +678,14 @@ class ShoppingListItem(models.Model, InflectUnitMixIn):
         verbose_name = _("Shopping list item")
         verbose_name_plural = _("Shopping list items")
 
+    def add_amount(self, amount):
+        #TODO: use sophisticated algorithm for add
+        self.amount += amount
+
+    def reduce_amount(self, amount):
+        #TODO: use sophisticated algorithm for reduce
+        amount = self.amount - amount
+        self.amount = amount if amount > 0 else 0
 
 models.signals.post_save.connect(RecipePhoto._bump_photos, sender=RecipePhoto)
 models.signals.post_delete.connect(RecipePhoto._bump_photos, sender=RecipePhoto)

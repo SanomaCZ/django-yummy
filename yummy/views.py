@@ -533,7 +533,6 @@ class ShoppingListPrint(ShoppingListDetailView):
 class ShoppingListMixin(SingleObjectTemplateResponseMixin):
     template_name = 'yummy/shopping_list/new.html'
     model = ShoppingList
-    #TODO: create ShoppingListAddForm
     form_class = ShoppingListAddForm
 
     def get_initial(self):
@@ -563,7 +562,6 @@ class ShoppingListRemove(DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
 
-        #TODO: create ShoppingListDeleteForm
         form = ShoppingListDeleteForm(data=request.POST, instance=self.object)
         if form.is_valid():
             self.object.delete()
