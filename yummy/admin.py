@@ -61,6 +61,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class IngredientInRecipeInlineAdmin(admin.TabularInline):
     model = IngredientInRecipe
     extra = 1
+    raw_id_fields = ('group', 'ingredient')
 
     def queryset(self, request):
         return super(IngredientInRecipeInlineAdmin, self).queryset(request).select_related()
@@ -89,6 +90,8 @@ class RecipeAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     list_filter = ('is_approved', 'is_public', 'is_checked', ('category__path', SubCategoryFilter))
     list_display = ('title', 'category', 'is_approved', 'is_public')
+    raw_id_fields = ('owner',)
+
     actions = ['set_checked']
 
     def set_checked(self, request, queryset):
