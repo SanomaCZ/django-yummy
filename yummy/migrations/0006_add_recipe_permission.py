@@ -10,7 +10,7 @@ class Migration(DataMigration):
         "Write your forwards methods here."
         # Note: Remember to use orm['appname.ModelName'] rather than "from appname.models..."
         ct = orm['contenttypes.ContentType'].objects.get(model='recipe', app_label='yummy')
-        orm['auth.permission'].objects.create(content_type=ct, codename='approve_recipe', name=u'Can approve recipe')
+        orm['auth.permission'].objects.get_or_create(content_type=ct, codename='approve_recipe', defaults=dict(name=u'Can approve recipe'))
 
     def backwards(self, orm):
         "Write your backwards methods here."
