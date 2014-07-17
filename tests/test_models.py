@@ -7,13 +7,32 @@ from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django import VERSION as DJANGO_VERSION
-from mock import patch, Mock
+from mock import patch
 
 from nose import tools, SkipTest
 from yummy import conf
 
-from yummy.models import ( Category, Recipe, RecipeRecommendation, CookingType,
-    Cuisine, WeekMenu, IngredientGroup, Ingredient, Photo, RecipePhoto, IngredientInRecipe, IngredientInRecipeGroup)
+from yummy.models import (
+    Category,
+    Recipe,
+    RecipeRecommendation,
+    CookingType,
+    Cuisine,
+    WeekMenu,
+    IngredientGroup,
+    Ingredient,
+    Photo,
+    RecipePhoto,
+    IngredientInRecipe,
+    IngredientInRecipeGroup,
+)
+
+try:
+    import ella
+except ImportError:
+    IS_ELLA_INSTALLED = False
+else:
+    IS_ELLA_INSTALLED = True
 
 
 class MockedDate(date):
@@ -49,7 +68,7 @@ class TestRecipeRecommendationModel(TestCase):
         tools.assert_raises(IntegrityError, lambda: RecipeRecommendation.objects.create(
             recipe=self.recipe,
             day_from=today,
-            day_to=today-timedelta(days=1)
+            day_to=today - timedelta(days=1)
             ))
 
     def test_valid_date_range_save_pass(self):
@@ -85,8 +104,8 @@ class TestRecipeRecommendationModel(TestCase):
         today = date.today()
         RecipeRecommendation.objects.create(
             recipe=self.recipe,
-            day_from=today-timedelta(days=2),
-            day_to=today-timedelta(days=1),
+            day_from=today - timedelta(days=2),
+            day_to=today - timedelta(days=1),
         )
 
         tools.assert_equals([], list(RecipeRecommendation.objects.get_actual()))
@@ -94,7 +113,7 @@ class TestRecipeRecommendationModel(TestCase):
     def test_recommendation_manager_get_actual_priorized_by_start_date(self):
         today = date.today()
 
-        r1 = RecipeRecommendation.objects.create(
+        RecipeRecommendation.objects.create(
             recipe=self.recipe,
             day_from=today - timedelta(days=2),
             day_to=today + timedelta(days=1),
@@ -107,7 +126,6 @@ class TestRecipeRecommendationModel(TestCase):
         )
 
         tools.assert_equals(r2, RecipeRecommendation.objects.get_actual()[0])
-
 
 
 class TestCategoryModel(TestCase):
@@ -158,8 +176,10 @@ class TestCategoryModel(TestCase):
         tools.assert_false(new_c_no.path_is_unique())
 
     def test_path_changed_correctly(self):
+        if IS_ELLA_INSTALLED:
+            raise SkipTest()
         c01 = Category.objects.create(title="Jajky", slug="jajky")
-        c12 = Category.objects.create(parent=self.c1, title="Mňam mňam", slug="mnam-mnam-2")
+        Category.objects.create(parent=self.c1, title="Mňam mňam", slug="mnam-mnam-2")
         self.c1.parent = c01
         self.c1.save()
         cx = Category.objects.get(slug="mnam-mnam-2")
@@ -171,7 +191,7 @@ class TestCategoryModel(TestCase):
         tools.assert_equal(2, self.c1.level)
 
     def test_get_children(self):
-        c01 = Category.objects.create(title="Jajky", slug="jajky")
+        Category.objects.create(title="Jajky", slug="jajky")
         c12 = Category.objects.create(parent=self.c1, title="Mňam mňam", slug="mnam-mnam-2")
 
         tools.assert_equal(self.c1, self.c0.get_children()[0])
@@ -194,7 +214,7 @@ class TestCategoryModel(TestCase):
         tools.assert_equal(u"Mňam mňam", "%s" % self.c1.__unicode__())
 
     def test_get_chained_title(self):
-        c2 =  Category.objects.create(parent=self.c1, title=u"Kůň", slug="kun")
+        c2 = Category.objects.create(parent=self.c1, title=u"Kůň", slug="kun")
         tools.assert_equal(u"Ámen / Mňam mňam / Kůň", "%s" % c2.chained_title)
 
     def test_select_related(self):
@@ -207,14 +227,14 @@ class TestCategoryModel(TestCase):
         tools.assert_equal('/category/amen/mnam-mnam/', self.c1.get_absolute_url())
 
     def test_cat_update_doesnt_complain_about_path_nonuniqueness(self):
-        cat =  Category.objects.create(title="foo", slug="foo")
+        cat = Category.objects.create(title="foo", slug="foo")
         cat.save()
-        cat.clean() #expected to doesnt raise ValidationError
+        cat.clean()  # expected to doesnt raise ValidationError
 
     def test_different_cat_with_same_path_raises_validation_error(self):
-        cat =  Category.objects.create(title="foo", slug="foo")
+        cat = Category.objects.create(title="foo", slug="foo")
         cat.save()
-        cat.clean() #expected to doesnt raise ValidationError
+        cat.clean()  # expected to doesnt raise ValidationError
 
         cat2 = Category(title='foo', slug='foo')
         tools.assert_raises(ValidationError, cat2.clean)
@@ -282,15 +302,16 @@ class TestCookingTypeModel(TestCase):
         cache.clear()
 
     def test_unique_slug_violation_raises(self):
-        cook_type = CookingType.objects.create(name='foobar')
+        CookingType.objects.create(name='foobar')
 
         tools.assert_raises(IntegrityError, lambda: CookingType.objects.create(name='foobar'))
 
     def test_unicode_pass(self):
-        name=u'vegetariánská díákrítíká'
+        name = u'vegetariánská díákrítíká'
         cook_type = CookingType.objects.create(name=name)
 
         tools.assert_equals(True, name in unicode(cook_type))
+
 
 class TestCuisineModel(TestCase):
 
@@ -304,7 +325,7 @@ class TestCuisineModel(TestCase):
         tools.assert_raises(IntegrityError, lambda: Cuisine.objects.create(name='foobar'))
 
     def test_unicode_pass(self):
-        name=u'árménská kúchýně'
+        name = u'árménská kúchýně'
         cook_type = Cuisine.objects.create(name=name)
         tools.assert_equals(True, name in unicode(cook_type))
 
@@ -321,7 +342,7 @@ class TestIngredientGroupModel(TestCase):
         tools.assert_raises(IntegrityError, lambda: IngredientGroup.objects.create(name='foobar'))
 
     def test_unicode_pass(self):
-        name=u'árménská'
+        name = u'árménská'
         group = IngredientGroup.objects.create(name=name)
         tools.assert_equals(True, name in unicode(group))
 
@@ -341,7 +362,7 @@ class TestIngredientModel(TestCase):
                                 default_unit=conf.UNITS[0][0]))
 
     def test_unicode_pass(self):
-        name=u'čokoláda'
+        name = u'čokoláda'
         ingredient = Ingredient.objects.create(name=name, default_unit=conf.UNITS[0][0])
         tools.assert_equals(True, name in unicode(ingredient))
 
@@ -411,7 +432,6 @@ class TestIngredientInRecipe(TestCase):
 
         tools.assert_equals(ir1.order, 1)
         tools.assert_equals(ir2.order, 2)
-
 
 
 class TestIngredientInRecipeGroup(TestCase):

@@ -1,3 +1,2 @@
-PIL
+Pillow
 Django>=1.4,<1.6
-south==1.0
