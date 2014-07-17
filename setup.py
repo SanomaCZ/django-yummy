@@ -3,7 +3,7 @@ import yummy
 
 install_requires = [
     'Django>=1.4,<1.6',
-    'south==0.7.6',
+    'south==1.0',
 ]
 
 tests_require = [
