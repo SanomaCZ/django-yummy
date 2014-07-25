@@ -9,10 +9,9 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_str
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import string_concat, ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.utils.timezone import now
-from django.utils.translation.trans_real import ugettext
 from django.template.defaultfilters import slugify
 
 from yummy import conf
@@ -619,12 +618,18 @@ class CookBook(models.Model):
 class WeekMenu(models.Model):
 
     day = models.IntegerField(_("Day of the week"), choices=conf.WEEK_DAYS)
-    soup = CachedForeignKey(Recipe, blank=True, null=True, related_name="menu_soup")
-    meal = CachedForeignKey(Recipe, blank=True, null=True, related_name="menu_meal")
-    dessert = CachedForeignKey(Recipe, blank=True, null=True, related_name="menu_dessert")
-    even_week = models.BooleanField(_("Menu for even week"), default=False,
-                                    help_text=_("Check if this day menu is for even week. Current week is %s." % \
-                                                ugettext("odd" if date.isocalendar(date.today())[1] % 2 else "even")))
+    soup = CachedForeignKey(Recipe, blank=True, null=True, related_name="menu_soup", verbose_name=_('Soup'))
+    meal = CachedForeignKey(Recipe, blank=True, null=True, related_name="menu_meal", verbose_name=_('Meal'))
+    dessert = CachedForeignKey(Recipe, blank=True, null=True, related_name="menu_dessert", verbose_name=_('Dessert'))
+    even_week = models.BooleanField(
+        _("Menu for even week"),
+        default=False,
+        help_text=string_concat(
+            _("Check if this day menu is for even week. Current week is "),
+            _("odd") if date.isocalendar(date.today())[1] % 2 else _("even"),
+            "."
+        )
+    )
 
     objects = managers.WeekMenuManager()
 

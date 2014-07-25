@@ -1,3 +1,5 @@
+from json import dumps
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
@@ -11,7 +13,6 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.views.generic import ListView, DetailView, View, CreateView, UpdateView, DeleteView
 from django.template.defaultfilters import slugify
-from django.utils.simplejson import dumps
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import SingleObjectTemplateResponseMixin
 

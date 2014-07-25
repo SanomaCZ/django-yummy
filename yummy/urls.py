@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 
 from yummy.views import (
