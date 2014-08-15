@@ -322,13 +322,16 @@ class FavoriteRecipeAdd(CreateView):
         self.object = form.save()
         return render_to_response('yummy/cookbook/fill_success.html')
 
-    def get(self, request, *args, **kwargs):
-        try:
-            CookBookRecipe.objects.get(recipe_id=kwargs['recipe_id'], cookbook__owner=request.user)
-        except CookBookRecipe.DoesNotExist:
-            return super(FavoriteRecipeAdd, self).get(request, *args, **kwargs)
-        else:
+    def get_response_for_method(self, method, request, *args, **kwargs):
+        if CookBook.objects.get_user_cookbook_items_for_recipe(owner=request.user, recipe=kwargs['recipe_id']):
             return render_to_response('yummy/cookbook/fill_exists.html')
+        return getattr(super(FavoriteRecipeAdd, self), method)(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return self.get_response_for_method('get', request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.get_response_for_method('post', request, *args, **kwargs)
 
 
 class CookBookList(CynosureList):

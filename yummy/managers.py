@@ -1,6 +1,7 @@
 from datetime import date
 from django.core.cache import cache
 from django.db import models
+from django.db.models.loading import get_model
 
 from yummy import conf
 
@@ -22,11 +23,12 @@ class CookBookManager(models.Manager):
         return recipes_count
 
     def get_user_cookbook_items_for_recipe(self, owner, recipe, recache=False):
-        cache_key = "recipe_%s_cbowner_%s_get_cookbook_items" % (recipe.pk, owner.pk)
+        recipe_id = isinstance(recipe, get_model('yummy', 'recipe')) and recipe.pk or recipe
+        cache_key = "recipe_%s_cbowner_%s_get_cookbook_items" % (recipe_id, owner.pk)
         items = cache.get(cache_key)
         if items is None or recache:
             from yummy.models import CookBookRecipe
-            items = CookBookRecipe.objects.filter(cookbook__owner=owner, recipe=recipe)
+            items = CookBookRecipe.objects.filter(cookbook__owner=owner, recipe__pk=recipe_id)
             cache.set(cache_key, list(items))
         return items
 
