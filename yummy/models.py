@@ -83,8 +83,10 @@ class Ingredient(models.Model):
     name = models.CharField(_('Name'), max_length=128)
     slug = models.SlugField(_('Slug'), max_length=64, unique=True)
     genitive = models.CharField(_('Genitive'), max_length=128, blank=True)
-    default_unit = models.PositiveSmallIntegerField(choices=conf.UNIT_CHOICES,
-        verbose_name=_('Default unit'), null=True, blank=True)
+    default_unit = models.PositiveSmallIntegerField(
+        choices=conf.UNIT_CHOICES,
+        verbose_name=_('Default unit'), null=True, blank=True
+    )
 
     ndb_no = models.IntegerField(_('NDB id number'), blank=True, null=True)
     is_approved = models.BooleanField(_('Approved'), default=True, db_index=True)
@@ -511,7 +513,7 @@ class RecipeRecommendation(models.Model):
     day_from = models.DateField(_("Show from day"), help_text=_("Recipe will show itself starting this day"))
     day_to = models.DateField(_("Show until day (inclusive)"), blank=True, null=True,
                               help_text=_("Recipe shown until this day. This field is not required. "
-                                            "The longer is recipe shown, the lower priority it has."))
+                                          "The longer is recipe shown, the lower priority it has."))
     recipe = CachedForeignKey(Recipe)
 
     def __unicode__(self):

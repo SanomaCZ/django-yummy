@@ -19,7 +19,7 @@ from django.views.generic.detail import SingleObjectTemplateResponseMixin
 from yummy.forms import FavoriteRecipeForm, CookBookAddForm, CookBookDeleteForm, CookBookEditForm
 from yummy.models import (
     Category, Ingredient, Recipe, WeekMenu, IngredientGroup, IngredientInRecipe,
-    Cuisine, CookBookRecipe, CookBook, ShoppingList, ShoppingListItem
+    Cuisine, CookBookRecipe, CookBook, ShoppingList
 )
 from yummy import conf
 from yummy.utils import import_module_member
@@ -93,7 +93,7 @@ class DailyMenu(JSONResponseMixin, View):
             return HttpResponseNotAllowed("Allowed AJAX request only")
 
         menu_days = WeekMenu.objects.get_actual()
-        menu_data = dict( [(one, {}) for one in range(1,8)] )
+        menu_data = dict([(one, {}) for one in range(1, 8)])
         for day_index, day_menu in menu_days.items():
             menu_data[day_index] = self.arrange_menu_item(day_menu)
 
@@ -166,7 +166,7 @@ class OrderListView(ListView):
 
     def get_objects_count(self):
         return Recipe.objects.public().count()
-        
+
     def get_context_data(self, **kwargs):
         data = super(OrderListView, self).get_context_data(**kwargs)
         data.update({
@@ -195,7 +195,7 @@ class CategoryView(OrderListView):
         order_attr = self.request.COOKIES.get(conf.CATEGORY_ORDER_ATTR)
         if order_attr not in conf.CATEGORY_ORDERING.keys():
             order_attr = conf.CATEGORY_ORDER_DEFAULT
-        
+
         if order_attr == 'by_rating' and FUNC_QS_BY_RATING:
             qs = FUNC_QS_BY_RATING(qs)
         else:
@@ -219,7 +219,7 @@ class CategoryDetail(CynosureList, CategoryView):
 
 class CategoryReorder(View):
     def get(self, request, *args, **kwargs):
-        #TODO - check or sign next_url (see Entree)
+        # TODO - check or sign next_url (see Entree)
         next_url = request.GET.get('next_url') or '/'
         response = HttpResponseRedirect(next_url)
 
@@ -431,9 +431,9 @@ class FavoriteRecipeRemove(DeleteView):
         return render_to_response('yummy/cookbook/recipe_remove_fail.html')
 
     def form_valid(self, form):
-        object = self.get_object()
-        object.delete()
-        return render_to_response('yummy/cookbook/recipe_remove_success.html', {'object': object})
+        obj = self.get_object()
+        obj.delete()
+        return render_to_response('yummy/cookbook/recipe_remove_success.html', {'object': obj})
 
     def get_object(self, queryset=None):
         try:
@@ -442,7 +442,7 @@ class FavoriteRecipeRemove(DeleteView):
             raise Http404(unicode("Given recipe not found"))
 
     def post(self, request, *args, **kwargs):
-        #dummy form to check CSRF
+        # dummy form to check CSRF
         form = forms.Form(data=request.POST)
         if form.is_valid():
             return self.form_valid(form)
@@ -450,7 +450,7 @@ class FavoriteRecipeRemove(DeleteView):
 
     def get_context_data(self, **kwargs):
         data = super(FavoriteRecipeRemove, self).get_context_data(**kwargs)
-        #dummy form to check CSRF
+        # dummy form to check CSRF
         data['form'] = forms.Form()
         return data
 
