@@ -113,7 +113,11 @@ class Ingredient(models.Model):
 
 def upload_to(instance, filename):
     name, ext = path.splitext(filename)
-    to_hash = '|'.join((name, now().strftime('%Y-%m-%d %H:%M:%S'), smart_str(instance.owner)))
+    to_hash = '|'.join((
+        slugify(name),
+        now().strftime('%Y-%m-%d %H:%M:%S'),
+        smart_str(instance.owner),
+    ))
     h = md5(to_hash).hexdigest()
 
     return path.join(
