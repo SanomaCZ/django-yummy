@@ -480,19 +480,30 @@ class IngredientInRecipe(models.Model):
 
     @property
     def inflect_unit(self):
+        def _get_magic_unit():
+            if conf.ALLOW_MAGIC_UNITS_TRANSFORM:
+                res = f(5)
+                res = ''.join([res[0:-1], slugify(res[-1])])
+            else:
+                res = f(1)
+            return res
+
         if self.unit is None or self.amount is None:
             return ""
-        f = conf.DICT_UNITS[self.unit]
+        f, amount_for_decimal = conf.DICT_UNITS[self.unit]
         i = int(self.amount)
 
         # if decimal amount is equal to int(amount) return
         if self.amount == i:
             return f(i)
 
-        # else use 3th translation form
+        # else construct magic unit
         num_parts = str(self.amount).split(".")
-        num = self.amount if len(num_parts) == 1 else 5
-        return f(num)
+        if len(num_parts) == 1:
+            res = f(self.amount)
+        else:
+            res = amount_for_decimal == 'm' and _get_magic_unit() or f(amount_for_decimal)
+        return res
 
 
 class UnitConversion(models.Model):
