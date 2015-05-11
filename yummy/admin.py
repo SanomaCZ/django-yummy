@@ -63,16 +63,26 @@ class IngredientInRecipeInlineAdmin(admin.TabularInline):
     extra = 1
     raw_id_fields = ('group', 'ingredient')
 
-    def queryset(self, request):
-        return super(IngredientInRecipeInlineAdmin, self).queryset(request).select_related()
+    def get_queryset(self, request):
+        parent = super(IngredientInRecipeInlineAdmin, self)
+        queryset_method = hasattr(parent, 'get_queryset') and getattr(parent, 'get_queryset') or getattr(parent, 'queryset')
+        return queryset_method(request).select_related()
+
+    # backward compatibility
+    queryset = get_queryset
 
 
 class IngredientInRecipeGroupInlineAdmin(admin.TabularInline):
     model = IngredientInRecipeGroup
     extra = 1
 
-    def queryset(self, request):
-        return super(IngredientInRecipeGroupInlineAdmin, self).queryset(request).select_related()
+    def get_queryset(self, request):
+        parent = super(IngredientInRecipeGroupInlineAdmin, self)
+        queryset_method = hasattr(parent, 'get_queryset') and getattr(parent, 'get_queryset') or getattr(parent, 'queryset')
+        return queryset_method(request).select_related()
+
+    # backward compatibility
+    queryset = get_queryset
 
 
 class RecipePhotoInlineAdmin(admin.TabularInline):
@@ -80,8 +90,13 @@ class RecipePhotoInlineAdmin(admin.TabularInline):
     raw_id_fields = ('photo', )
     extra = 1
 
-    def queryset(self, request):
-        return super(RecipePhotoInlineAdmin, self).queryset(request).select_related()
+    def get_queryset(self, request):
+        parent = super(RecipePhotoInlineAdmin, self)
+        queryset_method = hasattr(parent, 'get_queryset') and getattr(parent, 'get_queryset') or getattr(parent, 'queryset')
+        return queryset_method(request).select_related()
+
+    # backward compatibility
+    queryset = get_queryset
 
 
 class RecipeAdmin(admin.ModelAdmin):
@@ -99,7 +114,7 @@ class RecipeAdmin(admin.ModelAdmin):
     set_checked.short_description = _("Mark given photos as checked")
 
     def lookup_allowed(self, lookup, value):
-        #see https://code.djangoproject.com/ticket/19182
+        # see https://code.djangoproject.com/ticket/19182
         if lookup == 'category__path__istartswith':
             return True
         return super(RecipeAdmin, self).lookup_allowed(lookup, value)

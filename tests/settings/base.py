@@ -133,3 +133,5 @@ INSTALLED_APPS = (
 
     'yummy',
 )
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'

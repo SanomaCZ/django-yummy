@@ -9,7 +9,7 @@ from yummy import conf
 class CookBookManager(models.Manager):
 
     def create_default(self, user):
-        return self.get_query_set().get_or_create(owner=user, is_default=True, defaults={
+        return self.get_or_create(owner=user, is_default=True, defaults={
             'title': unicode(conf.DEFAULT_COOKBOOK)
         })
 
@@ -36,13 +36,18 @@ class CookBookManager(models.Manager):
 class RecipePhotoManager(models.Manager):
 
     def visible(self):
-        return self.get_query_set().filter(is_visible=True)
+        return self.filter(is_visible=True)
 
 
 class CategoryManager(models.Manager):
 
-    def get_query_set(self):
-        return super(CategoryManager, self).get_query_set().select_related('parent', 'photo')
+    def get_queryset(self):
+        parent = super(CategoryManager, self)
+        queryset_method = hasattr(parent, 'get_queryset') and getattr(parent, 'get_queryset') or getattr(parent, 'get_query_set')
+        return queryset_method().select_related('parent', 'photo')
+
+    # backward compatibility
+    get_query_set = get_queryset
 
 
 class RecipeManager(models.Manager):
@@ -51,13 +56,18 @@ class RecipeManager(models.Manager):
         return self.approved().filter(is_public=True)
 
     def approved(self):
-        return self.get_query_set().filter(is_approved=True)
+        return self.filter(is_approved=True)
 
     def checked(self):
         return self.public().filter(is_checked=True)
 
-    def get_query_set(self):
-        return super(RecipeManager, self).get_query_set().select_related()
+    def get_queryset(self):
+        parent = super(RecipeManager, self)
+        queryset_method = hasattr(parent, 'get_queryset') and getattr(parent, 'get_queryset') or getattr(parent, 'get_query_set')
+        return queryset_method().select_related()
+
+    # backward compatibility
+    get_query_set = get_queryset
 
 
 class RecipeRecommendationManager(models.Manager):
@@ -76,7 +86,7 @@ class RecipeRecommendationManager(models.Manager):
         r3     -+----
         """
         today = date.today()
-        return self.get_query_set().filter(
+        return self.filter(
             (models.Q(day_to__gte=today) | models.Q(day_to__isnull=True)),
             day_from__lte=today, recipe__is_approved=True, recipe__is_public=True,
         ).select_related('recipe').order_by('-day_from')
@@ -88,9 +98,8 @@ class WeekMenuManager(models.Manager):
         week_no = date.isocalendar(date.today())[1]
         is_even_week = bool((week_no + 1) % 2)
 
-        items = self.get_query_set().\
-                    select_related('soup', 'meal', 'dessert').\
-                    filter(even_week=is_even_week)
+        items = self.select_related('soup', 'meal', 'dessert').\
+            filter(even_week=is_even_week)
 
         return dict([(one.day, one) for one in items])
 
@@ -98,7 +107,7 @@ class WeekMenuManager(models.Manager):
 class IngredientManager(models.Manager):
 
     def approved(self):
-        return self.get_query_set().filter(is_approved=True)
+        return self.filter(is_approved=True)
 
     def get_names_list(self, recache=False):
         cache_key = 'ingredient_get_names_list'
