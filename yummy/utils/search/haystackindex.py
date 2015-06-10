@@ -19,14 +19,14 @@ class YummyRecipeIndex(indexes.SearchIndex):
                 ...
     """
 
-    title = indexes.CharField(model_attr='title', boost=10)
+    title = indexes.CharField(model_attr='title', boost=1.8)
     description = indexes.CharField(model_attr='description', null=True)
-    category = indexes.CharField(model_attr='category', boost=2)
+    category = indexes.CharField(model_attr='category', boost=1.1)
     category_path = indexes.CharField(faceted=True)
     cooking_type = indexes.CharField(model_attr='cooking_type', null=True, faceted=True)
     cuisines = indexes.MultiValueField(faceted=True)
     owner = indexes.CharField(model_attr='owner', faceted=True)
-    ingredients = indexes.MultiValueField(faceted=True, boost=3)
+    ingredients = indexes.MultiValueField(faceted=True, boost=1.1)
     ingredient_groups = indexes.MultiValueField(faceted=True)
     servings = indexes.IntegerField(model_attr='servings', null=True)
     price = indexes.IntegerField(model_attr='price')
