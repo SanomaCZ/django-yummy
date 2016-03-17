@@ -13,6 +13,7 @@ from django.utils.translation import string_concat, ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 from django.template.defaultfilters import slugify
+from django.utils.functional import cached_property
 
 from yummy import conf
 from yummy import managers
@@ -367,6 +368,10 @@ class Recipe(models.Model):
         else:
             return self.category.photo_hierarchic
 
+    @cached_property
+    def top_photo(self):
+        return self.get_top_photo()
+
     def groupped_ingredients(self, recache=False):
         """
         order items by group's priority
@@ -625,7 +630,11 @@ class CookBook(models.Model):
         recipes = self.recipes.all().order_by('id')[:1]
         if not recipes:
             return ""
-        return recipes[0].get_top_photo()
+        return recipes[0].top_photo
+
+    @cached_property
+    def top_photo(self):
+        return self.get_top_photo()
 
     def get_absolute_url(self):
         owner = self.owner

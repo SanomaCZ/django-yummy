@@ -107,7 +107,7 @@ class DailyMenu(JSONResponseMixin, View):
                 continue
 
             try:
-                image_url = GET_THUMBNAIL_FUNC(actual_item.get_top_photo().image).url
+                image_url = GET_THUMBNAIL_FUNC(actual_item.top_photo.image).url
             except AttributeError:
                 image_url = ''
 
