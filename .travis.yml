@@ -12,4 +12,5 @@ env:
   - DJANGO="1.6.10"
   - DJANGO="1.7.4"
   - DJANGO="1.8.5"
+  - DJANGO="1.9.4"
 script: python setup.py nosetests
