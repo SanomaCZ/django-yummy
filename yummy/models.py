@@ -17,6 +17,7 @@ from django.utils.functional import cached_property
 
 from yummy import conf
 from yummy import managers
+from yummy.decorators import recached_method_to_mem
 
 try:
     from ella.core.cache.fields import CachedForeignKey
@@ -372,6 +373,7 @@ class Recipe(models.Model):
     def top_photo(self):
         return self.get_top_photo()
 
+    @recached_method_to_mem
     def groupped_ingredients(self, recache=False):
         """
         order items by group's priority
