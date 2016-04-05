@@ -14,6 +14,7 @@ from django.contrib.auth.models import User
 from django.utils.timezone import now
 from django.template.defaultfilters import slugify
 from django.utils.functional import cached_property
+from django.utils.encoding import force_text
 
 from yummy import conf
 from yummy import managers
@@ -111,6 +112,40 @@ class Ingredient(models.Model):
 
     def get_absolute_url(self):
         return reverse('yummy:ingredient_detail', args=(self.slug,))
+
+    @cached_property
+    def substitutes(self):
+        return SubstituteIngredient.objects.get_for_ingredient_cached(self)
+
+
+class SubstituteIngredient(models.Model):
+
+    ingredient = CachedForeignKey(Ingredient, verbose_name=_('Ingredient'))
+    substitute = CachedForeignKey(Ingredient, verbose_name=_('Substitute ingredient'), related_name='substitute_ingredients')
+
+    objects = managers.SubstituteIngredientManager()
+
+    def __unicode__(self):
+        return force_text(_("%(sub)s is substitute for s%(ing)s") % {
+            'sub': self.substitute,
+            'ing': self.ingredient,
+        })
+
+    class Meta:
+        verbose_name = _('Substitute ingredient')
+        verbose_name_plural = _('Substitute ingredients')
+
+    def save(self, *args, **kwargs):
+        try:
+            self.clean()
+        except ValidationError, e:
+            raise IntegrityError(e.messages)
+
+        super(SubstituteIngredient, self).save(*args, **kwargs)
+
+    def clean(self):
+        if self.ingredient == self.substitute:
+            raise ValidationError(_('It is not allowed replacing itself'))
 
 
 def upload_to(instance, filename):

@@ -3,7 +3,12 @@ from django.template.defaultfilters import slugify
 from django.utils.html import strip_tags, escape
 from django.utils.translation import ugettext_lazy as _
 
-from yummy.models import CookBookRecipe, CookBook
+from yummy.models import (
+    CookBookRecipe,
+    CookBook,
+    Ingredient,
+    SubstituteIngredient,
+)
 
 
 class FavoriteRecipeForm(forms.ModelForm):
@@ -76,3 +81,13 @@ class CookBookEditForm(forms.ModelForm):
     def clean_note(self):
         data = self.cleaned_data
         return escape(strip_tags(data['note']))
+
+
+class SubstituteIngredientAdminForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SubstituteIngredientAdminForm, self).__init__(*args, **kwargs)
+        self.fields['substitute'].queryset = Ingredient.objects.approved()
+
+    class Meta:
+        fields = '__all__'
+        model = SubstituteIngredient

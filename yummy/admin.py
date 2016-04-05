@@ -4,10 +4,26 @@ from django.contrib.admin.widgets import ForeignKeyRawIdWidget
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
-from yummy.models import (Category, CookingType, Cuisine, Ingredient,
-    IngredientGroup, UnitConversion, Recipe, IngredientInRecipe,
-    IngredientInRecipeGroup, Photo, RecipePhoto, RecipeRecommendation,
-    CookBook, WeekMenu, ShoppingList, ShoppingListItem)
+from yummy.forms import SubstituteIngredientAdminForm
+from yummy.models import (
+    Category,
+    CookingType,
+    Cuisine,
+    Ingredient,
+    IngredientGroup,
+    UnitConversion,
+    Recipe,
+    IngredientInRecipe,
+    IngredientInRecipeGroup,
+    Photo,
+    RecipePhoto,
+    RecipeRecommendation,
+    CookBook,
+    WeekMenu,
+    ShoppingList,
+    ShoppingListItem,
+    SubstituteIngredient,
+)
 
 
 class SubCategoryFilter(RelatedFieldListFilter):
@@ -181,9 +197,18 @@ class WeekMenuAdmin(admin.ModelAdmin):
         return db_field.formfield(**kwargs)
 
 
+class SubstituteIngredientInlineAdmin(admin.TabularInline):
+    model = SubstituteIngredient
+    form = SubstituteIngredientAdminForm
+    fk_name = 'ingredient'
+    raw_id_fields = ('substitute',)
+    extra = 1
+
+
 class IngredientAdmin(admin.ModelAdmin):
 
     prepopulated_fields = {'slug': ('name',)}
+    inlines = [SubstituteIngredientInlineAdmin]
 
 
 class IngredientGroupAdmin(admin.ModelAdmin):

@@ -3,6 +3,7 @@ from django.core.cache import cache
 from django.db import models
 
 from yummy.utils import get_model
+from yummy.decorators import add_cached_methods
 from yummy import conf
 
 
@@ -116,3 +117,17 @@ class IngredientManager(models.Manager):
             ingredients = self.approved().values_list('name', flat=True)
             cache.set(cache_key, ingredients)
         return ingredients
+
+
+@add_cached_methods
+class SubstituteIngredientManager(models.Manager):
+    CACHE_METHODS = (
+        'get_for_ingredient',
+    )
+
+    @classmethod
+    def cache_manager_key(cls, func_name, obj):
+        return 'yummy_managers_%s_%s_%s' % (cls.__name__, func_name, obj.pk)
+
+    def get_for_ingredient(self, ingredient):
+        return self.filter(ingredient=ingredient)
