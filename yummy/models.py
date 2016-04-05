@@ -126,7 +126,7 @@ class SubstituteIngredient(models.Model):
     objects = managers.SubstituteIngredientManager()
 
     def __unicode__(self):
-        return force_text(_("%(sub)s is substitute for s%(ing)s") % {
+        return force_text(_("%(sub)s is substitute for %(ing)s") % {
             'sub': self.substitute,
             'ing': self.ingredient,
         })
