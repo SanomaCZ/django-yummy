@@ -130,4 +130,4 @@ class SubstituteIngredientManager(models.Manager):
         return 'yummy_managers_%s_%s_%s' % (cls.__name__, func_name, obj.pk)
 
     def get_for_ingredient(self, ingredient):
-        return self.filter(ingredient=ingredient)
+        return self.filter(ingredient=ingredient).select_related('substitute')
