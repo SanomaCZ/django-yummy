@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import yummy
 
 install_requires = [
-    'Django>=1.4.5,<1.10',
+    'Django>=1.7,<1.10',
 ]
 
 tests_require = [
