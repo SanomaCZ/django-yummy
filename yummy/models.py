@@ -350,7 +350,7 @@ class Recipe(models.Model):
     is_approved = models.BooleanField(_('Approved'), default=False, db_index=True)
     is_public = models.BooleanField(_('Public'), default=True)
     is_checked = models.BooleanField(_("Is checked"), default=False)
-    created = models.DateTimeField(editable=False)
+    created = models.DateTimeField(editable=False, db_index=True)
     updated = models.DateTimeField(editable=False)
 
     def __unicode__(self):
