@@ -358,6 +358,7 @@ class CookBookDetail(CynosureList):
             qs = Recipe.objects.public().filter(cookbook=self.cynosure)
         else:
             qs = Recipe.objects.filter(cookbook=self.cynosure)
+        qs = qs.order_by('-created')
         return qs
 
 
