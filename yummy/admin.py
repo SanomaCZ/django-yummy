@@ -88,17 +88,9 @@ class IngredientInRecipeInlineAdmin(admin.TabularInline):
     queryset = get_queryset
 
 
-class IngredientInRecipeGroupInlineAdmin(admin.TabularInline):
+class IngredientInRecipeGroupAdmin(admin.ModelAdmin):
     model = IngredientInRecipeGroup
-    extra = 1
-
-    def get_queryset(self, request):
-        parent = super(IngredientInRecipeGroupInlineAdmin, self)
-        queryset_method = hasattr(parent, 'get_queryset') and getattr(parent, 'get_queryset') or getattr(parent, 'queryset')
-        return queryset_method(request).select_related()
-
-    # backward compatibility
-    queryset = get_queryset
+    raw_id_fields = ("recipe",)
 
 
 class RecipePhotoInlineAdmin(admin.TabularInline):
@@ -225,6 +217,7 @@ admin.site.register(RecipeRecommendation, RecipeRecommendationAdmin)
 admin.site.register(WeekMenu, WeekMenuAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(IngredientGroup, IngredientGroupAdmin)
+admin.site.register(IngredientInRecipeGroup, IngredientInRecipeGroupAdmin)
 
-admin.site.register([CookingType, UnitConversion, IngredientInRecipeGroup, IngredientInRecipe, CookBook,
+admin.site.register([CookingType, UnitConversion, IngredientInRecipe, CookBook,
                      ShoppingList, ShoppingListItem])

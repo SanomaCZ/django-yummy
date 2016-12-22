@@ -6,3 +6,6 @@ build/
 nosetests.xml
 .coverage
 dist/
+
+# ide
+.idea
