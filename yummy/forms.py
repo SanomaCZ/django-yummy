@@ -7,8 +7,7 @@ from yummy.models import (
     CookBookRecipe,
     CookBook,
     Ingredient,
-    SubstituteIngredient,
-    IngredientInRecipeGroup
+    SubstituteIngredient
 )
 
 
