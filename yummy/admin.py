@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.contrib.admin import RelatedFieldListFilter
-from django.contrib.admin.widgets import ForeignKeyRawIdWidget
+from django.contrib.admin.widgets import ForeignKeyRawIdWidget, RelatedFieldWidgetWrapper
+from django.forms.widgets import Media
+from django.contrib.admin.templatetags.admin_static import static
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -88,10 +90,49 @@ class IngredientInRecipeInlineAdmin(admin.TabularInline):
     queryset = get_queryset
 
 
+class CustomRelatedFieldWidgetWrapper(RelatedFieldWidgetWrapper):
+
+    @property
+    def media(self):
+        media = Media(js=[static('yummy/js/custom-related-widget-wrapper.js')])
+        return self.widget.media + media
+
+
 class IngredientInRecipeGroupAdmin(admin.ModelAdmin):
     model = IngredientInRecipeGroup
-    raw_id_fields = ("recipe",)
 
+    def formfield_for_dbfield(self, db_field, **kwargs):
+
+        if db_field.name == 'recipe':
+
+            request = kwargs.pop("request", None)
+
+            formfield = self.formfield_for_foreignkey(db_field, request, **kwargs)
+
+            related_modeladmin = self.admin_site._registry.get(db_field.rel.to)
+
+            wrapper_kwargs = {}
+            if related_modeladmin:
+                wrapper_kwargs.update(
+                    can_add_related=related_modeladmin.has_add_permission(request),
+                    can_change_related=related_modeladmin.has_change_permission(request),
+                    can_delete_related=related_modeladmin.has_delete_permission(request),
+                )
+            formfield.widget = CustomRelatedFieldWidgetWrapper(
+                formfield.widget, db_field.rel, self.admin_site, **wrapper_kwargs
+            )
+        else:
+            formfield = super(IngredientInRecipeGroupAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+
+        return formfield
+
+    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
+        if db_field.name == 'recipe':
+            db = kwargs.get('using')
+            kwargs['widget'] = ForeignKeyRawIdWidget(db_field.rel, self.admin_site, using=db)
+            return db_field.formfield(**kwargs)
+        else:
+            return super(IngredientInRecipeGroupAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 class RecipePhotoInlineAdmin(admin.TabularInline):
     model = RecipePhoto
