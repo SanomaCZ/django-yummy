@@ -8,9 +8,7 @@ from django.http import (
     Http404, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed,
     HttpResponseForbidden
 )
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-from django.template.loader import render_to_string
+from django.shortcuts import render_to_response, redirect
 from django.views.generic import ListView, DetailView, View, CreateView, UpdateView, DeleteView
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
@@ -253,10 +251,11 @@ class RecipeDetail(DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         if not self.object.is_public and self.object.owner != self.request.user:
-            response = render_to_string("yummy/recipe/private.html",
-                                        self.get_context_data(),
-                                        context_instance=RequestContext(request))
-            return HttpResponseForbidden(response)
+            return redirect(self.object.category.get_absolute_url(), permanent=True)
+            # response = render_to_string("yummy/recipe/private.html",
+            #                             self.get_context_data(),
+            #                             context_instance=RequestContext(request))
+            # return HttpResponseForbidden(response)
 
         return super(RecipeDetail, self).get(request, *args, **kwargs)
 
